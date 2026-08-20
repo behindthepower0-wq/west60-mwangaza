@@ -1,0 +1,530 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// USERS & AUTH
+// ─────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(EDITOR)
+  status        UserStatus @default(ACTIVE)
+  lastLogin     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  activityLogs  ActivityLog[]
+  contentRevisions ContentRevision[]
+  posts         Post[]     @relation("PostAuthor")
+
+  @@map("users")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMINISTRATOR
+  EDITOR
+  CONTENT_STAFF
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+// ─────────────────────────────────────────────
+// SITE SETTINGS (singleton)
+// ─────────────────────────────────────────────
+
+model SiteSetting {
+  id              String  @id @default(cuid())
+  key             String  @unique
+  value           String?
+  label           String?
+  group           String  @default("general")
+  updatedAt       DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+
+model NavigationItem {
+  id          String   @id @default(cuid())
+  label       String
+  url         String
+  target      String   @default("_self")
+  order       Int      @default(0)
+  parentId    String?
+  isVisible   Boolean  @default(true)
+  isExternal  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  parent      NavigationItem?  @relation("NavChildren", fields: [parentId], references: [id])
+  children    NavigationItem[] @relation("NavChildren")
+
+  @@map("navigation_items")
+}
+
+// ─────────────────────────────────────────────
+// MEDIA LIBRARY
+// ─────────────────────────────────────────────
+
+model Media {
+  id          String   @id @default(cuid())
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int
+  width       Int?
+  height      Int?
+  url         String
+  thumbnailUrl String?
+  webpUrl     String?
+  altText     String?
+  caption     String?
+  category    MediaCategory @default(GENERAL)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("media")
+}
+
+enum MediaCategory {
+  BRANDING
+  HOMEPAGE
+  PROPERTIES
+  PROJECTS
+  SERVICES
+  TEAM
+  NEWS
+  GENERAL
+}
+
+// ─────────────────────────────────────────────
+// SEO METADATA
+// ─────────────────────────────────────────────
+
+model SeoMetadata {
+  id              String  @id @default(cuid())
+  entityType      String  // page | property | project | service | post
+  entityId        String
+  seoTitle        String?
+  metaDescription String?
+  canonicalUrl    String?
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+  noIndex         Boolean @default(false)
+  inSitemap       Boolean @default(true)
+  updatedAt       DateTime @updatedAt
+
+  @@unique([entityType, entityId])
+  @@map("seo_metadata")
+}
+
+// ─────────────────────────────────────────────
+// PAGES
+// ─────────────────────────────────────────────
+
+model Page {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  status      ContentStatus @default(DRAFT)
+  featuredImage String?
+  publishedAt DateTime?
+  scheduledAt DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  sections    PageSection[]
+  revisions   ContentRevision[]
+
+  @@map("pages")
+}
+
+model PageSection {
+  id          String   @id @default(cuid())
+  pageId      String
+  type        String   // hero | text | image_text | features | gallery | cta | stats | testimonials
+  content     String   // JSON blob
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  page        Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@map("page_sections")
+}
+
+// ─────────────────────────────────────────────
+// HOMEPAGE SECTIONS
+// ─────────────────────────────────────────────
+
+model HomepageSection {
+  id          String   @id @default(cuid())
+  key         String   @unique // hero | statistics | about | services | properties | projects | whychooseus | team | testimonials | news | cta
+  title       String
+  content     String   // JSON blob for all fields in this section
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+
+  @@map("homepage_sections")
+}
+
+// ─────────────────────────────────────────────
+// SERVICES
+// ─────────────────────────────────────────────
+
+model Service {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  shortDescription String?
+  fullDescription String?
+  icon            String?
+  image           String?
+  ctaText         String?
+  ctaUrl          String?
+  order           Int           @default(0)
+  status          ContentStatus @default(PUBLISHED)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("services")
+}
+
+// ─────────────────────────────────────────────
+// PROPERTIES
+// ─────────────────────────────────────────────
+
+model Property {
+  id              String          @id @default(cuid())
+  name            String
+  slug            String          @unique
+  propertyType    PropertyType    @default(RESIDENTIAL)
+  location        String?
+  area            String?
+  price           Float?
+  currency        String          @default("KES")
+  priceLabel      String?         // e.g. "From KES 500,000" or "Price on Request"
+  status          PropertyStatus  @default(AVAILABLE)
+  shortDescription String?
+  fullDescription String?
+  bedrooms        Int?
+  bathrooms       Int?
+  floorArea       Float?          // sqm
+  landSize        Float?          // sqm or acres
+  mainImage       String?
+  isFeatured      Boolean         @default(false)
+  isPublished     Boolean         @default(false)
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  mapLat          Float?
+  mapLng          Float?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  images          PropertyImage[]
+  features        PropertyFeature[]
+  amenities       PropertyAmenity[]
+  enquiries       Enquiry[]
+
+  @@map("properties")
+}
+
+model PropertyImage {
+  id          String   @id @default(cuid())
+  propertyId  String
+  url         String
+  thumbnailUrl String?
+  altText     String?
+  caption     String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_images")
+}
+
+model PropertyFeature {
+  id          String   @id @default(cuid())
+  propertyId  String
+  feature     String
+  order       Int      @default(0)
+
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_features")
+}
+
+model PropertyAmenity {
+  id          String   @id @default(cuid())
+  propertyId  String
+  amenity     String
+  icon        String?
+  order       Int      @default(0)
+
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_amenities")
+}
+
+enum PropertyType {
+  RESIDENTIAL
+  COMMERCIAL
+  LAND
+  MIXED_USE
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  COMING_SOON
+  UNDER_CONSTRUCTION
+  COMPLETED
+}
+
+// ─────────────────────────────────────────────
+// PROJECTS
+// ─────────────────────────────────────────────
+
+model Project {
+  id              String        @id @default(cuid())
+  name            String
+  slug            String        @unique
+  location        String?
+  shortDescription String?
+  fullDescription String?
+  status          ProjectStatus @default(ONGOING)
+  startDate       DateTime?
+  completionDate  DateTime?
+  mainImage       String?
+  isPublished     Boolean       @default(false)
+  publishedAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  images          ProjectImage[]
+  features        ProjectFeature[]
+  enquiries       Enquiry[]
+
+  @@map("projects")
+}
+
+model ProjectImage {
+  id          String   @id @default(cuid())
+  projectId   String
+  url         String
+  thumbnailUrl String?
+  altText     String?
+  caption     String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_images")
+}
+
+model ProjectFeature {
+  id          String   @id @default(cuid())
+  projectId   String
+  feature     String
+  order       Int      @default(0)
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_features")
+}
+
+enum ProjectStatus {
+  PLANNING
+  ONGOING
+  COMPLETED
+  ON_HOLD
+}
+
+// ─────────────────────────────────────────────
+// TEAM
+// ─────────────────────────────────────────────
+
+model TeamMember {
+  id              String   @id @default(cuid())
+  name            String
+  position        String?
+  biography       String?
+  qualifications  String?
+  photograph      String?
+  facebookUrl     String?
+  linkedinUrl     String?
+  twitterUrl      String?
+  instagramUrl    String?
+  order           Int      @default(0)
+  isVisible       Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+// ─────────────────────────────────────────────
+// TESTIMONIALS
+// ─────────────────────────────────────────────
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  clientName  String
+  company     String?
+  position    String?
+  testimonial String
+  photograph  String?
+  rating      Int?     // 1-5
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+// ─────────────────────────────────────────────
+// NEWS / BLOG
+// ─────────────────────────────────────────────
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  posts       Post[]
+
+  @@map("categories")
+}
+
+model Post {
+  id              String        @id @default(cuid())
+  title           String
+  slug            String        @unique
+  excerpt         String?
+  content         String?
+  featuredImage   String?
+  authorId        String?
+  categoryId      String?
+  status          ContentStatus @default(DRAFT)
+  isFeatured      Boolean       @default(false)
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  seoTitle        String?
+  metaDescription String?
+  ogImage         String?
+  tags            String?       // comma-separated
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  author          User?         @relation("PostAuthor", fields: [authorId], references: [id])
+  category        Category?     @relation(fields: [categoryId], references: [id])
+  revisions       ContentRevision[]
+
+  @@map("posts")
+}
+
+// ─────────────────────────────────────────────
+// ENQUIRIES
+// ─────────────────────────────────────────────
+
+model Enquiry {
+  id          String          @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  subject     String?
+  message     String
+  propertyId  String?
+  projectId   String?
+  status      EnquiryStatus   @default(NEW)
+  notes       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  property    Property?       @relation(fields: [propertyId], references: [id])
+  project     Project?        @relation(fields: [projectId], references: [id])
+
+  @@map("enquiries")
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  FOLLOW_UP
+  CONVERTED
+  CLOSED
+}
+
+// ─────────────────────────────────────────────
+// CONTENT STATUS
+// ─────────────────────────────────────────────
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+// ─────────────────────────────────────────────
+// CONTENT REVISIONS
+// ─────────────────────────────────────────────
+
+model ContentRevision {
+  id          String   @id @default(cuid())
+  entityType  String   // page | post | homepage_section
+  entityId    String
+  content     String   // JSON snapshot
+  userId      String?
+  createdAt   DateTime @default(now())
+
+  user        User?    @relation(fields: [userId], references: [id])
+
+  @@map("content_revisions")
+}
+
+// ─────────────────────────────────────────────
+// ACTIVITY LOG
+// ─────────────────────────────────────────────
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  entityType  String?
+  entityId    String?
+  entityLabel String?
+  metadata    String?  // JSON
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  user        User?    @relation(fields: [userId], references: [id])
+
+  @@map("activity_logs")
+}
