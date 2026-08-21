@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 // ─────────────────────────────────────────────
@@ -152,7 +151,6 @@ model Page {
   updatedAt   DateTime    @updatedAt
 
   sections    PageSection[]
-  revisions   ContentRevision[]
 
   @@map("pages")
 }
@@ -444,7 +442,6 @@ model Post {
 
   author          User?         @relation("PostAuthor", fields: [authorId], references: [id])
   category        Category?     @relation(fields: [categoryId], references: [id])
-  revisions       ContentRevision[]
 
   @@map("posts")
 }

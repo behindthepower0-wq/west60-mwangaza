@@ -39,3 +39,23 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cloudflare
+.open-next
+.wrangler
+.dev.vars
+worker-configuration.d.ts
+
+# database
+prisma/*.db
+prisma/*.db-journal
+
+# uploads
+public/uploads/
+
+# logs
+dev-server.log
+
+# seed scripts
+seed_sqlite.js
+seed_team.js
