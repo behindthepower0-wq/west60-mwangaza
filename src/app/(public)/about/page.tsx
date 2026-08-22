@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about West 60 Mwangaza Properties — our mission, vision, values and commitment to quality real estate in Kenya.',

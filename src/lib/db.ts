@@ -34,12 +34,24 @@ function createLocalClient(): PrismaClient {
 }
 
 // ─── Smart resolver ────────────────────────────────────────────────
+function isCloudflareWorkers(): boolean {
+  return (
+    typeof navigator !== "undefined" &&
+    navigator.userAgent === "Cloudflare-Workers"
+  );
+}
+
 function resolveClient(): PrismaClient {
-  // Try Cloudflare first — it will throw if not in Workers runtime
-  try {
-    return createD1Client();
-  } catch {
-    // Not in Cloudflare — use local SQLite
+  // Only use Cloudflare D1 when actually running on Workers.
+  // initOpenNextCloudflareForDev() makes getCloudflareContext() work in
+  // local dev too (against an empty miniflare D1), so we must not rely
+  // on it throwing to detect local development.
+  if (isCloudflareWorkers()) {
+    try {
+      return createD1Client();
+    } catch {
+      // Fall through to local SQLite
+    }
   }
   return createLocalClient();
 }

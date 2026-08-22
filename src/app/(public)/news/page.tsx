@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 import prisma from "@/lib/db";
 import { NewsCard } from "@/components/public/NewsSection";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "News & Insights",
   description: "Real estate news, property tips and investment insights from West 60 Mwangaza Properties Kenya.",

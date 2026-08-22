@@ -2,7 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "west60-mwangaza",
+  "workers_dev": true,
+  "minify": true,
   "compatibility_date": "2024-12-30",
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://west60-mwangaza.behindthepower0.workers.dev",
+    "NEXTJS_ENV": "production"
+  },
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public"
@@ -21,13 +27,13 @@
     {
       "binding": "DB",
       "database_name": "west60-db",
-      "database_id": "placeholder-replace-with-actual-id"
+      "database_id": "7dd9ff32-81dc-46b2-ad12-b6b5b94c32f6"
     }
   ],
-  "r2_buckets": [
-    {
-      "binding": "R2",
-      "bucket_name": "west60-uploads"
-    }
-  ]
+  // "r2_buckets": [
+  //   {
+  //     "binding": "R2",
+  //     "bucket_name": "west60-uploads"
+  //   }
+  // ]
 }

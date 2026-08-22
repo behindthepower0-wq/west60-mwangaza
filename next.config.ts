@@ -7,12 +7,18 @@ const nextConfig: NextConfig = {
       { protocol: "http", hostname: "**" },
     ],
     formats: ["image/webp", "image/avif"],
+    unoptimized: true,
   },
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
     },
   },
+  serverExternalPackages: [
+    "sharp",
+    "better-sqlite3",
+    "@prisma/adapter-better-sqlite3",
+  ],
 };
 
 export default nextConfig;

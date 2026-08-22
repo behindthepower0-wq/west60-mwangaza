@@ -446,18 +446,6 @@ async function main() {
     },
     {
       id: "team-8",
-      name: "Jackline",
-      position: "Senior Sales Manager",
-      biography: "Dedicated to helping clients navigate the property buying process with confidence and ease.",
-      qualifications: "",
-      photograph: "/images/team/jackline.jpg",
-      facebookUrl: "",
-      linkedinUrl: "",
-      order: 8,
-      isVisible: true,
-    },
-    {
-      id: "team-9",
       name: "Jackson",
       position: "Senior Sales Manager",
       biography: "Experienced in property sales with deep knowledge of Kenya's real estate market and investment opportunities.",
@@ -465,11 +453,11 @@ async function main() {
       photograph: "/images/team/jackson.jpg",
       facebookUrl: "",
       linkedinUrl: "",
-      order: 9,
+      order: 8,
       isVisible: true,
     },
     {
-      id: "team-10",
+      id: "team-9",
       name: "Aphia",
       position: "Front Desk",
       biography: "Welcoming face of West 60 Mwangaza, providing exceptional front-line service and administrative support.",
@@ -477,10 +465,13 @@ async function main() {
       photograph: "/images/team/aphia.jpg",
       facebookUrl: "",
       linkedinUrl: "",
-      order: 10,
+      order: 9,
       isVisible: true,
     },
   ];
+
+  const keepIds = teamMembers.map((m) => m.id);
+  await prisma.teamMember.deleteMany({ where: { id: { notIn: keepIds } } });
 
   for (const member of teamMembers) {
     await prisma.teamMember.upsert({

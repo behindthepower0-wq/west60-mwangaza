@@ -3,6 +3,8 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { ProjectCard } from "@/components/public/ProjectCard";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Projects",
   description: "Browse West 60 Mwangaza Properties projects — residential developments, land projects and commercial properties across Kenya.",

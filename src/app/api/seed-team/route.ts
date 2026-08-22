@@ -10,9 +10,8 @@ export async function GET() {
     { name: 'Jacinta', position: 'Senior Sales Manager', order: 5 },
     { name: 'Esther', position: 'Senior Sales Manager', order: 6 },
     { name: 'Dickson', position: 'Senior Sales Manager', order: 7 },
-    { name: 'Jackline', position: 'Senior Sales Manager', order: 8 },
-    { name: 'Jackson', position: 'Senior Sales Manager', order: 9 },
-    { name: 'Aphia', position: 'Front Desk', order: 10 },
+    { name: 'Jackson', position: 'Senior Sales Manager', order: 8 },
+    { name: 'Aphia', position: 'Front Desk', order: 9 },
   ];
 
   try {

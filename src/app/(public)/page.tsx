@@ -9,6 +9,8 @@ import { WhyChooseUsSection } from "@/components/public/WhyChooseUsSection";
 import { TeamSection } from "@/components/public/TeamSection";
 import { NewsSection } from "@/components/public/NewsSection";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "West 60 Mwangaza Properties — Premium Real Estate in Kenya",
   description:
