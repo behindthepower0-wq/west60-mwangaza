@@ -81,7 +81,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
         </div>
 
         {/* Service Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayServices.map((service, i) => (
             <ScrollReveal key={service.id} delay={i * 100} direction="up">
               <Link
