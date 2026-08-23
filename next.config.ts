@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     "sharp",
     "better-sqlite3",
+    "@prisma/client",
+    ".prisma/client",
+    "@prisma/adapter-libsql",
+    "@libsql/client",
   ],
 };
 

@@ -19,7 +19,7 @@ function createTursoClient(): PrismaClientType {
 
   const adapter = new PrismaLibSql({ url, authToken });
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { PrismaClient } = require("@prisma/client/edge");
+  const { PrismaClient } = require("@prisma/client");
   _tursoClient = new PrismaClient({ adapter });
   return _tursoClient!;
 }
