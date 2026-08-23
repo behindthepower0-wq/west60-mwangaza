@@ -15,13 +15,11 @@ function createTursoClient(): PrismaClientType {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { createClient } = require("@libsql/client");
   const { PrismaLibSql } = require("@prisma/adapter-libsql");
 
-  const client = createClient({ url, authToken });
-  const adapter = new PrismaLibSql(client);
+  const adapter = new PrismaLibSql({ url, authToken });
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { PrismaClient } = require("@prisma/client/edge");
+  const { PrismaClient } = require("@prisma/client");
   _tursoClient = new PrismaClient({ adapter });
   return _tursoClient!;
 }
