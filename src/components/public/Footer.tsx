@@ -179,9 +179,9 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={15} className="text-secondary-400 flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-white/55 leading-relaxed">
-                  Repen Complex, Block B, 4th Floor,<br />
-                  Suite 412, Katani Rd &amp; Mombasa Rd<br />
-                  Syokimau, Nairobi, Kenya
+                  At the Junction of Katani Rd<br />
+                  and Mombasa Rd, Syokimau<br />
+                  Nairobi, Kenya
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -201,8 +201,8 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <Clock size={15} className="text-secondary-400 flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-white/55 leading-relaxed">
-                  Mon–Fri: 8:00 AM – 6:00 PM<br />
-                  Sat: 9:00 AM – 4:00 PM
+                  Mon–Fri: 8:00 a.m – 4:30 p.m<br />
+                  Sat: 9:00 a.m – 1:00 p.m
                 </span>
               </li>
             </ul>

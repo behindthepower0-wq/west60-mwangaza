@@ -25,10 +25,10 @@ export default function ContactPage() {
               <h2 className="section-heading mb-8">Contact Information</h2>
               <div className="space-y-5">
                 {[
-                  { icon: MapPin, label: 'Office Address', value: 'Repen Complex, Block B, 4th Floor, Suite 412\nKatani Rd & Mombasa Rd, Syokimau, Nairobi, Kenya' },
+                  { icon: MapPin, label: 'Office Address', value: 'At the Junction of Katani Rd\nand Mombasa Rd, Syokimau\nNairobi, Kenya' },
                   { icon: Phone, label: 'Phone / WhatsApp', value: '0711 400 933', href: 'tel:0711400933' },
                   { icon: Mail, label: 'Email', value: 'info@west60mwangaza.com', href: 'mailto:info@west60mwangaza.com' },
-                  { icon: Clock, label: 'Working Hours', value: 'Monday–Friday: 8:00 AM – 6:00 PM\nSaturday: 9:00 AM – 4:00 PM' },
+                  { icon: Clock, label: 'Working Hours', value: 'Monday–Friday: 8:00 a.m – 4:30 p.m\nSaturday: 9:00 a.m – 1:00 p.m' },
                 ].map((item) => (
                   <div key={item.label} className="glass-card p-5 flex items-start gap-4">
                     <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(29,79,56,0.07)' }}>
@@ -48,8 +48,8 @@ export default function ContactPage() {
               <div className="mt-6 rounded-2xl overflow-hidden h-56 bg-primary-50 flex items-center justify-center border border-primary-100">
                 <div className="text-center">
                   <MapPin size={32} className="text-secondary-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">Repen Complex, Syokimau, Nairobi</p>
-                  <a href="https://maps.google.com/?q=Repen+Complex+Syokimau+Nairobi" target="_blank" rel="noopener noreferrer"
+                  <p className="text-sm text-gray-500">At the Junction of Katani Rd and Mombasa Rd, Syokimau, Nairobi</p>
+                  <a href="https://maps.google.com/?q=Junction+Katani+Road+Mombasa+Road+Syokimau+Nairobi" target="_blank" rel="noopener noreferrer"
                     className="text-xs text-primary-600 hover:text-secondary-600 transition-colors mt-1 block">
                     View on Google Maps →
                   </a>
