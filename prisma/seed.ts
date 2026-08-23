@@ -270,7 +270,7 @@ async function main() {
       slug: "valleys-gardens",
       propertyType: "RESIDENTIAL" as const,
       location: "Ndovoini, Joska",
-      area: "Ndovoini",
+      area: "Ndovoini, Joska",
       price: 479000,
       currency: "KES",
       priceLabel: "KES 479,000 · Deposit KES 80,000",
