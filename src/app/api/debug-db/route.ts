@@ -46,7 +46,7 @@ export async function GET() {
   // Test direct libsql connection (bypassing Prisma)
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { createClient } = require("@libsql/client");
+    const { createClient } = require("@libsql/client/web");
     const url = process.env.TURSO_DATABASE_URL;
     const authToken = process.env.TURSO_AUTH_TOKEN;
     const client = createClient({ url, authToken });
