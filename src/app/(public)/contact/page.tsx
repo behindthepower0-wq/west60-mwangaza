@@ -26,7 +26,7 @@ export default function ContactPage() {
               <div className="space-y-5">
                 {[
                   { icon: MapPin, label: 'Office Address', value: 'Repen Complex, Block B, 4th Floor, Suite 412\nKatani Rd & Mombasa Rd, Syokimau, Nairobi, Kenya' },
-                  { icon: Phone, label: 'Phone / WhatsApp', value: '0711 400 933\n0701 303 501', href: 'tel:0711400933' },
+                  { icon: Phone, label: 'Phone / WhatsApp', value: '0711 400 933', href: 'tel:0711400933' },
                   { icon: Mail, label: 'Email', value: 'info@west60mwangaza.com', href: 'mailto:info@west60mwangaza.com' },
                   { icon: Clock, label: 'Working Hours', value: 'Monday–Friday: 8:00 AM – 6:00 PM\nSaturday: 9:00 AM – 4:00 PM' },
                 ].map((item) => (

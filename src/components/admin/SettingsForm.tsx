@@ -19,8 +19,7 @@ const settingGroups = [
   {
     title: "Contact Details",
     fields: [
-      { key: "phone_primary", label: "Primary Phone / WhatsApp", type: "tel", placeholder: "0711 400 933" },
-      { key: "phone_secondary", label: "Secondary Phone", type: "tel", placeholder: "0701 303 501" },
+      { key: "phone_primary", label: "Phone / WhatsApp", type: "tel", placeholder: "0711 400 933" },
       { key: "email", label: "Email Address", type: "email", placeholder: "info@west60mwangaza.com" },
       { key: "address", label: "Physical Address", type: "textarea", placeholder: "Repen Complex, Block B, 4th Floor..." },
       { key: "working_hours", label: "Working Hours", type: "text", placeholder: "Mon-Fri: 8AM-6PM, Sat: 9AM-4PM" },

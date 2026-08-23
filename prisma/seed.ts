@@ -32,7 +32,6 @@ async function main() {
     { key: "company_tagline", value: "Creating Spaces. Building Futures.", label: "Tagline" },
     { key: "company_description", value: "West 60 Mwangaza Properties Ltd is committed to delivering quality properties that enhance lives and stand the test of time. Your trusted real estate partner across Kenya.", label: "Description" },
     { key: "phone_primary", value: "0711 400 933", label: "Primary Phone" },
-    { key: "phone_secondary", value: "0701 303 501", label: "Secondary Phone" },
     { key: "email", value: "info@west60mwangaza.com", label: "Email" },
     { key: "whatsapp", value: "0711400933", label: "WhatsApp" },
     { key: "address", value: "Repen Complex, Block B, 4th Floor, Suite 412\nKatani Rd & Mombasa Rd, Syokimau\nNairobi, Kenya", label: "Address" },

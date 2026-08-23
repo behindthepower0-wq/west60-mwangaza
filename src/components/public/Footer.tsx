@@ -190,9 +190,6 @@ export function Footer() {
                   <a href="tel:0711400933" className="block text-sm text-white/55 hover:text-white transition-colors">
                     0711 400 933
                   </a>
-                  <a href="tel:0701303501" className="block text-sm text-white/55 hover:text-white transition-colors">
-                    0701 303 501
-                  </a>
                 </div>
               </li>
               <li className="flex items-center gap-3">
