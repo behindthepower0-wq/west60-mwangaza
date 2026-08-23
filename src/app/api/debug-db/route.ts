@@ -47,7 +47,8 @@ export async function GET() {
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { createClient } = require("@libsql/client/web");
-    const url = process.env.TURSO_DATABASE_URL;
+    const rawUrl = process.env.TURSO_DATABASE_URL || "";
+    const url = rawUrl.startsWith("libsql://") ? "https://" + rawUrl.slice(9) : rawUrl;
     const authToken = process.env.TURSO_AUTH_TOKEN;
     const client = createClient({ url, authToken });
     const result = await client.execute("SELECT COUNT(*) as n FROM team_members");
