@@ -73,7 +73,7 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
           </ScrollReveal>
           <ScrollReveal delay={200}>
             <p className="section-subheading">
-              Handpicked properties across Kenya&apos;s most promising growth corridors — all verified with ready title deeds.
+              Handpicked properties across Kenya&apos;s most promising growth corridors, all verified with ready title deeds.
             </p>
           </ScrollReveal>
         </div>

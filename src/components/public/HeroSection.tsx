@@ -9,12 +9,12 @@ const glassFeatures = [
   {
     icon: <Shield size={22} className="text-secondary-400" />,
     title: "Quality & Trust",
-    desc: "Genuine properties with ready title deeds — no legal complications.",
+    desc: "Genuine properties with ready title deeds, no legal complications.",
   },
   {
     icon: <MapPin size={22} className="text-secondary-400" />,
     title: "Prime Locations",
-    desc: "Katani, Kitengela, Joska, Malaa, Kitui — Kenya's growth corridors.",
+    desc: "Katani, Kitengela, Joska, Malaa, Kitui are Kenya's growth corridors.",
   },
   {
     icon: <Users size={22} className="text-secondary-400" />,
@@ -152,7 +152,7 @@ export function HeroSection() {
               }`}
             >
               Premium residential and commercial properties across Kenya&apos;s
-              fastest-growing corridors — with ready title deeds, free site
+              fastest-growing corridors, with ready title deeds, free site
               visits, and flexible Lipa Pole Pole payment plans.
             </p>
 

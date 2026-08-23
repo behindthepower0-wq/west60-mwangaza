@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Mail, Phone, Calendar, Search } from 'lucide-react';
 import prisma from '@/lib/db';
 
-export const metadata: Metadata = { title: 'Enquiries — CMS' };
+export const metadata: Metadata = { title: 'Enquiries | CMS' };
 
 export default async function AdminEnquiriesPage() {
   const enquiries = await prisma.enquiry.findMany({
@@ -51,7 +51,7 @@ export default async function AdminEnquiriesPage() {
                       </div>
                     </td>
                     <td className="px-5 py-4 text-sm text-gray-700 font-medium">
-                      {e.property?.name || e.subject || '—'}
+                      {e.property?.name || e.subject || '-'}
                     </td>
                     <td className="px-5 py-4">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${

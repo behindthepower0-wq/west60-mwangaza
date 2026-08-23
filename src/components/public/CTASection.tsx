@@ -54,7 +54,7 @@ export function CTASection() {
         <ScrollReveal delay={200}>
           <p className="text-white/55 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
             Whether you&apos;re looking for a residential plot, commercial property, or your
-            dream home — we&apos;re here to make it happen. Book a free site visit today.
+            dream home, we&apos;re here to make it happen. Book a free site visit today.
           </p>
         </ScrollReveal>
 

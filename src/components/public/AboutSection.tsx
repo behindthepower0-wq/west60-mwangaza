@@ -108,8 +108,8 @@ export function AboutSection() {
 
             <ScrollReveal delay={300}>
               <p className="section-subheading mb-8">
-                From land selling and real estate consultancy to sales, marketing and
-                property management — we provide end-to-end real estate solutions tailored
+                From land selling and real estate consultancy to sales and marketing,
+we provide end-to-end real estate solutions tailored
                 to your needs. Our properties come with ready title deeds and flexible
                 payment plans designed to make property ownership accessible to everyone.
               </p>

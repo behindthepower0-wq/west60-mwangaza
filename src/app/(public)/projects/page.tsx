@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Browse West 60 Mwangaza Properties projects — residential developments, land projects and commercial properties across Kenya.",
+  description: "Browse West 60 Mwangaza Properties projects: residential developments, land projects and commercial properties across Kenya.",
 };
 
 export default async function ProjectsPage() {
@@ -30,7 +30,7 @@ export default async function ProjectsPage() {
           </div>
           <h1 className="section-heading-white mb-4">Our <span style={{ color: "#c6912b" }}>Projects</span></h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            From ongoing developments to completed landmarks — discover the work we&apos;re proud of.
+            From ongoing developments to completed landmarks, discover the work we&apos;re proud of.
           </p>
         </div>
       </section>

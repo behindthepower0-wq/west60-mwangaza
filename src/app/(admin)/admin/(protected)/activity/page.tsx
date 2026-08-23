@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import prisma from '@/lib/db';
 import { Activity } from 'lucide-react';
 
-export const metadata: Metadata = { title: 'Activity Log — CMS' };
+export const metadata: Metadata = { title: 'Activity Log | CMS' };
 
 export default async function AdminActivityPage() {
   const logs = await prisma.activityLog.findMany({

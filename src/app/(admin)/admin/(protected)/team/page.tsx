@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Plus, Pencil, Trash2, Users } from 'lucide-react';
 import prisma from '@/lib/db';
 
-export const metadata: Metadata = { title: 'Team — CMS' };
+export const metadata: Metadata = { title: 'Team | CMS' };
 
 export default async function AdminTeamPage() {
   const team = await prisma.teamMember.findMany({
@@ -51,7 +51,7 @@ export default async function AdminTeamPage() {
                         <p className="font-semibold text-sm text-gray-800">{member.name}</p>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{member.position || '—'}</td>
+                    <td className="px-5 py-4 text-sm text-gray-600">{member.position || '-'}</td>
                     <td className="px-5 py-4 text-sm text-gray-500">{member.order}</td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">

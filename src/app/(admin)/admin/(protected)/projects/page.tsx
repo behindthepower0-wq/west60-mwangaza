@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Plus, Pencil, Eye, Trash2, FolderKanban } from 'lucide-react';
 import prisma from '@/lib/db';
 
-export const metadata: Metadata = { title: 'Projects — CMS' };
+export const metadata: Metadata = { title: 'Projects | CMS' };
 
 export default async function AdminProjectsPage() {
   const projects = await prisma.project.findMany({

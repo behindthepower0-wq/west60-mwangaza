@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Plus, Pencil, Eye, Trash2, Newspaper } from 'lucide-react';
 import prisma from '@/lib/db';
 
-export const metadata: Metadata = { title: 'News & Articles — CMS' };
+export const metadata: Metadata = { title: 'News & Articles | CMS' };
 
 export default async function AdminNewsPage() {
   const posts = await prisma.post.findMany({
@@ -47,8 +47,8 @@ export default async function AdminNewsPage() {
                     <td className="px-5 py-4">
                       <p className="font-semibold text-sm text-gray-800 max-w-[300px] truncate">{p.title}</p>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{p.category?.name || '—'}</td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{p.author?.name || '—'}</td>
+                    <td className="px-5 py-4 text-sm text-gray-600">{p.category?.name || '-'}</td>
+                    <td className="px-5 py-4 text-sm text-gray-600">{p.author?.name || '-'}</td>
                     <td className="px-5 py-4">
                       <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${p.status === 'PUBLISHED' ? 'bg-secondary-50 text-secondary-600' : 'bg-gray-100 text-gray-600'}`}>
                         {p.status}

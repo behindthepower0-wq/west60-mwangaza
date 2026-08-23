@@ -4,7 +4,7 @@ import { Plus, Pencil, Eye, Trash2, Building2 } from 'lucide-react';
 import prisma from '@/lib/db';
 import { formatPrice, getPropertyStatusLabel, getPropertyStatusClass } from '@/lib/utils';
 
-export const metadata: Metadata = { title: 'Properties — CMS' };
+export const metadata: Metadata = { title: 'Properties | CMS' };
 
 export default async function AdminPropertiesPage() {
   const properties = await prisma.property.findMany({
@@ -56,7 +56,7 @@ export default async function AdminPropertiesPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{p.location || '—'}</td>
+                    <td className="px-5 py-4 text-sm text-gray-600">{p.location || '-'}</td>
                     <td className="px-5 py-4 text-sm font-medium text-gray-700">{p.priceLabel || formatPrice(p.price, p.currency)}</td>
                     <td className="px-5 py-4"><span className={getPropertyStatusClass(p.status)}>{getPropertyStatusLabel(p.status)}</span></td>
                     <td className="px-5 py-4"><span className={`text-xs font-medium ${p.isFeatured ? 'text-secondary-600' : 'text-gray-400'}`}>{p.isFeatured ? 'Yes' : 'No'}</span></td>

@@ -17,7 +17,6 @@ const serviceLinks = [
   { label: "Land Selling", href: "/services/land-selling" },
   { label: "Real Estate Consultancy", href: "/services/real-estate-consultancy" },
   { label: "Sales & Marketing", href: "/services/sales-and-marketing" },
-  { label: "Property Management", href: "/services/property-management" },
 ];
 
 const areas = [

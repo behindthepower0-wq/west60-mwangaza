@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Building2, FolderKanban, MessageSquare, Users, Newspaper, TrendingUp, ArrowRight } from "lucide-react";
 import prisma from "@/lib/db";
 
-export const metadata: Metadata = { title: "Dashboard — CMS" };
+export const metadata: Metadata = { title: "Dashboard | CMS" };
 
 export default async function AdminDashboardPage() {
   const [propertyCount, projectCount, newEnquiries, totalEnquiries, teamCount, postCount] =

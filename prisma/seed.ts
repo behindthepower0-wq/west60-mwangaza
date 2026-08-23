@@ -81,7 +81,7 @@ async function main() {
       id: "svc-land",
       name: "Land Selling",
       slug: "land-selling",
-      shortDescription: "We offer prime residential and commercial plots across Katani, Kitengela, Joska, Malaa and Kitui — all with ready title deeds.",
+      shortDescription: "We offer prime residential and commercial plots across Katani, Kitengela, Joska, Malaa and Kitui, all with ready title deeds.",
       fullDescription: "West 60 Mwangaza Properties specializes in selling genuine land across Kenya's fastest-growing corridors. All our plots come with ready, clean title deeds. We offer both residential and commercial plots tailored to fit different budgets and investment goals. Our flexible Lipa Pole Pole payment plan allows you to own property through manageable installments spread over 18 months.",
       icon: "Home",
       order: 1,
@@ -91,8 +91,8 @@ async function main() {
       id: "svc-consultancy",
       name: "Real Estate Consultancy",
       slug: "real-estate-consultancy",
-      shortDescription: "Professional guidance through the entire property buying process — from initial enquiry and site viewing to documentation and final ownership.",
-      fullDescription: "Our expert consultants guide you through every step of property acquisition. From understanding your investment goals and budget, to identifying the right property, conducting site visits, reviewing documentation, and completing the transfer process — we are with you at every stage. We ensure you make informed decisions with no surprises.",
+      shortDescription: "Professional guidance through the entire property buying process, from initial enquiry and site viewing to documentation and final ownership.",
+      fullDescription: "Our expert consultants guide you through every step of property acquisition. From understanding your investment goals and budget, to identifying the right property, conducting site visits, reviewing documentation, and completing the transfer process, we are with you at every stage. We ensure you make informed decisions with no surprises.",
       icon: "MessageSquare",
       order: 2,
       status: "PUBLISHED" as const,
@@ -107,16 +107,7 @@ async function main() {
       order: 3,
       status: "PUBLISHED" as const,
     },
-    {
-      id: "svc-management",
-      name: "Property Management",
-      slug: "property-management",
-      shortDescription: "End-to-end property management services ensuring your investment is well-maintained and generates consistent returns.",
-      fullDescription: "Our property management service takes the stress out of owning investment property. We handle tenant sourcing, rent collection, maintenance coordination, property inspections and reporting — so you enjoy the returns without the headaches. We provide transparent monthly reports and ensure your property remains in top condition.",
-      icon: "Settings",
-      order: 4,
-      status: "PUBLISHED" as const,
-    },
+
   ];
 
   for (const service of services) {
@@ -158,7 +149,7 @@ async function main() {
         eyebrow: "Welcome to West 60 Mwangaza Properties Ltd",
         heading: "Creating Spaces.",
         headingGold: "Building Futures.",
-        description: "We develop and manage quality properties that provide lasting value, comfort and exceptional living experiences across Kenya — with ready title deeds and flexible payment plans.",
+        description: "We develop and manage quality properties that provide lasting value, comfort and exceptional living experiences across Kenya, with ready title deeds and flexible payment plans.",
         primaryCta: "Explore Properties",
         primaryCtaUrl: "/properties",
         secondaryCta: "Contact Us",

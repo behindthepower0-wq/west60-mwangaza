@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!property) return { title: "Property Not Found" };
   return {
     title: property.name,
-    description: property.shortDescription || `${property.name} — ${property.location || "Kenya"}. Available from West 60 Mwangaza Properties.`,
+    description: property.shortDescription || `${property.name}, ${property.location || "Kenya"}. Available from West 60 Mwangaza Properties.`,
     openGraph: { title: property.name, images: property.mainImage ? [property.mainImage] : [] },
   };
 }
@@ -75,7 +75,7 @@ export default async function PropertyDetailPage({ params }: Props) {
       <section className="py-16" style={{ background: "var(--color-warm-white)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-10">
 
-          {/* Left col — detail */}
+          {/* Left col: detail */}
           <div className="lg:col-span-2 space-y-8">
             {/* Title */}
             <div>
@@ -168,7 +168,7 @@ export default async function PropertyDetailPage({ params }: Props) {
             )}
           </div>
 
-          {/* Right col — CTA sidebar */}
+          {/* Right col: CTA sidebar */}
           <div className="space-y-6">
             {/* Quick contact */}
             <div className="glass-card p-6">

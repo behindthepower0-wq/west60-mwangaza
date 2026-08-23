@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about West 60 Mwangaza Properties — our mission, vision, values and commitment to quality real estate in Kenya.',
+  description: 'Learn about West 60 Mwangaza Properties: our mission, vision, values and commitment to quality real estate in Kenya.',
 };
 
 const values = [
@@ -33,7 +33,7 @@ export default async function AboutPage() {
           </div>
           <h1 className="section-heading-white mb-6">Building With Purpose. <span style={{ color: '#c6912b' }}>Delivering Value.</span></h1>
           <p className="text-white/65 text-lg max-w-2xl mx-auto leading-relaxed">
-            West 60 Mwangaza Properties Ltd — your trusted real estate partner across Kenya.
+            West 60 Mwangaza Properties Ltd, your trusted real estate partner across Kenya.
           </p>
         </div>
       </section>
@@ -44,9 +44,9 @@ export default async function AboutPage() {
           <h2 className="section-heading mb-6">Who We Are</h2>
           <div className="prose-brand space-y-4">
             <p>West 60 Mwangaza Properties Ltd is a Kenyan real estate company committed to delivering quality, genuine property investment opportunities to Kenyans and the diaspora alike.</p>
-            <p>Based at Repen Complex, Syokimau — at the strategic junction of Katani Road and Mombasa Road — we are positioned at the heart of Nairobi&apos;s fastest growing property corridor. Our office at Block B, 4th Floor, Suite 412 serves clients across Kenya and beyond.</p>
-            <p>We specialize in land selling, real estate consultancy, sales and marketing, and property management. All our properties come with ready title deeds, flexible payment plans including our Lipa Pole Pole installment option, and free site visits for prospective buyers.</p>
-            <p>Our property areas include Katani, Kitengela, Joska, Malaa and Kitui — all high-growth locations within and around Nairobi with excellent access to infrastructure and amenities.</p>
+            <p>Based at Repen Complex, Syokimau, at the strategic junction of Katani Road and Mombasa Road, we are positioned at the heart of Nairobi&apos;s fastest growing property corridor. Our office at Block B, 4th Floor, Suite 412 serves clients across Kenya and beyond.</p>
+            <p>We specialize in land selling, real estate consultancy, and sales and marketing. All our properties come with ready title deeds, flexible payment plans including our Lipa Pole Pole installment option, and free site visits for prospective buyers.</p>
+            <p>Our property areas include Katani, Kitengela, Joska, Malaa and Kitui, all high-growth locations within and around Nairobi with excellent access to infrastructure and amenities.</p>
           </div>
         </div>
       </section>
@@ -65,7 +65,7 @@ export default async function AboutPage() {
               <span className="text-2xl">🔭</span>
             </div>
             <h3 className="section-heading text-2xl mb-4">Our Vision</h3>
-            <p className="section-subheading">To be Kenya&apos;s most trusted property company — known for integrity, quality and a relentless commitment to putting our clients first in every transaction.</p>
+            <p className="section-subheading">To be Kenya&apos;s most trusted property company, known for integrity, quality and a relentless commitment to putting our clients first in every transaction.</p>
           </div>
         </div>
       </section>

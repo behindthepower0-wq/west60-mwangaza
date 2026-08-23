@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, Save, UploadCloud } from 'lucide-react';
 import { PropertyForm } from '@/components/admin/PropertyForm';
 
-export const metadata: Metadata = { title: 'Add Property — CMS' };
+export const metadata: Metadata = { title: 'Add Property | CMS' };
 
 export default function NewPropertyPage() {
   return (

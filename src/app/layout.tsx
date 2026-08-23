@@ -18,10 +18,10 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: {
     template: "%s | West 60 Mwangaza Properties",
-    default: "West 60 Mwangaza Properties — Premium Real Estate in Kenya",
+    default: "West 60 Mwangaza Properties | Premium Real Estate in Kenya",
   },
   description:
-    "West 60 Mwangaza Properties — your trusted partner for quality land and property in Kenya. Serving Katani, Kitengela, Joska, Malaa and Kitui with ready title deeds and flexible payment plans.",
+    "West 60 Mwangaza Properties, your trusted partner for quality land and property in Kenya. Serving Katani, Kitengela, Joska, Malaa and Kitui with ready title deeds and flexible payment plans.",
   keywords: [
     "West 60 Mwangaza",
     "properties Kenya",

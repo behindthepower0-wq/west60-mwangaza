@@ -24,7 +24,7 @@ const defaultServices = [
     icon: "Home",
     name: "Land Selling",
     shortDescription:
-      "Prime residential and commercial plots across Katani, Kitengela, Joska, Malaa and Kitui — all with ready title deeds and flexible payment plans.",
+      "Prime residential and commercial plots across Katani, Kitengela, Joska, Malaa and Kitui, all with ready title deeds and flexible payment plans.",
     slug: "land-selling",
   },
   {
@@ -32,7 +32,7 @@ const defaultServices = [
     icon: "MessageSquare",
     name: "Real Estate Consultancy",
     shortDescription:
-      "Professional guidance through the entire property buying process — from enquiry and site viewing to documentation and ownership.",
+      "Professional guidance through the entire property buying process, from enquiry and site viewing to documentation and ownership.",
     slug: "real-estate-consultancy",
   },
   {
@@ -42,14 +42,6 @@ const defaultServices = [
     shortDescription:
       "Strategic property marketing for developers and landowners. We connect buyers to the right properties through targeted campaigns.",
     slug: "sales-and-marketing",
-  },
-  {
-    id: "property-management",
-    icon: "Settings",
-    name: "Property Management",
-    shortDescription:
-      "End-to-end property management ensuring your investment is well-maintained and generates consistent returns.",
-    slug: "property-management",
   },
 ];
 
@@ -83,7 +75,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
           </ScrollReveal>
           <ScrollReveal delay={200}>
             <p className="section-subheading">
-              End-to-end real estate solutions tailored to your needs — from land acquisition to property management.
+              End-to-end real estate solutions tailored to your needs, from land acquisition to sales and marketing.
             </p>
           </ScrollReveal>
         </div>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { SettingsForm } from '@/components/admin/SettingsForm';
 import prisma from '@/lib/db';
 
-export const metadata: Metadata = { title: 'Settings — CMS' };
+export const metadata: Metadata = { title: 'Settings | CMS' };
 
 async function getSettings() {
   const settings = await prisma.siteSetting.findMany().catch(() => []);

@@ -17,7 +17,7 @@ const reasons = [
     icon: <MapPin size={24} />,
     title: "Prime Locations",
     description:
-      "Our properties are strategically located in high-growth areas — Katani, Kitengela, Joska, Malaa and Kitui — for maximum value.",
+      "Our properties are strategically located in high-growth areas: Katani, Kitengela, Joska, Malaa and Kitui for maximum value.",
   },
   {
     icon: <Award size={24} />,
@@ -35,7 +35,7 @@ const reasons = [
     icon: <FileCheck size={24} />,
     title: "Flexible Payment Plans",
     description:
-      "Our Lipa Pole Pole payment structure makes property ownership accessible — spread your payments over a comfortable period.",
+      "Our Lipa Pole Pole payment structure makes property ownership accessible: spread your payments over a comfortable period.",
   },
 ];
 

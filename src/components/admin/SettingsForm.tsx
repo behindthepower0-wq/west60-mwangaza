@@ -40,7 +40,7 @@ const settingGroups = [
   {
     title: "SEO Defaults",
     fields: [
-      { key: "default_seo_title", label: "Default SEO Title", type: "text", placeholder: "West 60 Mwangaza Properties — Premium Real Estate in Kenya" },
+      { key: "default_seo_title", label: "Default SEO Title", type: "text", placeholder: "West 60 Mwangaza Properties | Premium Real Estate in Kenya" },
       { key: "default_meta_description", label: "Default Meta Description", type: "textarea", placeholder: "Your trusted real estate partner in Kenya..." },
     ],
   },

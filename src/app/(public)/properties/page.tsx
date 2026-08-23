@@ -6,7 +6,7 @@ import { Filter } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Properties",
-  description: "Browse all available land and properties from West 60 Mwangaza Properties across Kenya — Katani, Kitengela, Joska, Malaa and Kitui.",
+  description: "Browse all available land and properties from West 60 Mwangaza Properties across Kenya: Katani, Kitengela, Joska, Malaa and Kitui.",
 };
 
 const areas = ["All", "Katani", "Kitengela", "Joska", "Malaa", "Kitui"];

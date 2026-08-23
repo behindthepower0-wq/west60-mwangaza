@@ -12,9 +12,9 @@ import { NewsSection } from "@/components/public/NewsSection";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "West 60 Mwangaza Properties — Premium Real Estate in Kenya",
+  title: "West 60 Mwangaza Properties | Premium Real Estate in Kenya",
   description:
-    "West 60 Mwangaza Properties — your trusted partner for quality land and property in Kenya. Ready title deeds, flexible payment plans, free site visits. Katani, Kitengela, Joska, Malaa, Kitui.",
+    "West 60 Mwangaza Properties, your trusted partner for quality land and property in Kenya. Ready title deeds, flexible payment plans, free site visits. Katani, Kitengela, Joska, Malaa, Kitui.",
   openGraph: {
     title: "West 60 Mwangaza Properties",
     description: "Premium real estate in Kenya. Land with ready title deeds.",

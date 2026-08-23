@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "Admin Login — West 60 Mwangaza CMS",
+  title: "Admin Login | West 60 Mwangaza CMS",
   description: "Sign in to the West 60 Mwangaza Properties content management system.",
   robots: { index: false, follow: false },
 };

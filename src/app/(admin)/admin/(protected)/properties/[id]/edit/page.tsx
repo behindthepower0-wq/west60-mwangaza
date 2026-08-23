@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { PropertyForm } from '@/components/admin/PropertyForm';
 import prisma from '@/lib/db';
 
-export const metadata: Metadata = { title: 'Edit Property — CMS' };
+export const metadata: Metadata = { title: 'Edit Property | CMS' };
 
 export default async function EditPropertyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
