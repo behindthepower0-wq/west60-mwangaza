@@ -44,7 +44,7 @@ export default async function AboutPage() {
           <h2 className="section-heading mb-6">Who We Are</h2>
           <div className="prose-brand space-y-4">
             <p>West 60 Mwangaza Properties Ltd is a Kenyan real estate company committed to delivering quality, genuine property investment opportunities to Kenyans and the diaspora alike.</p>
-            <p>Based at the junction of Katani Road and Mombasa Road in Syokimau, we are positioned at the heart of Nairobi&apos;s fastest growing property corridor, serving clients across Kenya and beyond.</p>
+            <p>Based at Repen Complex, Block B, 4th Floor, Suite 412, Katani Rd at the junction of Katani Road and Mombasa Road in Syokimau, we are positioned at the heart of Nairobi&apos;s fastest growing property corridor, serving clients across Kenya and beyond.</p>
             <p>We specialize in land selling, real estate consultancy, and sales and marketing. All our properties come with ready title deeds, flexible payment plans including our Lipa Pole Pole installment option, and free site visits for prospective buyers.</p>
             <p>Our property areas include Katani, Kitengela, Joska, Malaa and Kitui, all high-growth locations within and around Nairobi with excellent access to infrastructure and amenities.</p>
           </div>

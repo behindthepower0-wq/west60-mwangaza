@@ -179,9 +179,10 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={15} className="text-secondary-400 flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-white/55 leading-relaxed">
-                  At the Junction of Katani Rd<br />
-                  and Mombasa Rd, Syokimau<br />
-                  Nairobi, Kenya
+                  Repen Complex, Block B, 4th Floor,<br />
+                  Suite 412, Katani Rd at the<br />
+                  Junction of Katani Rd &amp; Mombasa Rd,<br />
+                  Syokimau, Nairobi
                 </span>
               </li>
               <li className="flex items-center gap-3">

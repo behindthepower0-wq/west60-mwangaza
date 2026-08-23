@@ -34,7 +34,7 @@ async function main() {
     { key: "phone_primary", value: "0711 400 933", label: "Primary Phone" },
     { key: "email", value: "info@west60mwangaza.com", label: "Email" },
     { key: "whatsapp", value: "0711400933", label: "WhatsApp" },
-    { key: "address", value: "At the Junction of Katani Rd and Mombasa Rd\nSyokimau, Nairobi, Kenya", label: "Address" },
+    { key: "address", value: "Repen Complex, Block B, 4th Floor, Suite 412\nKatani Rd at the Junction of Katani Rd and Mombasa Rd\nSyokimau, Nairobi, Kenya", label: "Address" },
     { key: "working_hours", value: "Monday–Friday: 8:00 a.m – 4:30 p.m\nSaturday: 9:00 a.m – 1:00 p.m", label: "Working Hours" },
     { key: "facebook_url", value: "https://facebook.com", label: "Facebook URL" },
     { key: "instagram_url", value: "", label: "Instagram URL" },

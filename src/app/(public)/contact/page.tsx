@@ -25,7 +25,7 @@ export default function ContactPage() {
               <h2 className="section-heading mb-8">Contact Information</h2>
               <div className="space-y-5">
                 {[
-                  { icon: MapPin, label: 'Office Address', value: 'At the Junction of Katani Rd\nand Mombasa Rd, Syokimau\nNairobi, Kenya' },
+                  { icon: MapPin, label: 'Office Address', value: 'Repen Complex, Block B, 4th Floor,\nSuite 412, Katani Rd at the Junction\nof Katani Rd and Mombasa Rd, Syokimau' },
                   { icon: Phone, label: 'Phone / WhatsApp', value: '0711 400 933', href: 'tel:0711400933' },
                   { icon: Mail, label: 'Email', value: 'info@west60mwangaza.com', href: 'mailto:info@west60mwangaza.com' },
                   { icon: Clock, label: 'Working Hours', value: 'Monday–Friday: 8:00 a.m – 4:30 p.m\nSaturday: 9:00 a.m – 1:00 p.m' },
@@ -48,7 +48,7 @@ export default function ContactPage() {
               <div className="mt-6 rounded-2xl overflow-hidden h-56 bg-primary-50 flex items-center justify-center border border-primary-100">
                 <div className="text-center">
                   <MapPin size={32} className="text-secondary-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">At the Junction of Katani Rd and Mombasa Rd, Syokimau, Nairobi</p>
+                  <p className="text-sm text-gray-500">Repen Complex, Suite 412, Katani Rd at the Junction of Katani Rd and Mombasa Rd, Syokimau</p>
                   <a href="https://maps.google.com/?q=Junction+Katani+Road+Mombasa+Road+Syokimau+Nairobi" target="_blank" rel="noopener noreferrer"
                     className="text-xs text-primary-600 hover:text-secondary-600 transition-colors mt-1 block">
                     View on Google Maps →

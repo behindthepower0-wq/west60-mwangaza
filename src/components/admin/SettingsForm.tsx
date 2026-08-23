@@ -21,7 +21,7 @@ const settingGroups = [
     fields: [
       { key: "phone_primary", label: "Phone / WhatsApp", type: "tel", placeholder: "0711 400 933" },
       { key: "email", label: "Email Address", type: "email", placeholder: "info@west60mwangaza.com" },
-      { key: "address", label: "Physical Address", type: "textarea", placeholder: "At the Junction of Katani Rd and Mombasa Rd..." },
+      { key: "address", label: "Physical Address", type: "textarea", placeholder: "Repen Complex, Block B, 4th Floor, Suite 412..." },
       { key: "working_hours", label: "Working Hours", type: "text", placeholder: "Mon-Fri: 8a.m-4:30p.m, Sat: 9a.m-1p.m" },
     ],
   },
