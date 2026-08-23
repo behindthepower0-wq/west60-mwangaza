@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import prisma from "@/lib/db";
 import { PropertyCard } from "@/components/public/PropertyCard";
-import { Filter } from "lucide-react";
+import { PropertyFilters } from "@/components/public/PropertyFilters";
 
 export const metadata: Metadata = {
   title: "Properties",
   description: "Browse all available land and properties from West 60 Mwangaza Properties across Kenya: Katani, Kitengela, Joska, Malaa and Kitui.",
-};
-
-const areas = ["All", "Katani", "Kitengela", "Joska", "Malaa", "Kitui"];
-const statuses = ["All", "AVAILABLE", "COMING_SOON", "UNDER_CONSTRUCTION", "COMPLETED", "SOLD"];
-const statusLabels: Record<string, string> = {
-  All: "All", AVAILABLE: "Available", COMING_SOON: "Coming Soon",
-  UNDER_CONSTRUCTION: "Under Construction", COMPLETED: "Completed", SOLD: "Sold",
 };
 
 async function getProperties(searchParams: { area?: string; status?: string; search?: string }) {
@@ -64,43 +56,7 @@ export default async function PropertiesPage({
       </section>
 
       {/* Filters */}
-      <section className="sticky top-[72px] z-30 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <div className="flex items-center gap-2 text-sm font-medium text-gray-600 flex-shrink-0">
-            <Filter size={16} /> Filter:
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {areas.map((area) => (
-              <a
-                key={area}
-                href={`/properties?area=${area}`}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                  (params.area || "All") === area
-                    ? "bg-primary-700 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-primary-50 hover:text-primary-700"
-                }`}
-              >
-                {area}
-              </a>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-2 sm:ml-4">
-            {statuses.map((s) => (
-              <a
-                key={s}
-                href={`/properties?${params.area ? `area=${params.area}&` : ""}status=${s}`}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
-                  (params.status || "All") === s
-                    ? "bg-secondary-400 text-primary-900"
-                    : "bg-gray-100 text-gray-600 hover:bg-secondary-50 hover:text-secondary-700"
-                }`}
-              >
-                {statusLabels[s]}
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
+      <PropertyFilters activeArea={params.area} activeStatus={params.status} />
 
       {/* Grid */}
       <section className="py-16" style={{ background: "var(--color-warm-white)" }}>
