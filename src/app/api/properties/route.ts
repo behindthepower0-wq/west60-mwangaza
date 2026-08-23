@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       sizeUnit,
       features,
       isFeatured,
+      mainImage,
     } = body;
 
     if (!name || !description || !location) {
@@ -54,6 +55,7 @@ export async function POST(req: NextRequest) {
         propertyType,
         status,
         area: size ? `${size} ${sizeUnit || ''}`.trim() : null,
+        mainImage: mainImage || null,
         features: {
           create: features?.map((f: string) => ({ feature: f })) || []
         },

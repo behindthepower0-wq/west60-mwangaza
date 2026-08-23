@@ -32,6 +32,21 @@ export async function POST(req: NextRequest) {
         await bucket.put(key, buffer, {
           httpMetadata: { contentType: file.type },
         });
+        // Save to Media library
+        const category = formData.get("category") as string || "GENERAL";
+        const prismaModule = await import("@/lib/db");
+        const prismaDb = prismaModule.default;
+        await prismaDb.media.create({
+          data: {
+            filename,
+            originalName: file.name,
+            mimeType: file.type,
+            size: file.size,
+            url: `/uploads/${filename}`,
+            altText: file.name.replace(/\.[^.]+$/, ""),
+            category: category as any,
+          },
+        });
         return NextResponse.json({
           url: `/uploads/${filename}`,
           name: file.name,
@@ -54,6 +69,22 @@ export async function POST(req: NextRequest) {
 
     const filepath = path.join(uploadDir, filename);
     await writeFile(filepath, Buffer.from(buffer));
+
+    // Save to Media library
+    const category = formData.get("category") as string || "GENERAL";
+    const prismaModule = await import("@/lib/db");
+    const prismaDb = prismaModule.default;
+    await prismaDb.media.create({
+      data: {
+        filename,
+        originalName: file.name,
+        mimeType: file.type,
+        size: file.size,
+        url: `/uploads/${filename}`,
+        altText: file.name.replace(/\.[^.]+$/, ""),
+        category: category as any,
+      },
+    });
 
     return NextResponse.json({
       url: `/uploads/${filename}`,

@@ -58,9 +58,9 @@ export default async function AdminProjectsPage() {
                         <Link href={`/projects/${p.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">
                           <Eye size={16} />
                         </Link>
-                        <button className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
+                        <Link href={`/admin/projects/${p.id}/edit`} className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
                           <Pencil size={16} />
-                        </button>
+                        </Link>
                         <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
                           <Trash2 size={16} />
                         </button>

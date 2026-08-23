@@ -8,6 +8,9 @@ import { ProjectsSection } from "@/components/public/ProjectCard";
 import { WhyChooseUsSection } from "@/components/public/WhyChooseUsSection";
 import { TeamSection } from "@/components/public/TeamSection";
 import { NewsSection } from "@/components/public/NewsSection";
+import { PaymentPlansSection } from "@/components/public/PaymentPlansSection";
+import { TrustBadges } from "@/components/public/TrustBadges";
+import { AwardsSection } from "@/components/public/AwardsSection";
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +27,8 @@ export const metadata: Metadata = {
 
 async function getData() {
   try {
-    const [services, featuredProperties, projects, teamMembers, latestPosts] =
+    const [featuredProperties, projects, teamMembers, latestPosts, services] =
       await Promise.all([
-        prisma.service.findMany({
-          where: { status: "PUBLISHED" },
-          orderBy: { order: "asc" },
-          take: 4,
-        }),
         prisma.property.findMany({
           where: { isFeatured: true, isPublished: true },
           orderBy: { createdAt: "desc" },
@@ -54,31 +52,38 @@ async function getData() {
           take: 3,
           include: { category: true, author: true },
         }),
+        prisma.service.findMany({
+          where: { status: "PUBLISHED" },
+          orderBy: { order: "asc" },
+        }),
       ]);
 
-    return { services, featuredProperties, projects, teamMembers, latestPosts };
+    return { featuredProperties, projects, teamMembers, latestPosts, services };
   } catch {
     return {
-      services: [],
       featuredProperties: [],
       projects: [],
       teamMembers: [],
       latestPosts: [],
+      services: [],
     };
   }
 }
 
 export default async function HomePage() {
-  const { services, featuredProperties, projects, teamMembers, latestPosts } =
+  const { featuredProperties, projects, teamMembers, latestPosts, services } =
     await getData();
 
   return (
     <>
       <HeroSection />
+      <TrustBadges />
       <AboutSection />
       <ServicesSection services={services} />
       <FeaturedPropertiesSection properties={featuredProperties} />
+      <PaymentPlansSection />
       <WhyChooseUsSection />
+      <AwardsSection />
       <ProjectsSection projects={projects} />
       <TeamSection teamMembers={teamMembers} />
       <NewsSection posts={latestPosts} />

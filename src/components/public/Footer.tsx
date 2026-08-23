@@ -6,17 +6,10 @@ import { getWhatsAppUrl } from "@/lib/utils";
 const quickLinks = [
   { label: "About Us", href: "/about" },
   { label: "Properties", href: "/properties" },
-  { label: "Services", href: "/services" },
   { label: "Projects", href: "/projects" },
   { label: "Our Team", href: "/team" },
   { label: "News & Insights", href: "/news" },
   { label: "Contact Us", href: "/contact" },
-];
-
-const serviceLinks = [
-  { label: "Land Selling", href: "/services/land-selling" },
-  { label: "Real Estate Consultancy", href: "/services/real-estate-consultancy" },
-  { label: "Sales & Marketing", href: "/services/sales-and-marketing" },
 ];
 
 const areas = [
@@ -137,24 +130,9 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Services + Areas */}
+          {/* Column 3: Areas */}
           <div>
             <h3 className="text-sm font-semibold text-white mb-5 tracking-wider uppercase" style={{ fontFamily: "var(--font-sans)" }}>
-              Our Services
-            </h3>
-            <ul className="space-y-2.5 mb-8">
-              {serviceLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/55 hover:text-secondary-400 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <h3 className="text-sm font-semibold text-white mb-3 tracking-wider uppercase" style={{ fontFamily: "var(--font-sans)" }}>
               Our Areas
             </h3>
             <div className="flex flex-wrap gap-2">

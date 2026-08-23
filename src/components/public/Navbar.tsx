@@ -22,7 +22,6 @@ const navItems = [
       { label: "Kitui", href: "/properties?area=kitui" },
     ],
   },
-  { label: "Services", href: "/services" },
   { label: "Projects", href: "/projects" },
   { label: "News", href: "/news" },
   { label: "Contact Us", href: "/contact" },

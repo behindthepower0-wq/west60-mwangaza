@@ -27,6 +27,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       sizeUnit,
       features,
       isFeatured,
+      mainImage,
     } = body;
 
     if (!name || !description || !location) {
@@ -60,6 +61,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         propertyType,
         status,
         area: size ? `${size} ${sizeUnit || ''}`.trim() : null,
+        mainImage: mainImage !== undefined ? mainImage : undefined,
         features: {
           deleteMany: {},
           create: features?.map((f: string) => ({ feature: f })) || []

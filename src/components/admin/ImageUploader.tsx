@@ -1,0 +1,182 @@
+"use client";
+
+import { useState, useRef, useCallback } from "react";
+import { Upload, X, Image, Loader2, CheckCircle } from "lucide-react";
+
+interface ImageUploaderProps {
+  currentUrl?: string | null;
+  onUpload: (url: string, filename: string) => void;
+  label?: string;
+  className?: string;
+  category?: string;
+}
+
+export function ImageUploader({
+  currentUrl,
+  onUpload,
+  label = "Upload Image",
+  className = "",
+  category,
+}: ImageUploaderProps) {
+  const [preview, setPreview] = useState<string | null>(currentUrl || null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = useCallback(
+    async (file: File) => {
+      if (!file.type.startsWith("image/")) {
+        setError("Please select an image file");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        setError("Image must be less than 10MB");
+        return;
+      }
+
+      setError("");
+      setIsUploading(true);
+
+      // Show local preview immediately
+      const localPreview = URL.createObjectURL(file);
+      setPreview(localPreview);
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        if (category) formData.append("category", category);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!res.ok) throw new Error("Upload failed");
+
+        const data = await res.json();
+        URL.revokeObjectURL(localPreview);
+        setPreview(data.url);
+        onUpload(data.url, data.name);
+      } catch (err) {
+        URL.revokeObjectURL(localPreview);
+        setPreview(currentUrl || null);
+        setError("Upload failed. Please try again.");
+      } finally {
+        setIsUploading(false);
+      }
+    },
+    [currentUrl, onUpload, category]
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  };
+
+  const handleRemove = () => {
+    setPreview(null);
+    onUpload("", "");
+    if (inputRef.current) inputRef.current.value = "";
+  };
+
+  return (
+    <div className={className}>
+      <label className="form-label">{label}</label>
+
+      {preview ? (
+        <div className="relative group rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-full h-48 object-cover"
+          />
+          {/* Overlay controls */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="px-4 py-2 bg-white/90 rounded-lg text-sm font-medium text-gray-800 hover:bg-white transition-colors flex items-center gap-2"
+            >
+              <Upload size={14} /> Replace
+            </button>
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="px-4 py-2 bg-red-500/90 rounded-lg text-sm font-medium text-white hover:bg-red-500 transition-colors flex items-center gap-2"
+            >
+              <X size={14} /> Remove
+            </button>
+          </div>
+          {isUploading && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="flex items-center gap-2 text-white text-sm">
+                <Loader2 size={18} className="animate-spin" /> Uploading...
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          onClick={() => inputRef.current?.click()}
+          className={`
+            border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all
+            ${
+              isDragging
+                ? "border-primary-500 bg-primary-50/50"
+                : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
+            }
+          `}
+        >
+          {isUploading ? (
+            <div className="flex flex-col items-center gap-3">
+              <Loader2 size={32} className="text-primary-500 animate-spin" />
+              <p className="text-sm text-gray-500">Uploading...</p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-14 h-14 rounded-full bg-primary-50 flex items-center justify-center">
+                <Image size={24} className="text-primary-500" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  Click to upload or drag and drop
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  PNG, JPG, WebP up to 10MB
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {error && (
+        <p className="text-xs text-red-500 mt-2 flex items-center gap-1">
+          {error}
+        </p>
+      )}
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleInputChange}
+        className="hidden"
+      />
+    </div>
+  );
+}

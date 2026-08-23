@@ -55,11 +55,13 @@ async function main() {
   console.log("✅ Site settings seeded");
 
   // ─── NAVIGATION ───
+  // Remove stale nav items pointing at removed pages
+  await prisma.navigationItem.deleteMany({ where: { url: "/services" } });
+
   const navItems = [
     { label: "Home", url: "/", order: 1 },
     { label: "About Us", url: "/about", order: 2 },
     { label: "Properties", url: "/properties", order: 3 },
-    { label: "Services", url: "/services", order: 4 },
     { label: "Projects", url: "/projects", order: 5 },
     { label: "News", url: "/news", order: 6 },
     { label: "Contact Us", url: "/contact", order: 7 },

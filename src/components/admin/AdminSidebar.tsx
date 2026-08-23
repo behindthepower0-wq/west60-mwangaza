@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard, Home, Building2, FolderKanban, Wrench,
+  LayoutDashboard, Home, Building2, FolderKanban,
   Users, Star, Newspaper, Image, Navigation, MessageSquare,
   Search, Settings, UserCog, Activity, ChevronDown, ChevronRight,
 } from "lucide-react";
@@ -24,7 +24,6 @@ const navGroups = [
       { label: "Homepage", href: "/admin/homepage", icon: Home },
       { label: "Properties", href: "/admin/properties", icon: Building2 },
       { label: "Projects", href: "/admin/projects", icon: FolderKanban },
-      { label: "Services", href: "/admin/services", icon: Wrench },
       { label: "Team", href: "/admin/team", icon: Users },
       { label: "Testimonials", href: "/admin/testimonials", icon: Star },
       { label: "News / Blog", href: "/admin/news", icon: Newspaper },

@@ -55,9 +55,9 @@ export default async function AdminTeamPage() {
                     <td className="px-5 py-4 text-sm text-gray-500">{member.order}</td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">
-                        <button className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
+                        <Link href={`/admin/team/${member.id}/edit`} className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
                           <Pencil size={16} />
-                        </button>
+                        </Link>
                         <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
                           <Trash2 size={16} />
                         </button>
