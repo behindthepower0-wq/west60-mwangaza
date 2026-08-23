@@ -61,7 +61,11 @@ export async function GET() {
     const data = await resp.json();
     steps.rawFetchOk = resp.status === 200;
     steps.rawFetchStatus = resp.status;
-    steps.rawFetchCount = data?.results?.[0]?.response?.result?.rows?.[0]?.[1]?.value;
+    steps.rawFetchBody = JSON.stringify(data).substring(0, 500);
+    // Mask auth token for debugging
+    steps.tursoUrlUsed = httpsUrl;
+    steps.tursoTokenLength = authToken?.length || 0;
+    steps.tursoTokenPrefix = authToken?.substring(0, 10) || "none";
   } catch (e) {
     steps.rawFetchError = e instanceof Error ? e.message : String(e);
   }
