@@ -1,27 +1,49 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import type { PrismaClient as PrismaClientType } from "@prisma/client";
 
-// ─── Cloudflare D1 client ─────────────────────────────────────────
+// ─── Turso (libSQL) client for production ──────────────────────────
+let _tursoClient: PrismaClientType | null = null;
+
+function createTursoClient(): PrismaClientType {
+  if (_tursoClient) return _tursoClient;
+
+  const url = process.env.TURSO_DATABASE_URL;
+  const authToken = process.env.TURSO_AUTH_TOKEN;
+
+  if (!url || !authToken) {
+    throw new Error("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { createClient } = require("@libsql/client");
+  const { PrismaLibSql } = require("@prisma/adapter-libsql");
+
+  const client = createClient({ url, authToken });
+  const adapter = new PrismaLibSql(client);
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaClient } = require("@prisma/client/edge");
+  _tursoClient = new PrismaClient({ adapter });
+  return _tursoClient!;
+}
+
+// ─── Cloudflare D1 client (fallback) ──────────────────────────────
 let _cfClient: PrismaClientType | null = null;
 
 function createD1Client(): PrismaClientType {
   if (_cfClient) return _cfClient;
-  // getCloudflareContext() is only available in Cloudflare Workers runtime
-  // In local dev it will throw, so we fall back to SQLite
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { getCloudflareContext } = require("@opennextjs/cloudflare");
   const { env } = getCloudflareContext();
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaD1 } = require("@prisma/adapter-d1");
   const adapter = new PrismaD1(env.DB);
-  // Use the edge-compatible client to avoid WASM issues on Workers
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaClient } = require("@prisma/client/edge");
   _cfClient = new PrismaClient({ adapter });
   return _cfClient!;
 }
 
-// ─── Local SQLite client ───────────────────────────────────────────
+// ─── Local SQLite client for dev ───────────────────────────────────
 let _localClient: PrismaClientType | null = null;
 
 function createLocalClient(): PrismaClientType {
@@ -48,23 +70,29 @@ function isCloudflareWorkers(): boolean {
 }
 
 function resolveClient(): PrismaClientType {
-  // Only use Cloudflare D1 when actually running on Workers.
-  // initOpenNextCloudflareForDev() makes getCloudflareContext() work in
-  // local dev too (against an empty miniflare D1), so we must not rely
-  // on it throwing to detect local development.
+  // 1. Turso — when TURSO_DATABASE_URL is set (Vercel production)
+  if (process.env.TURSO_DATABASE_URL) {
+    try {
+      return createTursoClient();
+    } catch {
+      // Fall through
+    }
+  }
+
+  // 2. Cloudflare D1 — when running on Workers
   if (isCloudflareWorkers()) {
     try {
       return createD1Client();
     } catch {
-      // Fall through to local SQLite
+      // Fall through
     }
   }
+
+  // 3. Local SQLite — development
   return createLocalClient();
 }
 
 // ─── Proxy that lazily resolves and delegates ──────────────────────
-// This lets the rest of the codebase keep using `import prisma from "@/lib/db"`
-// and calling `prisma.model.findMany(...)` without any changes.
 const prisma = new Proxy({} as unknown as PrismaClientType, {
   get(_target, prop, _receiver) {
     const client = resolveClient();
