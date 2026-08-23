@@ -20,15 +20,15 @@ async function getProperties(searchParams: { area?: string; status?: string; sea
   const where: Record<string, unknown> = { isPublished: true };
 
   if (searchParams.area && searchParams.area !== "All") {
-    where.area = { contains: searchParams.area, mode: "insensitive" };
+    where.area = { contains: searchParams.area };
   }
   if (searchParams.status && searchParams.status !== "All") {
     where.status = searchParams.status;
   }
   if (searchParams.search) {
     where.OR = [
-      { name: { contains: searchParams.search, mode: "insensitive" } },
-      { location: { contains: searchParams.search, mode: "insensitive" } },
+      { name: { contains: searchParams.search } },
+      { location: { contains: searchParams.search } },
     ];
   }
 
