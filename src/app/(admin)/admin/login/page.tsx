@@ -6,13 +6,13 @@ export default function AdminLoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "linear-gradient(135deg, #0A1410 0%, #0F2218 50%, #0A1410 100%)" }}
+      style={{ background: "linear-gradient(135deg, #081a10 0%, #0f3021 50%, #081a10 100%)" }}
     >
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-5"
-        style={{ background: "radial-gradient(circle, #C9A84C, transparent)", transform: "translate(30%, -30%)" }} />
+        style={{ background: "radial-gradient(circle, #c6912b, transparent)", transform: "translate(30%, -30%)" }} />
       <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-5"
-        style={{ background: "radial-gradient(circle, #2D5A3D, transparent)", transform: "translate(-30%, 30%)" }} />
+        style={{ background: "radial-gradient(circle, #2a6b50, transparent)", transform: "translate(-30%, 30%)" }} />
 
       <div className="relative w-full max-w-md">
         {/* Card */}

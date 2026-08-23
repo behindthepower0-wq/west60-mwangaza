@@ -35,7 +35,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
 
         <div className="flex items-center gap-2.5 pl-3 border-l border-gray-100">
           <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white"
-            style={{ background: "linear-gradient(135deg, #1A3A2A, #2D5A3D)" }}>
+            style={{ background: "linear-gradient(135deg, #1d4f38, #2a6b50)" }}>
             {user?.name?.charAt(0) || "A"}
           </div>
           <div className="hidden sm:block">

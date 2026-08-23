@@ -65,7 +65,7 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
           </ScrollReveal>
           <ScrollReveal delay={100}>
             <h2 className="section-heading mb-4">
-              Discover Your <span style={{ color: "#C9A84C" }}>Dream Property</span>
+              Discover Your <span style={{ color: "#c6912b" }}>Dream Property</span>
             </h2>
           </ScrollReveal>
           <ScrollReveal delay={150}>
@@ -96,7 +96,7 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
                   {/* Gradient overlay on hover */}
                   <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ background: "linear-gradient(to top, rgba(26,58,42,0.6) 0%, transparent 50%)" }}
+                    style={{ background: "linear-gradient(to top, rgba(29,79,56,0.6) 0%, transparent 50%)" }}
                   />
                   {/* Status badge */}
                   <div className="absolute top-4 left-4">
@@ -108,10 +108,10 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
                   <div
                     className="absolute bottom-4 right-4 px-4 py-2 rounded-xl text-sm font-bold"
                     style={{
-                      background: "rgba(26,58,42,0.85)",
+                      background: "rgba(29,79,56,0.85)",
                       backdropFilter: "blur(8px)",
-                      color: "#C9A84C",
-                      border: "1px solid rgba(201,168,76,0.2)",
+                      color: "#c6912b",
+                      border: "1px solid rgba(198,145,43,0.2)",
                     }}
                   >
                     {property.priceLabel || formatPrice(property.price, property.currency)}
@@ -185,7 +185,7 @@ export function PropertyCard({ property }: { property: any }) {
         />
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{ background: "linear-gradient(to top, rgba(26,58,42,0.6) 0%, transparent 50%)" }}
+          style={{ background: "linear-gradient(to top, rgba(29,79,56,0.6) 0%, transparent 50%)" }}
         />
         <div className="absolute top-4 left-4">
           <span className={getStatusClass(property.status)}>
@@ -195,10 +195,10 @@ export function PropertyCard({ property }: { property: any }) {
         <div
           className="absolute bottom-4 right-4 px-4 py-2 rounded-xl text-sm font-bold"
           style={{
-            background: "rgba(26,58,42,0.85)",
+            background: "rgba(29,79,56,0.85)",
             backdropFilter: "blur(8px)",
-            color: "#C9A84C",
-            border: "1px solid rgba(201,168,76,0.2)",
+            color: "#c6912b",
+            border: "1px solid rgba(198,145,43,0.2)",
           }}
         >
           {property.priceLabel || formatPrice(property.price, property.currency)}

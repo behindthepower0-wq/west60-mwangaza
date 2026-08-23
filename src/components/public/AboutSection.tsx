@@ -15,7 +15,7 @@ export function AboutSection() {
       {/* Subtle decorative background */}
       <div
         className="absolute top-0 right-0 w-[500px] h-[500px] opacity-[0.03] pointer-events-none"
-        style={{ background: "radial-gradient(circle, #1A3A2A, transparent 60%)" }}
+        style={{ background: "radial-gradient(circle, #1d4f38, transparent 60%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +34,7 @@ export function AboutSection() {
                 {/* Overlay gradient */}
                 <div
                   className="absolute inset-0 opacity-20"
-                  style={{ background: "linear-gradient(135deg, #1A3A2A, transparent)" }}
+                  style={{ background: "linear-gradient(135deg, #1d4f38, transparent)" }}
                 />
               </div>
 
@@ -45,8 +45,8 @@ export function AboutSection() {
                   background: "rgba(255,255,255,0.92)",
                   backdropFilter: "blur(16px)",
                   WebkitBackdropFilter: "blur(16px)",
-                  border: "1px solid rgba(201,168,76,0.2)",
-                  boxShadow: "0 12px 40px rgba(26,58,42,0.15)",
+                  border: "1px solid rgba(198,145,43,0.2)",
+                  boxShadow: "0 12px 40px rgba(29,79,56,0.15)",
                 }}
               >
                 <p className="text-xs text-secondary-600 font-semibold tracking-wider uppercase mb-1.5">
@@ -61,8 +61,8 @@ export function AboutSection() {
               <div
                 className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-lg"
                 style={{
-                  background: "linear-gradient(135deg, #1A3A2A, #2D5A3D)",
-                  border: "2px solid rgba(201,168,76,0.3)",
+                  background: "linear-gradient(135deg, #1d4f38, #2a6b50)",
+                  border: "2px solid rgba(198,145,43,0.3)",
                   animation: "float 5s ease-in-out infinite reverse",
                 }}
               >
@@ -73,7 +73,7 @@ export function AboutSection() {
               {/* Decorative blob */}
               <div
                 className="absolute -top-12 -left-12 w-64 h-64 rounded-full -z-10"
-                style={{ background: "radial-gradient(circle, rgba(201,168,76,0.08), transparent 60%)" }}
+                style={{ background: "radial-gradient(circle, rgba(198,145,43,0.08), transparent 60%)" }}
               />
             </div>
           </ScrollReveal>
@@ -90,7 +90,7 @@ export function AboutSection() {
             <ScrollReveal delay={100}>
               <h2 className="section-heading mb-6">
                 Building With Purpose.{" "}
-                <span style={{ color: "#C9A84C" }}>Delivering Value.</span>
+                <span style={{ color: "#c6912b" }}>Delivering Value.</span>
               </h2>
             </ScrollReveal>
 
@@ -123,8 +123,8 @@ export function AboutSection() {
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110"
                       style={{
-                        background: "linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05))",
-                        border: "1px solid rgba(201,168,76,0.25)",
+                        background: "linear-gradient(135deg, rgba(198,145,43,0.15), rgba(198,145,43,0.05))",
+                        border: "1px solid rgba(198,145,43,0.25)",
                       }}
                     >
                       <CheckCircle size={14} className="text-secondary-500" />

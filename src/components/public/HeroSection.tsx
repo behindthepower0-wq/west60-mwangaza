@@ -87,8 +87,8 @@ export function HeroSection() {
         style={{
           background: `
             linear-gradient(135deg, rgba(8,14,12,0.92) 0%, rgba(8,14,12,0.70) 40%, rgba(8,14,12,0.35) 70%, rgba(8,14,12,0.50) 100%),
-            radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.08) 0%, transparent 60%),
-            radial-gradient(ellipse at 20% 20%, rgba(26,58,42,0.15) 0%, transparent 50%)
+            radial-gradient(ellipse at 80% 80%, rgba(198,145,43,0.08) 0%, transparent 60%),
+            radial-gradient(ellipse at 20% 20%, rgba(29,79,56,0.15) 0%, transparent 50%)
           `,
         }}
         aria-hidden="true"
@@ -98,13 +98,13 @@ export function HeroSection() {
       <div
         className="absolute top-20 right-20 w-96 h-96 rounded-full animate-float opacity-[0.03]"
         style={{
-          background: "radial-gradient(circle, #C9A84C, transparent 60%)",
+          background: "radial-gradient(circle, #c6912b, transparent 60%)",
         }}
       />
       <div
         className="absolute bottom-40 left-10 w-64 h-64 rounded-full opacity-[0.04]"
         style={{
-          background: "radial-gradient(circle, #C9A84C, transparent 60%)",
+          background: "radial-gradient(circle, #c6912b, transparent 60%)",
           animation: "float 8s ease-in-out infinite reverse",
         }}
       />
@@ -113,7 +113,7 @@ export function HeroSection() {
       <div
         className="absolute bottom-0 left-0 right-0 h-px"
         style={{
-          background: "linear-gradient(90deg, transparent 5%, rgba(201,168,76,0.3) 30%, rgba(201,168,76,0.5) 50%, rgba(201,168,76,0.3) 70%, transparent 95%)",
+          background: "linear-gradient(90deg, transparent 5%, rgba(198,145,43,0.3) 30%, rgba(198,145,43,0.5) 50%, rgba(198,145,43,0.3) 70%, transparent 95%)",
         }}
       />
 
@@ -210,8 +210,8 @@ export function HeroSection() {
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
                   style={{
-                    background: "linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05))",
-                    border: "1px solid rgba(201,168,76,0.25)",
+                    background: "linear-gradient(135deg, rgba(198,145,43,0.15), rgba(198,145,43,0.05))",
+                    border: "1px solid rgba(198,145,43,0.25)",
                   }}
                 >
                   {feat.icon}
@@ -282,7 +282,7 @@ export function HeroSection() {
           background: "rgba(10,20,16,0.6)",
           backdropFilter: "blur(20px) saturate(1.3)",
           WebkitBackdropFilter: "blur(20px) saturate(1.3)",
-          borderTop: "1px solid rgba(201,168,76,0.12)",
+          borderTop: "1px solid rgba(198,145,43,0.12)",
         }}
       >
         <div className="max-w-7xl mx-auto px-8 py-6 grid grid-cols-4 gap-8">

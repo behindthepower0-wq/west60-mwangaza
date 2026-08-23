@@ -33,20 +33,20 @@ export function Footer() {
       <div
         className="relative overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #1A3A2A 0%, #2D5A3D 60%, #1A3A2A 100%)",
-          borderTop: "1px solid rgba(201,168,76,0.20)",
+          background: "linear-gradient(135deg, #1d4f38 0%, #2a6b50 60%, #1d4f38 100%)",
+          borderTop: "1px solid rgba(198,145,43,0.20)",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-18 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <div className="section-eyebrow mb-2">
-              <span className="w-5 h-px" style={{ background: "#C9A84C" }}></span>
+              <span className="w-5 h-px" style={{ background: "#c6912b" }}></span>
               Get In Touch
             </div>
             <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "var(--font-serif)", color: "white" }}>
               Let&apos;s Build Something<br className="hidden md:block" />{" "}
-              <span style={{ color: "#C9A84C" }}>Great Together</span>
+              <span style={{ color: "#c6912b" }}>Great Together</span>
             </h2>
             <p className="text-white/65 mt-2 text-sm">
               Talk to us today and let&apos;s turn your vision into reality.

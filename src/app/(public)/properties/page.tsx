@@ -55,7 +55,7 @@ export default async function PropertiesPage({
           <div className="section-eyebrow justify-center mb-4">
             <span className="w-8 h-px bg-secondary-400" />Properties<span className="w-8 h-px bg-secondary-400" />
           </div>
-          <h1 className="section-heading-white mb-4">Find Your Perfect <span style={{ color: "#C9A84C" }}>Space</span></h1>
+          <h1 className="section-heading-white mb-4">Find Your Perfect <span style={{ color: "#c6912b" }}>Space</span></h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
             Browse available land and properties across Kenya&apos;s most promising locations.
             All with ready title deeds and flexible payment plans.

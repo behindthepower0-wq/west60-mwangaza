@@ -61,7 +61,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
       {/* Decorative elements */}
       <div
         className="absolute top-20 left-0 w-72 h-72 rounded-full opacity-[0.04] pointer-events-none"
-        style={{ background: "radial-gradient(circle, #C9A84C, transparent 60%)" }}
+        style={{ background: "radial-gradient(circle, #c6912b, transparent 60%)" }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,7 +100,7 @@ export function ServicesSection({ services }: ServicesSectionProps) {
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: "radial-gradient(circle at 50% 0%, rgba(201,168,76,0.06) 0%, transparent 70%)",
+                    background: "radial-gradient(circle at 50% 0%, rgba(198,145,43,0.06) 0%, transparent 70%)",
                   }}
                 />
 
@@ -108,8 +108,8 @@ export function ServicesSection({ services }: ServicesSectionProps) {
                 <div
                   className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 text-primary-600 transition-all duration-400 group-hover:scale-110 group-hover:shadow-lg relative z-10"
                   style={{
-                    background: "linear-gradient(135deg, rgba(26,58,42,0.08), rgba(26,58,42,0.03))",
-                    border: "1px solid rgba(26,58,42,0.10)",
+                    background: "linear-gradient(135deg, rgba(29,79,56,0.08), rgba(29,79,56,0.03))",
+                    border: "1px solid rgba(29,79,56,0.10)",
                   }}
                 >
                   {(() => {

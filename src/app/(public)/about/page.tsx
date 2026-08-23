@@ -31,7 +31,7 @@ export default async function AboutPage() {
           <div className="section-eyebrow justify-center mb-4">
             <span className="w-8 h-px bg-secondary-400" />About Us<span className="w-8 h-px bg-secondary-400" />
           </div>
-          <h1 className="section-heading-white mb-6">Building With Purpose. <span style={{ color: '#C9A84C' }}>Delivering Value.</span></h1>
+          <h1 className="section-heading-white mb-6">Building With Purpose. <span style={{ color: '#c6912b' }}>Delivering Value.</span></h1>
           <p className="text-white/65 text-lg max-w-2xl mx-auto leading-relaxed">
             West 60 Mwangaza Properties Ltd — your trusted real estate partner across Kenya.
           </p>
@@ -54,14 +54,14 @@ export default async function AboutPage() {
       <section className="py-20" style={{ background: 'var(--color-warm-white)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8">
           <div className="glass-card p-8">
-            <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style={{ background: 'rgba(26,58,42,0.08)' }}>
+            <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style={{ background: 'rgba(29,79,56,0.08)' }}>
               <span className="text-2xl">🎯</span>
             </div>
             <h3 className="section-heading text-2xl mb-4">Our Mission</h3>
             <p className="section-subheading">To provide accessible, genuine and quality property investment opportunities that enhance the lives of our clients and communities while delivering exceptional value and lasting legacies.</p>
           </div>
           <div className="glass-card p-8">
-            <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style={{ background: 'rgba(201,168,76,0.08)' }}>
+            <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style={{ background: 'rgba(198,145,43,0.08)' }}>
               <span className="text-2xl">🔭</span>
             </div>
             <h3 className="section-heading text-2xl mb-4">Our Vision</h3>

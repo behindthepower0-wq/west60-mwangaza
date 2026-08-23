@@ -52,7 +52,7 @@ export default function LoginForm() {
               background: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.10)",
             }}
-            onFocus={(e) => e.target.style.borderColor = "rgba(201,168,76,0.50)"}
+            onFocus={(e) => e.target.style.borderColor = "rgba(198,145,43,0.50)"}
             onBlur={(e) => e.target.style.borderColor = "rgba(255,255,255,0.10)"}
             autoComplete="email"
             required
@@ -75,7 +75,7 @@ export default function LoginForm() {
               background: "rgba(255,255,255,0.06)",
               border: "1px solid rgba(255,255,255,0.10)",
             }}
-            onFocus={(e) => e.target.style.borderColor = "rgba(201,168,76,0.50)"}
+            onFocus={(e) => e.target.style.borderColor = "rgba(198,145,43,0.50)"}
             onBlur={(e) => e.target.style.borderColor = "rgba(255,255,255,0.10)"}
             autoComplete="current-password"
             required
@@ -106,9 +106,9 @@ export default function LoginForm() {
         className="w-full py-3.5 rounded-xl font-semibold text-sm text-primary-900 transition-all duration-200 mt-2 flex items-center justify-center gap-2"
         style={{
           background: status === "loading"
-            ? "rgba(201,168,76,0.60)"
-            : "linear-gradient(135deg, #C9A84C, #E8C96A)",
-          boxShadow: "0 4px 16px rgba(201,168,76,0.25)",
+            ? "rgba(198,145,43,0.60)"
+            : "linear-gradient(135deg, #c6912b, #d9a94e)",
+          boxShadow: "0 4px 16px rgba(198,145,43,0.25)",
         }}
       >
         {status === "loading" ? (

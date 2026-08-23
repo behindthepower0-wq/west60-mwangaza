@@ -48,9 +48,9 @@ export function WhyChooseUsSection() {
     >
       {/* Decorative circles */}
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-5"
-        style={{ background: "radial-gradient(circle, #C9A84C, transparent)", transform: "translate(30%, -30%)" }} />
+        style={{ background: "radial-gradient(circle, #c6912b, transparent)", transform: "translate(30%, -30%)" }} />
       <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full opacity-5"
-        style={{ background: "radial-gradient(circle, #C9A84C, transparent)", transform: "translate(-30%, 30%)" }} />
+        style={{ background: "radial-gradient(circle, #c6912b, transparent)", transform: "translate(-30%, 30%)" }} />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -63,7 +63,7 @@ export function WhyChooseUsSection() {
           </div>
           <h2 className="section-heading-white mb-4">
             We Deliver More Than{" "}
-            <span style={{ color: "#C9A84C" }}>Properties</span>
+            <span style={{ color: "#c6912b" }}>Properties</span>
           </h2>
           <div className="gold-divider mx-auto mb-5" />
           <p className="text-white/60 text-base leading-relaxed">
@@ -82,7 +82,7 @@ export function WhyChooseUsSection() {
             >
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-secondary-400 transition-transform duration-300 group-hover:scale-110"
-                style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.22)" }}
+                style={{ background: "rgba(198,145,43,0.12)", border: "1px solid rgba(198,145,43,0.22)" }}
               >
                 {reason.icon}
               </div>

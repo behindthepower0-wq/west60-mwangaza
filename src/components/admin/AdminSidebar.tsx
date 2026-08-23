@@ -64,7 +64,7 @@ export function AdminSidebar() {
     <aside
       className="fixed top-0 left-0 h-screen w-64 z-50 flex flex-col"
       style={{
-        background: "linear-gradient(180deg, #0A1410 0%, #0F1E14 100%)",
+        background: "linear-gradient(180deg, #081a10 0%, #0f2815 100%)",
         borderRight: "1px solid rgba(255,255,255,0.06)",
       }}
     >
@@ -97,8 +97,8 @@ export function AdminSidebar() {
                           : "text-white/45 hover:text-white/80 hover:bg-white/5"
                       )}
                       style={active ? {
-                        background: "rgba(201,168,76,0.12)",
-                        borderLeft: "2px solid #C9A84C",
+                        background: "rgba(198,145,43,0.12)",
+                        borderLeft: "2px solid #c6912b",
                         paddingLeft: "10px",
                       } : {}}
                     >

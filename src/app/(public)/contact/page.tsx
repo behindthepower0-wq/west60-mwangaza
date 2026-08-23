@@ -13,7 +13,7 @@ export default function ContactPage() {
       <section className="relative pt-32 pb-16" style={{ background: 'var(--color-primary)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="section-eyebrow justify-center mb-4"><span className="w-8 h-px bg-secondary-400" />Contact Us<span className="w-8 h-px bg-secondary-400" /></div>
-          <h1 className="section-heading-white mb-4">Get In <span style={{ color: '#C9A84C' }}>Touch</span></h1>
+          <h1 className="section-heading-white mb-4">Get In <span style={{ color: '#c6912b' }}>Touch</span></h1>
           <p className="text-white/60 text-lg max-w-xl mx-auto">We&apos;d love to hear from you. Reach out and our team will respond promptly.</p>
         </div>
       </section>
@@ -31,7 +31,7 @@ export default function ContactPage() {
                   { icon: Clock, label: 'Working Hours', value: 'Monday–Friday: 8:00 AM – 6:00 PM\nSaturday: 9:00 AM – 4:00 PM' },
                 ].map((item) => (
                   <div key={item.label} className="glass-card p-5 flex items-start gap-4">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(26,58,42,0.07)' }}>
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(29,79,56,0.07)' }}>
                       <item.icon size={20} className="text-secondary-500" />
                     </div>
                     <div>

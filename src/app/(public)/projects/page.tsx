@@ -28,7 +28,7 @@ export default async function ProjectsPage() {
           <div className="section-eyebrow justify-center mb-4">
             <span className="w-8 h-px bg-secondary-400" />Projects<span className="w-8 h-px bg-secondary-400" />
           </div>
-          <h1 className="section-heading-white mb-4">Our <span style={{ color: "#C9A84C" }}>Projects</span></h1>
+          <h1 className="section-heading-white mb-4">Our <span style={{ color: "#c6912b" }}>Projects</span></h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
             From ongoing developments to completed landmarks — discover the work we&apos;re proud of.
           </p>

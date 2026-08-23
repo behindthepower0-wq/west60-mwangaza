@@ -23,9 +23,9 @@ export default async function AdminDashboardPage() {
   }).catch(() => []);
 
   const stats = [
-    { label: "Properties", value: propertyCount, icon: Building2, href: "/admin/properties", color: "#1A3A2A" },
-    { label: "Projects", value: projectCount, icon: FolderKanban, href: "/admin/projects", color: "#2D5A3D" },
-    { label: "New Enquiries", value: newEnquiries, icon: MessageSquare, href: "/admin/enquiries", color: newEnquiries > 0 ? "#C9A84C" : "#6B7280", badge: newEnquiries > 0 },
+    { label: "Properties", value: propertyCount, icon: Building2, href: "/admin/properties", color: "#1d4f38" },
+    { label: "Projects", value: projectCount, icon: FolderKanban, href: "/admin/projects", color: "#2a6b50" },
+    { label: "New Enquiries", value: newEnquiries, icon: MessageSquare, href: "/admin/enquiries", color: newEnquiries > 0 ? "#c6912b" : "#6B7280", badge: newEnquiries > 0 },
     { label: "Team Members", value: teamCount, icon: Users, href: "/admin/team", color: "#4B5563" },
     { label: "Articles", value: postCount, icon: Newspaper, href: "/admin/news", color: "#374151" },
     { label: "Total Enquiries", value: totalEnquiries, icon: TrendingUp, href: "/admin/enquiries", color: "#6B7280" },

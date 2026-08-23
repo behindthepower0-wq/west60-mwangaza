@@ -26,7 +26,7 @@ export function TeamSection({ teamMembers }: TeamSectionProps) {
           </ScrollReveal>
           <ScrollReveal delay={100}>
             <h2 className="section-heading mb-4">
-              Meet The People <span style={{ color: "#C9A84C" }}>Behind The Brand</span>
+              Meet The People <span style={{ color: "#c6912b" }}>Behind The Brand</span>
             </h2>
           </ScrollReveal>
           <ScrollReveal delay={150}>
@@ -43,7 +43,7 @@ export function TeamSection({ teamMembers }: TeamSectionProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {visibleMembers.map((member, i) => (
             <ScrollReveal key={member.id} delay={i * 100} direction="up">
-              <div className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:shadow-[0_20px_40px_rgb(26,58,42,0.08)] transition-all duration-500">
+              <div className="group relative overflow-hidden rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 hover:shadow-[0_20px_40px_rgb(29,79,56,0.08)] transition-all duration-500">
                 {/* Photo area */}
                 <div className="aspect-[4/5] overflow-hidden relative">
                   {member.photograph ? (
@@ -61,7 +61,7 @@ export function TeamSection({ teamMembers }: TeamSectionProps) {
                   )}
                   
                   {/* Subtle glass overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A3A2A]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1d4f38]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
                   </div>
                 </div>
 

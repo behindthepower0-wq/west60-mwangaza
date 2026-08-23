@@ -19,8 +19,8 @@ export function CTASection() {
         className="absolute inset-0"
         style={{
           background: `
-            linear-gradient(135deg, rgba(26,58,42,0.85) 0%, rgba(15,34,24,0.75) 50%, rgba(26,58,42,0.80) 100%),
-            radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, transparent 70%)
+            linear-gradient(135deg, rgba(29,79,56,0.85) 0%, rgba(15,34,24,0.75) 50%, rgba(29,79,56,0.80) 100%),
+            radial-gradient(ellipse at center, rgba(198,145,43,0.08) 0%, transparent 70%)
           `,
         }}
       />
@@ -28,7 +28,7 @@ export function CTASection() {
       {/* Decorative gold line at top */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent)" }}
+        style={{ background: "linear-gradient(90deg, transparent, rgba(198,145,43,0.4), transparent)" }}
       />
 
       {/* Content */}

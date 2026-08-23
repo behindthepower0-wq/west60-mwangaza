@@ -26,7 +26,7 @@ export default async function NewsPage() {
             <span className="w-8 h-px bg-secondary-400" />News &amp; Insights<span className="w-8 h-px bg-secondary-400" />
           </div>
           <h1 className="section-heading-white mb-4">
-            Real Estate <span style={{ color: "#C9A84C" }}>Insights</span>
+            Real Estate <span style={{ color: "#c6912b" }}>Insights</span>
           </h1>
           <p className="text-white/60 text-lg max-w-2xl mx-auto">
             Stay informed with the latest property news, investment tips and market insights from our team.
