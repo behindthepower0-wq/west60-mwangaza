@@ -72,7 +72,8 @@ function resolveClient(): PrismaClientType {
   if (process.env.TURSO_DATABASE_URL) {
     try {
       return createTursoClient();
-    } catch {
+    } catch (e) {
+      console.error("[db] Turso client failed:", e instanceof Error ? e.message : e);
       // Fall through
     }
   }
