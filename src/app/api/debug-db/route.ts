@@ -43,6 +43,20 @@ export async function GET() {
     hasNextPublicSiteUrl: !!process.env.NEXT_PUBLIC_SITE_URL,
   };
 
+  // Test direct libsql connection (bypassing Prisma)
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createClient } = require("@libsql/client");
+    const url = process.env.TURSO_DATABASE_URL;
+    const authToken = process.env.TURSO_AUTH_TOKEN;
+    const client = createClient({ url, authToken });
+    const result = await client.execute("SELECT COUNT(*) as n FROM team_members");
+    steps.directLibsqlOk = true;
+    steps.directLibsqlCount = Number(result.rows[0].n);
+  } catch (e) {
+    steps.directLibsqlError = e instanceof Error ? e.message : String(e);
+  }
+
   try {
     const prisma = (await import("@/lib/db")).default;
     const members = await prisma.teamMember.findMany({ take: 2 });
