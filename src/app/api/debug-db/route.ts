@@ -38,7 +38,7 @@ export async function GET() {
     hasTursoUrl: !!process.env.TURSO_DATABASE_URL,
     hasTursoToken: !!process.env.TURSO_AUTH_TOKEN,
     tursoUrlPrefix: process.env.TURSO_DATABASE_URL?.substring(0, 30) || null,
-    hasNextauthSecret: !!process.env.NEXTAUTH_SECRET,
+    hasNextauthSecret: !!(process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET),
     hasNextauthUrl: !!process.env.NEXTAUTH_URL,
     hasNextPublicSiteUrl: !!process.env.NEXT_PUBLIC_SITE_URL,
   };
