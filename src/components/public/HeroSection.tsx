@@ -130,7 +130,7 @@ export function HeroSection() {
               }`}
             >
               <span className="w-10 h-px bg-secondary-400 flex-shrink-0" />
-              Welcome to West 60 Mwangaza
+              Welcome to West 60 Mwangaza Properties Ltd
             </div>
 
             {/* Headline */}

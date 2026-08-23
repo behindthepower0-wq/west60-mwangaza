@@ -155,7 +155,7 @@ async function main() {
       key: "hero",
       title: "Hero Section",
       content: JSON.stringify({
-        eyebrow: "Welcome to West 60 Mwangaza",
+        eyebrow: "Welcome to West 60 Mwangaza Properties Ltd",
         heading: "Creating Spaces.",
         headingGold: "Building Futures.",
         description: "We develop and manage quality properties that provide lasting value, comfort and exceptional living experiences across Kenya — with ready title deeds and flexible payment plans.",
