@@ -43,19 +43,27 @@ export async function GET() {
     hasNextPublicSiteUrl: !!process.env.NEXT_PUBLIC_SITE_URL,
   };
 
-  // Test direct libsql connection (bypassing Prisma)
+  // Test raw HTTP fetch to Turso (bypassing @libsql/client)
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { createClient } = require("@libsql/client");
     const rawUrl = process.env.TURSO_DATABASE_URL || "";
-    const url = rawUrl.startsWith("libsql://") ? "https://" + rawUrl.slice(9) : rawUrl;
+    const httpsUrl = rawUrl.startsWith("libsql://") ? "https://" + rawUrl.slice(9) : rawUrl;
     const authToken = process.env.TURSO_AUTH_TOKEN;
-    const client = createClient({ url, authToken });
-    const result = await client.execute("SELECT COUNT(*) as n FROM team_members");
-    steps.directLibsqlOk = true;
-    steps.directLibsqlCount = Number(result.rows[0].n);
+    const resp = await fetch(httpsUrl + "/v2/pipeline", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + authToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        requests: [{ type: "execute", stmt: { sql: "SELECT COUNT(*) as n FROM team_members" } }]
+      })
+    });
+    const data = await resp.json();
+    steps.rawFetchOk = resp.status === 200;
+    steps.rawFetchStatus = resp.status;
+    steps.rawFetchCount = data?.results?.[0]?.response?.result?.rows?.[0]?.[1]?.value;
   } catch (e) {
-    steps.directLibsqlError = e instanceof Error ? e.message : String(e);
+    steps.rawFetchError = e instanceof Error ? e.message : String(e);
   }
 
   try {
