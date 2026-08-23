@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 
 const values = [
-  "Quality Construction",
+  "Ready Title Deeds",
   "Transparent Process",
   "Prime Locations",
   "After-Sales Support",

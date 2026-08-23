@@ -1,12 +1,6 @@
-import { Shield, Eye, MapPin, Award, Headphones, FileCheck } from "lucide-react";
+import { Eye, MapPin, Award, Headphones, FileCheck } from "lucide-react";
 
 const reasons = [
-  {
-    icon: <Shield size={24} />,
-    title: "Quality Construction",
-    description:
-      "Every property we offer meets rigorous quality standards. We partner with trusted developers who share our commitment to excellence.",
-  },
   {
     icon: <Eye size={24} />,
     title: "Transparent Process",
