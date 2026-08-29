@@ -1,7 +1,18 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import type { PrismaClient as PrismaClientType } from "@prisma/client";
 
-// ─── Turso (libSQL) client for production ──────────────────────────
+// ─── PostgreSQL client (Supabase / any Postgres) ───────────────────
+let _pgClient: PrismaClientType | null = null;
+
+function createPgClient(): PrismaClientType {
+  if (_pgClient) return _pgClient;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaClient } = require("@prisma/client");
+  _pgClient = new PrismaClient();
+  return _pgClient!;
+}
+
+// ─── Turso (libSQL) client ────────────────────────────────────────
 let _tursoClient: PrismaClientType | null = null;
 
 function createTursoClient(): PrismaClientType {
@@ -17,7 +28,6 @@ function createTursoClient(): PrismaClientType {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaLibSql } = require("@prisma/adapter-libsql");
 
-  // Convert libsql:// to https:// for Vercel serverless (no WebSocket)
   const httpsUrl = url.startsWith("libsql://") ? "https://" + url.slice(9) : url;
   const adapter = new PrismaLibSql({ url: httpsUrl, authToken });
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -26,7 +36,7 @@ function createTursoClient(): PrismaClientType {
   return _tursoClient!;
 }
 
-// ─── Cloudflare D1 client (fallback) ──────────────────────────────
+// ─── Cloudflare D1 client ──────────────────────────────────────────
 let _cfClient: PrismaClientType | null = null;
 
 function createD1Client(): PrismaClientType {
@@ -70,27 +80,36 @@ function isCloudflareWorkers(): boolean {
 }
 
 function resolveClient(): PrismaClientType {
-  // 1. Cloudflare D1 — canonical DB when running on Workers
+  const dbUrl = process.env.DATABASE_URL;
+
+  // 1. PostgreSQL — when DATABASE_URL is postgres:// or postgresql://
+  if (dbUrl && (dbUrl.startsWith("postgresql://") || dbUrl.startsWith("postgres://"))) {
+    try {
+      return createPgClient();
+    } catch (e) {
+      console.error("[db] PostgreSQL client failed:", e instanceof Error ? e.message : e);
+    }
+  }
+
+  // 2. Cloudflare D1 — canonical DB when running on Workers
   if (isCloudflareWorkers()) {
     try {
       return createD1Client();
     } catch (e) {
       console.error("[db] D1 client failed:", e instanceof Error ? e.message : e);
-      // Fall through
     }
   }
 
-  // 2. Turso — when TURSO_DATABASE_URL is set (other serverless platforms)
+  // 3. Turso — when TURSO_DATABASE_URL is set
   if (process.env.TURSO_DATABASE_URL) {
     try {
       return createTursoClient();
     } catch (e) {
       console.error("[db] Turso client failed:", e instanceof Error ? e.message : e);
-      // Fall through
     }
   }
 
-  // 3. Local SQLite — development
+  // 4. Local SQLite — development
   return createLocalClient();
 }
 
