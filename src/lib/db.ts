@@ -6,9 +6,11 @@ let _pgClient: PrismaClientType | null = null;
 
 function createPgClient(): PrismaClientType {
   if (_pgClient) return _pgClient;
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error("DATABASE_URL must be set for PostgreSQL");
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaClient } = require("@prisma/client");
-  _pgClient = new PrismaClient();
+  _pgClient = new PrismaClient({ datasourceUrl: url });
   return _pgClient!;
 }
 

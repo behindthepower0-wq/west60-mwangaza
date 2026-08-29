@@ -1,4 +1,5 @@
 import { defineConfig } from "prisma/config";
+import path from "node:path";
 
 export default defineConfig({
   schema: "./prisma/schema.prisma",
@@ -7,6 +8,6 @@ export default defineConfig({
     seed: "ts-node --compiler-options {\"module\":\"commonjs\"} prisma/seed.ts",
   },
   datasource: {
-    url: "file:./prisma/west60.db",
+    url: process.env.DATABASE_URL || `file:${path.join(process.cwd(), "prisma", "west60.db")}`,
   },
 });
