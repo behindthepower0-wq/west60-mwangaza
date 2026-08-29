@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 
-// PUT /api/admin/homepage/[id]/image - Update a homepage section's image
+// PUT /api/admin/homepage/[id]/content - Update a homepage section's content
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -15,12 +15,10 @@ export async function PUT(
 
     const { id } = await params;
     const body = await req.json();
-    const { imageKey, imageUrl } = body;
+    const { content } = body;
 
-    if (!imageKey || !imageUrl) {
-      return new NextResponse("imageKey and imageUrl are required", {
-        status: 400,
-      });
+    if (content === undefined || content === null) {
+      return new NextResponse("content is required", { status: 400 });
     }
 
     // Verify section exists
@@ -29,26 +27,16 @@ export async function PUT(
       return new NextResponse("Section not found", { status: 404 });
     }
 
-    // Parse existing content JSON and update the image field
-    let content: Record<string, unknown> = {};
-    try {
-      content = JSON.parse(section.content || "{}");
-    } catch {
-      content = {};
-    }
-
-    content[imageKey] = imageUrl;
+    const contentStr = typeof content === "string" ? content : JSON.stringify(content);
 
     await prisma.homepageSection.update({
       where: { id },
-      data: { content: JSON.stringify(content) },
+      data: { content: contentStr },
     });
-
-    // Note: Media library record is already created by /api/upload
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[HOMEPAGE_IMAGE_PUT]", error);
+    console.error("[HOMEPAGE_CONTENT_PUT]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

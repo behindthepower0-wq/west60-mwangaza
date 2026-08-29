@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Plus, Pencil, Trash2, UserCog, Shield, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Pencil, UserCog, Shield, CheckCircle, XCircle } from 'lucide-react';
+import { DeleteButton } from '@/components/admin/DeleteButton';
 import prisma from '@/lib/db';
 
 export const metadata: Metadata = { title: 'Users | CMS' };
@@ -81,9 +82,7 @@ export default async function AdminUsersPage() {
                         <Link href={`/admin/users/${u.id}/edit`} className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
                           <Pencil size={16} />
                         </Link>
-                        <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteButton id={u.id} apiPath="/api/admin/users" itemName="user" />
                       </div>
                     </td>
                   </tr>

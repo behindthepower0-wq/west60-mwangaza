@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
-  Upload,
   X,
   Image,
   Loader2,
   Star,
-  GripVertical,
   Plus,
 } from "lucide-react";
+import { useFileUpload } from "@/hooks/useFileUpload";
+import { UploadProgress } from "@/components/admin/UploadProgress";
 
 interface PropertyImage {
   id: string;
@@ -36,40 +36,33 @@ export function PropertyImageManager({
   const [currentMainImage, setCurrentMainImage] = useState<string | null>(
     mainImage || null
   );
-  const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [settingMainId, setSettingMainId] = useState<string | null>(null);
+  const [uploadFileName, setUploadFileName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { upload, progress, isUploading, error: uploadError } = useFileUpload();
+  const [xhrProgress, setXhrProgress] = useState(0);
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setXhrProgress(detail.percent);
+    };
+    window.addEventListener("upload-progress", handler);
+    return () => window.removeEventListener("upload-progress", handler);
+  }, []);
 
   const handleFile = useCallback(
     async (file: File) => {
-      if (!file.type.startsWith("image/")) {
-        setError("Please select an image file");
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        setError("Image must be less than 10MB");
-        return;
-      }
-
       setError("");
-      setIsUploading(true);
+      setUploadFileName(file.name);
+
+      const uploadData = await upload(file);
+      if (!uploadData) return;
 
       try {
-        // Upload the file
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!uploadRes.ok) throw new Error("Upload failed");
-        const uploadData = await uploadRes.json();
-
         // Add as property image
         const isFirst = images.length === 0;
         const imageRes = await fetch(`/api/properties/${propertyId}/images`, {
@@ -93,12 +86,10 @@ export function PropertyImageManager({
 
         onUpdate();
       } catch {
-        setError("Upload failed. Please try again.");
-      } finally {
-        setIsUploading(false);
+        setError("Failed to add image to property.");
       }
     },
-    [images.length, propertyId, onUpdate]
+    [upload, images.length, propertyId, onUpdate]
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -199,19 +190,22 @@ export function PropertyImageManager({
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => !isUploading && inputRef.current?.click()}
         className={`
-          border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all
+          border-2 border-dashed rounded-xl p-6 text-center transition-all
           ${
             isDragging
               ? "border-primary-500 bg-primary-50/50"
               : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
-          }
-        `}
+          } ${isUploading ? "cursor-wait" : "cursor-pointer"}`}
       >
         {isUploading ? (
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-            <Loader2 size={16} className="animate-spin" /> Uploading...
+          <div className="flex justify-center py-2">
+            <UploadProgress
+              progress={xhrProgress || progress}
+              isUploading={isUploading}
+              fileName={uploadFileName}
+            />
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
@@ -235,8 +229,8 @@ export function PropertyImageManager({
         className="hidden"
       />
 
-      {error && (
-        <p className="text-xs text-red-500 flex items-center gap-1">{error}</p>
+      {(error || uploadError) && (
+        <p className="text-xs text-red-500 flex items-center gap-1">{error || uploadError}</p>
       )}
 
       {/* Image Grid */}

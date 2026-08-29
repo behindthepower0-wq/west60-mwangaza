@@ -8,7 +8,6 @@ import { ProjectsSection } from "@/components/public/ProjectCard";
 import { WhyChooseUsSection } from "@/components/public/WhyChooseUsSection";
 import { TeamSection } from "@/components/public/TeamSection";
 import { NewsSection } from "@/components/public/NewsSection";
-import { PaymentPlansSection } from "@/components/public/PaymentPlansSection";
 import { TrustBadges } from "@/components/public/TrustBadges";
 import { AwardsSection } from "@/components/public/AwardsSection";
 
@@ -81,7 +80,6 @@ export default async function HomePage() {
       <AboutSection />
       <ServicesSection services={services} />
       <FeaturedPropertiesSection properties={featuredProperties} />
-      <PaymentPlansSection />
       <WhyChooseUsSection />
       <AwardsSection />
       <ProjectsSection projects={projects} />

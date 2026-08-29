@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 
 export async function PUT(
@@ -6,6 +7,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { id } = await params;
     const body = await req.json();
     const {
@@ -17,6 +23,8 @@ export async function PUT(
       facebookUrl,
       twitterUrl,
       linkedinUrl,
+      instagramUrl,
+      isVisible,
       order,
     } = body;
 
@@ -31,6 +39,8 @@ export async function PUT(
         facebookUrl,
         twitterUrl,
         linkedinUrl,
+        instagramUrl,
+        isVisible: isVisible ?? true,
         order: order ? parseInt(order, 10) : undefined,
       },
     });
@@ -50,6 +60,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { id } = await params;
     await prisma.teamMember.delete({
       where: { id },

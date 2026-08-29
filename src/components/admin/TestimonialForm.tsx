@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Save, Loader2 } from "lucide-react";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 interface TestimonialFormProps {
   initialData?: any;
@@ -12,6 +13,7 @@ export function TestimonialForm({ initialData }: TestimonialFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [photograph, setPhotograph] = useState<string | null>(initialData?.photograph || null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -24,6 +26,7 @@ export function TestimonialForm({ initialData }: TestimonialFormProps) {
       company: formData.get("company"),
       position: formData.get("position"),
       testimonial: formData.get("testimonial"),
+      photograph: photograph || null,
       rating: parseInt(formData.get("rating") as string) || 5,
       order: parseInt(formData.get("order") as string) || 0,
       isVisible: formData.get("isVisible") === "on",
@@ -145,6 +148,13 @@ export function TestimonialForm({ initialData }: TestimonialFormProps) {
           placeholder="What the client said..."
         />
       </div>
+
+      <ImageUploader
+        currentUrl={photograph}
+        onUpload={(url) => setPhotograph(url || null)}
+        label="Client Photo (optional)"
+        category="GENERAL"
+      />
 
       <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
         <button

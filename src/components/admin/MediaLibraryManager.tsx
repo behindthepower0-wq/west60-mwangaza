@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Upload,
   X,
   Image,
   Loader2,
   Trash2,
-  CheckCircle,
   Search,
   Grid3X3,
   List,
 } from "lucide-react";
+import { useFileUpload } from "@/hooks/useFileUpload";
+import { UploadProgress } from "@/components/admin/UploadProgress";
 
 interface MediaItem {
   id: string;
@@ -20,6 +21,8 @@ interface MediaItem {
   mimeType: string;
   size: number;
   url: string;
+  thumbnailUrl: string | null;
+  webpUrl: string | null;
   altText: string | null;
   caption: string | null;
   category: string;
@@ -32,9 +35,20 @@ interface MediaLibraryManagerProps {
 
 export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) {
   const [media, setMedia] = useState<MediaItem[]>(initialMedia);
-  const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
+  const [uploadFileName, setUploadFileName] = useState("");
+
+  const { upload, progress, isUploading, error: uploadError } = useFileUpload();
+  const [xhrProgress, setXhrProgress] = useState(0);
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setXhrProgress(detail.percent);
+    };
+    window.addEventListener("upload-progress", handler);
+    return () => window.removeEventListener("upload-progress", handler);
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
@@ -64,43 +78,19 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
   });
 
   const handleFile = useCallback(async (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      setError("Please select an image file");
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setError("Image must be less than 10MB");
-      return;
-    }
-
     setError("");
-    setIsUploading(true);
+    setUploadFileName(file.name);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("Upload failed");
-
-      const data = await res.json();
-
+    const result = await upload(file);
+    if (result) {
       // Refresh media list
       const listRes = await fetch("/api/admin/media");
       if (listRes.ok) {
         const items = await listRes.json();
         setMedia(items);
       }
-    } catch {
-      setError("Upload failed. Please try again.");
-    } finally {
-      setIsUploading(false);
     }
-  }, []);
+  }, [upload]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -150,20 +140,22 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
+        onClick={() => !isUploading && inputRef.current?.click()}
         className={`
-          border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all
+          border-2 border-dashed rounded-xl p-10 text-center transition-all
           ${
             isDragging
               ? "border-primary-500 bg-primary-50/50"
               : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
-          }
-        `}
+          } ${isUploading ? "cursor-wait" : "cursor-pointer"}`}
       >
         {isUploading ? (
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 size={36} className="text-primary-500 animate-spin" />
-            <p className="text-sm text-gray-500">Uploading image...</p>
+          <div className="flex flex-col items-center gap-3 max-w-xs mx-auto">
+            <UploadProgress
+              progress={xhrProgress || progress}
+              isUploading={isUploading}
+              fileName={uploadFileName}
+            />
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
@@ -182,9 +174,9 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
         )}
       </div>
 
-      {error && (
+      {(error || uploadError) && (
         <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm flex items-center gap-2">
-          {error}
+          {error || uploadError}
           <button onClick={() => setError("")} className="ml-auto">
             <X size={14} />
           </button>
@@ -275,9 +267,10 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
             >
               {m.url.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) ? (
                 <img
-                  src={m.url}
+                  src={m.thumbnailUrl || m.url}
                   alt={m.altText || m.filename}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -352,9 +345,10 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
                     <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
                       {m.url.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) ? (
                         <img
-                          src={m.url}
+                          src={m.thumbnailUrl || m.url}
                           alt={m.altText || m.filename}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">

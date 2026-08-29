@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Plus, Pencil, Eye, Trash2, Newspaper } from 'lucide-react';
+import { Plus, Pencil, Eye, Newspaper } from 'lucide-react';
+import { DeleteButton } from '@/components/admin/DeleteButton';
 import prisma from '@/lib/db';
 
 export const metadata: Metadata = { title: 'News & Articles | CMS' };
@@ -63,9 +64,7 @@ export default async function AdminNewsPage() {
                         <Link href={`/admin/news/${p.id}/edit`} className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
                           <Pencil size={16} />
                         </Link>
-                        <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteButton id={p.id} apiPath="/api/admin/news" itemName="article" />
                       </div>
                     </td>
                   </tr>

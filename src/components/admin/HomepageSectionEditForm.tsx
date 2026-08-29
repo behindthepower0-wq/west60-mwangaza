@@ -130,28 +130,27 @@ export function HomepageSectionEditForm({
       setError("");
 
       try {
+        // Update local state and save content directly
+        const newContent = { ...content, [imageKey]: "" };
+        setContent(newContent);
+
         const updateRes = await fetch(
-          `/api/admin/homepage/${sectionId}/image`,
+          `/api/admin/homepage/${sectionId}/content`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              imageKey,
-              imageUrl: "",
-            }),
+            body: JSON.stringify({ content: newContent }),
           }
         );
 
         if (!updateRes.ok) throw new Error("Failed to update section");
-
-        setContent((prev) => ({ ...prev, [imageKey]: "" }));
       } catch {
         setError("Failed to remove image.");
       } finally {
         setSavingImageKey(null);
       }
     },
-    [sectionId]
+    [sectionId, content]
   );
 
   const handleSave = async () => {
@@ -159,13 +158,17 @@ export function HomepageSectionEditForm({
     setError("");
 
     try {
-      const res = await fetch("/api/admin/settings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          [`homepage_section_${sectionKey}`]: JSON.stringify(content),
-        }),
-      });
+      // Save content directly to the homepage section
+      const contentRes = await fetch(
+        `/api/admin/homepage/${sectionId}/content`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+        }
+      );
+
+      if (!contentRes.ok) throw new Error("Failed to save content");
 
       // Also update visibility
       await fetch(`/api/admin/homepage/${sectionId}/visibility`, {
@@ -173,8 +176,6 @@ export function HomepageSectionEditForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isVisible }),
       }).catch(() => {});
-
-      if (!res.ok) throw new Error("Failed to save");
 
       router.push("/admin/homepage");
       router.refresh();

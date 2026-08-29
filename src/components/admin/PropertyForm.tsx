@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Loader2, ArrowLeft, Upload, X, Image } from "lucide-react";
+import { Save, Loader2, Upload, X, Image } from "lucide-react";
+import { useFileUpload } from "@/hooks/useFileUpload";
+import { UploadProgress } from "@/components/admin/UploadProgress";
 
 interface PropertyFormProps {
   initialData?: any;
@@ -16,42 +18,33 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
   const [mainImage, setMainImage] = useState<string | null>(
     initialData?.mainImage || null
   );
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadFileName, setUploadFileName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = useCallback(async (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      setError("Please select an image file");
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setError("Image must be less than 10MB");
-      return;
-    }
-
-    setError("");
-    setIsUploadingImage(true);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("Upload failed");
-
-      const data = await res.json();
-      setMainImage(data.url);
-    } catch {
-      setError("Image upload failed. Please try again.");
-    } finally {
-      setIsUploadingImage(false);
-    }
+  const { upload, progress, isUploading, error: uploadError } = useFileUpload();
+  const [xhrProgress, setXhrProgress] = useState(0);
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setXhrProgress(detail.percent);
+    };
+    window.addEventListener("upload-progress", handler);
+    return () => window.removeEventListener("upload-progress", handler);
   }, []);
+
+  const handleImageUpload = useCallback(
+    async (file: File) => {
+      setError("");
+      setUploadFileName(file.name);
+
+      const result = await upload(file);
+      if (result) {
+        setMainImage(result.url);
+      }
+    },
+    [upload]
+  );
 
   const handleImageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -108,7 +101,6 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
 
       if (!res.ok) throw new Error(await res.text());
 
-      // If new property, redirect to edit page so they can add more images
       if (!initialData) {
         const newProperty = await res.json();
         router.push(`/admin/properties/${newProperty.id}/edit`);
@@ -124,9 +116,9 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
-      {error && (
+      {(error || uploadError) && (
         <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm">
-          {error}
+          {error || uploadError}
         </div>
       )}
 
@@ -141,7 +133,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               name="name"
               required
               defaultValue={initialData?.name}
-              className="input-field"
+              className="form-input"
               placeholder="e.g. Mwangaza Heights"
             />
           </div>
@@ -153,7 +145,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               type="text"
               name="slug"
               defaultValue={initialData?.slug}
-              className="input-field"
+              className="form-input"
               placeholder="e.g. mwangaza-heights"
             />
           </div>
@@ -166,7 +158,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               name="location"
               required
               defaultValue={initialData?.location}
-              className="input-field"
+              className="form-input"
               placeholder="e.g. Syokimau, Nairobi"
             />
           </div>
@@ -177,13 +169,13 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               </label>
               <select
                 name="propertyType"
-                defaultValue={initialData?.propertyType || "LAND"}
-                className="input-field bg-white"
+                defaultValue={initialData?.propertyType || "RESIDENTIAL"}
+                className="form-input bg-white"
               >
+                <option value="RESIDENTIAL">Residential</option>
                 <option value="LAND">Land / Plot</option>
-                <option value="HOUSE">House / Villa</option>
-                <option value="APARTMENT">Apartment</option>
-                <option value="COMMERCIAL">Commercial Space</option>
+                <option value="COMMERCIAL">Commercial</option>
+                <option value="MIXED_USE">Mixed Use</option>
               </select>
             </div>
             <div>
@@ -193,11 +185,14 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               <select
                 name="status"
                 defaultValue={initialData?.status || "AVAILABLE"}
-                className="input-field bg-white"
+                className="form-input bg-white"
               >
                 <option value="AVAILABLE">Available</option>
-                <option value="SOLD">Sold</option>
                 <option value="RESERVED">Reserved</option>
+                <option value="SOLD">Sold</option>
+                <option value="COMING_SOON">Coming Soon</option>
+                <option value="UNDER_CONSTRUCTION">Under Construction</option>
+                <option value="COMPLETED">Completed</option>
               </select>
             </div>
           </div>
@@ -213,7 +208,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
                 type="number"
                 name="price"
                 defaultValue={initialData?.price}
-                className="input-field"
+                className="form-input"
                 placeholder="e.g. 1500000"
               />
             </div>
@@ -225,7 +220,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
                 type="text"
                 name="currency"
                 defaultValue={initialData?.currency || "KES"}
-                className="input-field"
+                className="form-input"
                 placeholder="KES"
               />
             </div>
@@ -238,7 +233,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               type="text"
               name="priceLabel"
               defaultValue={initialData?.priceLabel}
-              className="input-field"
+              className="form-input"
               placeholder="e.g. From KES 1.5M"
             />
           </div>
@@ -252,7 +247,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
                 step="0.01"
                 name="size"
                 defaultValue={initialData?.size}
-                className="input-field"
+                className="form-input"
                 placeholder="e.g. 50"
               />
             </div>
@@ -264,7 +259,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
                 type="text"
                 name="sizeUnit"
                 defaultValue={initialData?.sizeUnit || "x 100 ft"}
-                className="input-field"
+                className="form-input"
                 placeholder="e.g. x 100 ft, acres"
               />
             </div>
@@ -294,7 +289,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
           required
           defaultValue={initialData?.description}
           rows={6}
-          className="input-field resize-y"
+          className="form-input resize-y"
           placeholder="Detailed description of the property..."
         ></textarea>
       </div>
@@ -307,7 +302,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
           type="text"
           name="features"
           defaultValue={initialData?.features?.join(", ")}
-          className="input-field"
+          className="form-input"
           placeholder="e.g. Ready Title Deeds, Borehole Water, Electricity, Fenced"
         />
       </div>
@@ -338,10 +333,14 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
                 <X size={14} /> Remove
               </button>
             </div>
-            {isUploadingImage && (
-              <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <div className="flex items-center gap-2 text-white text-sm">
-                  <Loader2 size={18} className="animate-spin" /> Uploading...
+            {isUploading && (
+              <div className="absolute inset-0 bg-black/50 flex items-center justify-center px-8">
+                <div className="w-full max-w-xs">
+                  <UploadProgress
+                    progress={xhrProgress || progress}
+                    isUploading={isUploading}
+                    fileName={uploadFileName}
+                  />
                 </div>
               </div>
             )}
@@ -354,23 +353,20 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
             }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleImageDrop}
-            onClick={() => inputRef.current?.click()}
-            className={`
-              border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all
-              ${
-                isDragging
-                  ? "border-primary-500 bg-primary-50/50"
-                  : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
-              }
-            `}
+            onClick={() => !isUploading && inputRef.current?.click()}
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
+              isDragging
+                ? "border-primary-500 bg-primary-50/50"
+                : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
+            } ${isUploading ? "cursor-wait" : "cursor-pointer"}`}
           >
-            {isUploadingImage ? (
+            {isUploading ? (
               <div className="flex flex-col items-center gap-3">
-                <Loader2
-                  size={32}
-                  className="text-primary-500 animate-spin"
+                <UploadProgress
+                  progress={xhrProgress || progress}
+                  isUploading={isUploading}
+                  fileName={uploadFileName}
                 />
-                <p className="text-sm text-gray-500">Uploading...</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-3">

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Plus, Pencil, Trash2, Star, Eye, EyeOff } from 'lucide-react';
+import { Plus, Pencil, Star, Eye, EyeOff } from 'lucide-react';
+import { DeleteButton } from '@/components/admin/DeleteButton';
 import prisma from '@/lib/db';
 
 export const metadata: Metadata = { title: 'Testimonials | CMS' };
@@ -59,9 +60,7 @@ export default async function AdminTestimonialsPage() {
                         <Link href={`/admin/testimonials/${t.id}/edit`} className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
                           <Pencil size={16} />
                         </Link>
-                        <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteButton id={t.id} apiPath="/api/admin/testimonials" itemName="testimonial" />
                       </div>
                     </td>
                   </tr>

@@ -38,7 +38,7 @@ function createD1Client(): PrismaClientType {
   const { PrismaD1 } = require("@prisma/adapter-d1");
   const adapter = new PrismaD1(env.DB);
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { PrismaClient } = require("@prisma/client/edge");
+  const { PrismaClient } = require("@prisma/client");
   _cfClient = new PrismaClient({ adapter });
   return _cfClient!;
 }

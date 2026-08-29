@@ -53,18 +53,7 @@ export async function POST(
       });
     }
 
-    // Also save to Media library
-    await prisma.media.create({
-      data: {
-        filename: url.split("/").pop() || "image",
-        originalName: altText || "Property image",
-        mimeType: "image/jpeg",
-        size: 0,
-        url,
-        altText: altText || property.name,
-        category: "PROPERTIES",
-      },
-    });
+    // Note: Media library record is already created by /api/upload
 
     return NextResponse.json(image);
   } catch (error) {

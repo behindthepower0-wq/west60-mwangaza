@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Plus, Pencil, Eye, Trash2, Building2 } from 'lucide-react';
+import { Plus, Pencil, Eye, Building2 } from 'lucide-react';
+import { DeleteButton } from '@/components/admin/DeleteButton';
 import prisma from '@/lib/db';
 import { formatPrice, getPropertyStatusLabel, getPropertyStatusClass } from '@/lib/utils';
 
@@ -69,9 +70,7 @@ export default async function AdminPropertiesPage() {
                         <Link href={`/admin/properties/${p.id}/edit`} className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors">
                           <Pencil size={16} />
                         </Link>
-                        <button className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors">
-                          <Trash2 size={16} />
-                        </button>
+                        <DeleteButton id={p.id} apiPath="/api/properties" itemName="property" />
                       </div>
                     </td>
                   </tr>

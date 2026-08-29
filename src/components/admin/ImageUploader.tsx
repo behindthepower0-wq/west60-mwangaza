@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { Upload, X, Image, Loader2, CheckCircle } from "lucide-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { Upload, X, Image } from "lucide-react";
+import { useFileUpload } from "@/hooks/useFileUpload";
+import { UploadProgress } from "@/components/admin/UploadProgress";
 
 interface ImageUploaderProps {
   currentUrl?: string | null;
@@ -20,53 +22,43 @@ export function ImageUploader({
 }: ImageUploaderProps) {
   const [preview, setPreview] = useState<string | null>(currentUrl || null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [error, setError] = useState("");
+  const [uploadFileName, setUploadFileName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { upload, progress, isUploading, error } = useFileUpload({
+    category,
+  });
+
+  // Listen for progress events from XHR
+  const [xhrProgress, setXhrProgress] = useState(0);
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      setXhrProgress(detail.percent);
+    };
+    window.addEventListener("upload-progress", handler);
+    return () => window.removeEventListener("upload-progress", handler);
+  }, []);
 
   const handleFile = useCallback(
     async (file: File) => {
-      if (!file.type.startsWith("image/")) {
-        setError("Please select an image file");
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) {
-        setError("Image must be less than 10MB");
-        return;
-      }
-
-      setError("");
-      setIsUploading(true);
-
       // Show local preview immediately
       const localPreview = URL.createObjectURL(file);
       setPreview(localPreview);
+      setUploadFileName(file.name);
 
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-        if (category) formData.append("category", category);
+      const result = await upload(file);
 
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!res.ok) throw new Error("Upload failed");
-
-        const data = await res.json();
+      if (result) {
         URL.revokeObjectURL(localPreview);
-        setPreview(data.url);
-        onUpload(data.url, data.name);
-      } catch (err) {
+        setPreview(result.url);
+        onUpload(result.url, result.name);
+      } else {
         URL.revokeObjectURL(localPreview);
         setPreview(currentUrl || null);
-        setError("Upload failed. Please try again.");
-      } finally {
-        setIsUploading(false);
       }
     },
-    [currentUrl, onUpload, category]
+    [upload, currentUrl, onUpload],
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,9 +108,13 @@ export function ImageUploader({
             </button>
           </div>
           {isUploading && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <div className="flex items-center gap-2 text-white text-sm">
-                <Loader2 size={18} className="animate-spin" /> Uploading...
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center px-8">
+              <div className="w-full max-w-xs">
+                <UploadProgress
+                  progress={xhrProgress || progress}
+                  isUploading={isUploading}
+                  fileName={uploadFileName}
+                />
               </div>
             </div>
           )}
@@ -131,20 +127,20 @@ export function ImageUploader({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
-          className={`
-            border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all
-            ${
-              isDragging
-                ? "border-primary-500 bg-primary-50/50"
-                : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
-            }
-          `}
+          onClick={() => !isUploading && inputRef.current?.click()}
+          className={`border-2 border-dashed rounded-xl p-8 text-center transition-all ${
+            isDragging
+              ? "border-primary-500 bg-primary-50/50"
+              : "border-gray-200 hover:border-primary-400 hover:bg-gray-50"
+          } ${isUploading ? "cursor-wait" : "cursor-pointer"}`}
         >
           {isUploading ? (
             <div className="flex flex-col items-center gap-3">
-              <Loader2 size={32} className="text-primary-500 animate-spin" />
-              <p className="text-sm text-gray-500">Uploading...</p>
+              <UploadProgress
+                progress={xhrProgress || progress}
+                isUploading={isUploading}
+                fileName={uploadFileName}
+              />
             </div>
           ) : (
             <div className="flex flex-col items-center gap-3">

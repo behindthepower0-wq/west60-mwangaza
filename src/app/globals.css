@@ -2,6 +2,18 @@
 
 @import "tailwindcss";
 
+@config "../../tailwind.config.ts";
+
+@theme {
+  --color-primary-light: #2a6b50;
+  --color-primary-dark: #0f3021;
+  --color-secondary-light: #d9a94e;
+  --color-secondary-dark: #9e7420;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #4A4A4A;
+  --color-text-muted: #7A7A7A;
+}
+
 /* ─────────────────────────────────────────────
    CSS CUSTOM PROPERTIES
 ───────────────────────────────────────────── */

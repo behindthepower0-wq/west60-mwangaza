@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Save, X } from "lucide-react";
 import Link from "next/link";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 
 type TeamMember = {
   id?: string;
@@ -15,6 +16,8 @@ type TeamMember = {
   facebookUrl?: string | null;
   twitterUrl?: string | null;
   linkedinUrl?: string | null;
+  instagramUrl?: string | null;
+  isVisible?: boolean | null;
   order?: number | null;
 };
 
@@ -35,6 +38,8 @@ export default function TeamMemberForm({ initialData }: TeamMemberFormProps) {
     facebookUrl: initialData?.facebookUrl || "",
     twitterUrl: initialData?.twitterUrl || "",
     linkedinUrl: initialData?.linkedinUrl || "",
+    instagramUrl: initialData?.instagramUrl || "",
+    isVisible: initialData?.isVisible ?? true,
     order: initialData?.order || 0,
   });
 
@@ -144,21 +149,14 @@ export default function TeamMemberForm({ initialData }: TeamMemberFormProps) {
         />
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="photograph" className="block text-sm font-medium text-gray-700">
-          Photograph URL
-        </label>
-        <input
-          type="text"
-          id="photograph"
-          name="photograph"
-          value={formData.photograph || ""}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+      <ImageUploader
+        currentUrl={formData.photograph || ""}
+        onUpload={(url) => setFormData(prev => ({ ...prev, photograph: url || "" }))}
+        label="Photograph"
+        category="TEAM"
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="space-y-2">
           <label htmlFor="facebookUrl" className="block text-sm font-medium text-gray-700">
             Facebook URL
@@ -200,20 +198,60 @@ export default function TeamMemberForm({ initialData }: TeamMemberFormProps) {
             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        <div className="space-y-2">
+          <label htmlFor="instagramUrl" className="block text-sm font-medium text-gray-700">
+            Instagram URL
+          </label>
+          <input
+            type="url"
+            id="instagramUrl"
+            name="instagramUrl"
+            value={formData.instagramUrl || ""}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
 
-      <div className="space-y-2">
-        <label htmlFor="order" className="block text-sm font-medium text-gray-700">
-          Display Order (Number)
-        </label>
-        <input
-          type="number"
-          id="order"
-          name="order"
-          value={formData.order || 0}
-          onChange={handleChange}
-          className="w-full md:w-1/3 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label htmlFor="order" className="block text-sm font-medium text-gray-700">
+            Display Order (Number)
+          </label>
+          <input
+            type="number"
+            id="order"
+            name="order"
+            value={formData.order || 0}
+            onChange={handleChange}
+            className="w-full md:w-1/3 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Visible on Website
+          </label>
+          <div className="flex items-center gap-3 pt-1">
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, isVisible: !(prev.isVisible ?? true) }))}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                (formData.isVisible ?? true) ? "bg-blue-600" : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  (formData.isVisible ?? true) ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+            <span className="text-sm text-gray-600">
+              {(formData.isVisible ?? true) ? "Visible" : "Hidden"}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center gap-4 pt-4">
