@@ -737,16 +737,20 @@ function createModelDelegator(modelName: string) {
 
 const modelCache = new Map<string, ReturnType<typeof createModelDelegator>>();
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { PrismaClient } = require("@prisma/client") as { PrismaClient: new () => Record<string, unknown> };
+
 const prisma = new Proxy(
-  {} as Record<string, unknown>,
+  {} as PrismaClient,
   {
-    get(_target, prop: string) {
+    get(_target, prop: string | symbol) {
       if (prop === "$disconnect" || prop === "$connect") return () => Promise.resolve();
 
-      if (!modelCache.has(prop)) {
-        modelCache.set(prop, createModelDelegator(prop));
+      const key = String(prop);
+      if (!modelCache.has(key)) {
+        modelCache.set(key, createModelDelegator(key));
       }
-      return modelCache.get(prop);
+      return modelCache.get(key);
     },
   },
 );
