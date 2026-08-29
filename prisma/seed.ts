@@ -1,10 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { hash } from "bcryptjs";
-import path from "node:path";
 
-const adapter = new PrismaBetterSqlite3({ url: path.join(process.cwd(), "prisma", "west60.db") });
-const prisma = new PrismaClient({ adapter });
+function createPrismaClient() {
+  if (process.env.DATABASE_URL?.startsWith("postgresql://") || process.env.DATABASE_URL?.startsWith("postgres://")) {
+    return new PrismaClient();
+  }
+  // Local SQLite dev
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const path = require("node:path");
+  const adapter = new PrismaBetterSqlite3({ url: path.join(process.cwd(), "prisma", "west60.db") });
+  return new PrismaClient({ adapter });
+}
+
+const prisma = createPrismaClient();
 
 
 async function main() {

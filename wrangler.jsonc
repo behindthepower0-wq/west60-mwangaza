@@ -4,10 +4,13 @@
   "name": "west60-mwangaza",
   "workers_dev": true,
   "minify": true,
+  "find_additional_modules": true,
   "compatibility_date": "2024-12-30",
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://west60-mwangaza.behindthepower0.workers.dev",
-    "NEXTJS_ENV": "production"
+    "NEXTAUTH_URL": "https://west60-mwangaza.behindthepower0.workers.dev",
+    "NEXTJS_ENV": "production",
+    "AUTH_TRUST_HOST": "true"
   },
   "compatibility_flags": [
     "nodejs_compat",

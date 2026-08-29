@@ -49,6 +49,8 @@ worker-configuration.d.ts
 # database
 prisma/*.db
 prisma/*.db-journal
+auth
+auth-wal
 
 # uploads
 public/uploads/
@@ -59,3 +61,6 @@ dev-server.log
 # seed scripts
 seed_sqlite.js
 seed_team.js
+
+.vercel
+.env*

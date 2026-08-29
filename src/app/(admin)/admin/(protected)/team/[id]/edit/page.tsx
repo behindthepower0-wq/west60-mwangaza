@@ -5,10 +5,11 @@ import TeamMemberForm from "@/components/admin/TeamMemberForm";
 export default async function EditTeamMemberPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const member = await prisma.teamMember.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!member) {

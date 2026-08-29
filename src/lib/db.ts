@@ -70,21 +70,22 @@ function isCloudflareWorkers(): boolean {
 }
 
 function resolveClient(): PrismaClientType {
-  // 1. Turso — when TURSO_DATABASE_URL is set (Vercel production)
+  // 1. Cloudflare D1 — canonical DB when running on Workers
+  if (isCloudflareWorkers()) {
+    try {
+      return createD1Client();
+    } catch (e) {
+      console.error("[db] D1 client failed:", e instanceof Error ? e.message : e);
+      // Fall through
+    }
+  }
+
+  // 2. Turso — when TURSO_DATABASE_URL is set (other serverless platforms)
   if (process.env.TURSO_DATABASE_URL) {
     try {
       return createTursoClient();
     } catch (e) {
       console.error("[db] Turso client failed:", e instanceof Error ? e.message : e);
-      // Fall through
-    }
-  }
-
-  // 2. Cloudflare D1 — when running on Workers
-  if (isCloudflareWorkers()) {
-    try {
-      return createD1Client();
-    } catch {
       // Fall through
     }
   }
