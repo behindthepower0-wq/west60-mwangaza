@@ -372,31 +372,61 @@ CREATE INDEX IF NOT EXISTS idx_activity_logs_user_id ON activity_logs(user_id);
 
 -- ──── RLS ───────────────────────────────────────────────
 
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE navigation_items ENABLE ROW LEVEL SECURITY;
-ALTER TABLE media ENABLE ROW LEVEL SECURITY;
-ALTER TABLE seo_metadata ENABLE ROW LEVEL SECURITY;
-ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE page_sections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE homepage_sections ENABLE ROW LEVEL SECURITY;
-ALTER TABLE services ENABLE ROW LEVEL SECURITY;
-ALTER TABLE properties ENABLE ROW LEVEL SECURITY;
-ALTER TABLE property_images ENABLE ROW LEVEL SECURITY;
-ALTER TABLE property_features ENABLE ROW LEVEL SECURITY;
-ALTER TABLE property_amenities ENABLE ROW LEVEL SECURITY;
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE project_images ENABLE ROW LEVEL SECURITY;
-ALTER TABLE project_features ENABLE ROW LEVEL SECURITY;
-ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
-ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
-ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE enquiries ENABLE ROW LEVEL SECURITY;
-ALTER TABLE content_revisions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN
+  ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE navigation_items ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE media ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE seo_metadata ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE page_sections ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE homepage_sections ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE services ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE properties ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE property_images ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE property_features ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE property_amenities ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE project_images ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE project_features ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE enquiries ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE content_revisions ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
 
--- Admin access via service role key
+-- Admin access via service role key (drop and recreate to be idempotent)
+DO $$ BEGIN
+  DROP POLICY IF EXISTS "Allow all" ON users;
+  DROP POLICY IF EXISTS "Allow all" ON site_settings;
+  DROP POLICY IF EXISTS "Allow all" ON navigation_items;
+  DROP POLICY IF EXISTS "Allow all" ON media;
+  DROP POLICY IF EXISTS "Allow all" ON seo_metadata;
+  DROP POLICY IF EXISTS "Allow all" ON pages;
+  DROP POLICY IF EXISTS "Allow all" ON page_sections;
+  DROP POLICY IF EXISTS "Allow all" ON homepage_sections;
+  DROP POLICY IF EXISTS "Allow all" ON services;
+  DROP POLICY IF EXISTS "Allow all" ON properties;
+  DROP POLICY IF EXISTS "Allow all" ON property_images;
+  DROP POLICY IF EXISTS "Allow all" ON property_features;
+  DROP POLICY IF EXISTS "Allow all" ON property_amenities;
+  DROP POLICY IF EXISTS "Allow all" ON projects;
+  DROP POLICY IF EXISTS "Allow all" ON project_images;
+  DROP POLICY IF EXISTS "Allow all" ON project_features;
+  DROP POLICY IF EXISTS "Allow all" ON team_members;
+  DROP POLICY IF EXISTS "Allow all" ON testimonials;
+  DROP POLICY IF EXISTS "Allow all" ON categories;
+  DROP POLICY IF EXISTS "Allow all" ON posts;
+  DROP POLICY IF EXISTS "Allow all" ON enquiries;
+  DROP POLICY IF EXISTS "Allow all" ON content_revisions;
+  DROP POLICY IF EXISTS "Allow all" ON activity_logs;
+EXCEPTION WHEN undefined_object THEN null;
+END $$;
+
 CREATE POLICY "Allow all" ON users FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON site_settings FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON navigation_items FOR ALL USING (true) WITH CHECK (true);
