@@ -6,38 +6,34 @@ export async function GET() {
   const dbUrl = process.env.DATABASE_URL || "";
   const password = dbUrl.match(/:(.+)@/)?.[1] || "";
   const projectRef = "srisvchdkfzazzkmrzzt";
-  const regions = [
-    "us-east-1", "us-east-2", "us-west-1", "us-west-2",
-    "eu-west-1", "eu-west-2", "eu-west-3", "eu-central-1",
-    "ap-southeast-1", "ap-southeast-2", "ap-northeast-1",
-    "ap-south-1", "sa-east-1", "ca-central-1",
-  ];
 
   const { Pool } = await import("pg");
 
-  const tests = regions.map(async (region) => {
-    const host = `aws-0-${region}.pooler.supabase.com`;
-    const connStr = `postgresql://postgres.${projectRef}:${password}@${host}:6543/postgres`;
-    const pool = new Pool({ connectionString: connStr, connectionTimeoutMillis: 5000, query_timeout: 5000 });
+  const tests: Array<[string, string]> = [
+    // Direct connection
+    [`postgresql://postgres:${password}@db.${projectRef}.supabase.co:5432/postgres`, "direct"],
+    // Pooler with different username formats
+    [`postgresql://postgres:${password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`, "pooler-no-ref"],
+    [`postgresql://postgres.${projectRef}:${password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`, "pooler-us-east-1"],
+    [`postgresql://postgres.${projectRef}:${password}@aws-0-eu-west-1.pooler.supabase.com:6543/postgres`, "pooler-eu-west-1"],
+  ];
+
+  const results: Record<string, string> = {};
+
+  for (const [connStr, label] of tests) {
+    const pool = new Pool({ connectionString: connStr, connectionTimeoutMillis: 8000, query_timeout: 8000 });
     try {
       const start = Date.now();
-      await pool.query("SELECT 1");
+      await pool.query("SELECT 1 as ok");
       const ms = Date.now() - start;
+      results[label] = `OK (${ms}ms)`;
       await pool.end();
-      return [region, `OK (${ms}ms)`];
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
+      results[label] = msg.substring(0, 120);
       await pool.end().catch(() => {});
-      if (msg.includes("tenant") || msg.includes("IDENTIFIER")) {
-        return [region, "TENANT_NOT_FOUND"];
-      } else if (msg.includes("ENOTFOUND")) {
-        return [region, "DNS_FAIL"];
-      } else {
-        return [region, msg.substring(0, 60)];
-      }
     }
-  });
+  }
 
-  const results = Object.fromEntries(await Promise.all(tests));
   return NextResponse.json(results);
 }
