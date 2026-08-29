@@ -427,7 +427,7 @@ function findRelatedTable(parentTable: string, relName: string): string | null {
   return RELATIONS[parentTable]?.[relName] || null;
 }
 
-function applyPostInsertRelations(
+async function applyPostInsertRelations(
   row: Record<string, unknown>,
   include: Record<string, unknown>,
   primaryTable: string,
