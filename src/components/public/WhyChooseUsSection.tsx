@@ -1,4 +1,4 @@
-import { Eye, MapPin, Award, Headphones, FileCheck } from "lucide-react";
+import { Eye, MapPin, Award, Headphones } from "lucide-react";
 
 const reasons = [
   {
@@ -24,12 +24,6 @@ const reasons = [
     title: "After-Sales Support",
     description:
       "Our relationship doesn't end at purchase. We provide ongoing support, site visit assistance, and property guidance.",
-  },
-  {
-    icon: <FileCheck size={24} />,
-    title: "Flexible Payment Plans",
-    description:
-      "Our Lipa Pole Pole payment structure makes property ownership accessible: spread your payments over a comfortable period.",
   },
 ];
 
@@ -67,7 +61,7 @@ export function WhyChooseUsSection() {
         </div>
 
         {/* Cards grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 gap-6">
           {reasons.map((reason, i) => (
             <div
               key={reason.title}
