@@ -9,8 +9,11 @@ function createPgClient(): PrismaClientType {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL must be set for PostgreSQL");
   // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaPg } = require("@prisma/adapter-pg");
+  const adapter = new PrismaPg({ connectionString: url });
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaClient } = require("@prisma/client");
-  _pgClient = new PrismaClient({ datasourceUrl: url });
+  _pgClient = new PrismaClient({ adapter });
   return _pgClient!;
 }
 
@@ -90,6 +93,7 @@ function resolveClient(): PrismaClientType {
       return createPgClient();
     } catch (e) {
       console.error("[db] PostgreSQL client failed:", e instanceof Error ? e.message : e);
+      console.error("[db] Full error:", e);
     }
   }
 
