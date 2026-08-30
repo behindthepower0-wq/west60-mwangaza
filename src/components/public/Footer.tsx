@@ -26,7 +26,7 @@ export async function Footer() {
 
   const whatsappUrl = settings.whatsapp_url || getWhatsAppUrl("0711400933");
   const facebookUrl = settings.facebook_url || "https://www.facebook.com/west60mwangaza/";
-  const instagramUrl = settings.instagram_url || "https://www.instagram.com/west60mwangazaproperties?igsi=cDk5bmhjbDIxb2gy";
+  const instagramUrl = settings.instagram_url || "https://www.instagram.com/west60mwangazaproperties";
   const youtubeUrl = settings.youtube_url || "";
   const tiktokUrl = settings.tiktok_url || "https://vm.tiktok.com/ZS9BxDPojLPhc-YKyKL/";
 
