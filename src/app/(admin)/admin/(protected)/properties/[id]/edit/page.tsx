@@ -93,7 +93,6 @@ export default async function EditPropertyPage({
               caption: img.caption,
               order: img.order,
             }))}
-            onUpdate={() => {}}
           />
         </PropertyForm>
       </div>

@@ -28,12 +28,11 @@ const settingGroups = [
   {
     title: "Social Media",
     fields: [
-      { key: "facebook_url", label: "Facebook URL", type: "url", placeholder: "https://facebook.com/..." },
-      { key: "instagram_url", label: "Instagram URL", type: "url", placeholder: "https://instagram.com/..." },
-      { key: "linkedin_url", label: "LinkedIn URL", type: "url", placeholder: "https://linkedin.com/..." },
-      { key: "twitter_url", label: "X / Twitter URL", type: "url", placeholder: "https://x.com/..." },
+      { key: "facebook_url", label: "Facebook URL", type: "url", placeholder: "https://www.facebook.com/west60mwangaza/" },
+      { key: "instagram_url", label: "Instagram URL", type: "url", placeholder: "https://www.instagram.com/p/DSwdY07jGrK/" },
       { key: "youtube_url", label: "YouTube URL", type: "url", placeholder: "https://youtube.com/..." },
-      { key: "tiktok_url", label: "TikTok URL", type: "url", placeholder: "https://tiktok.com/..." },
+      { key: "tiktok_url", label: "TikTok URL", type: "url", placeholder: "https://www.tiktok.com/@west60mwangaza" },
+      { key: "whatsapp_url", label: "WhatsApp URL", type: "url", placeholder: "https://wa.me/254711400933" },
     ],
   },
   {

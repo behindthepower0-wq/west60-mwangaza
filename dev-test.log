@@ -1,0 +1,13 @@
+▲ Next.js 16.2.11 (Turbopack)
+- Local:         http://localhost:3999
+- Network:       http://192.168.0.105:3999
+- Environments: .env.local
+✓ Ready in 4.4s
+- Experiments (use with caution):
+  · serverActions
+
+○ Compiling /admin/properties ...
+ GET /admin/properties 307 in 35.0s (next.js: 23.6s, application-code: 11.4s)
+○ Compiling /admin/properties/[id]/edit ...
+ GET /admin/properties/prop-valleys-gardens/edit 307 in 20.9s (next.js: 15.8s, application-code: 5.1s)
+✓ Compiled in 3.3s

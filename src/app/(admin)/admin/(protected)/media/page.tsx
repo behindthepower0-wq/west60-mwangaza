@@ -11,7 +11,7 @@ export default async function AdminMediaPage() {
 
   const serializedMedia = media.map(m => ({
     ...m,
-    createdAt: m.createdAt.toISOString(),
+    createdAt: typeof m.createdAt === 'string' ? m.createdAt : String(m.createdAt),
   }));
 
   return (

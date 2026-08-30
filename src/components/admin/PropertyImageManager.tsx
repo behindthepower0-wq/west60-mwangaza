@@ -23,7 +23,7 @@ interface PropertyImageManagerProps {
   propertyId: string;
   mainImage?: string | null;
   images: PropertyImage[];
-  onUpdate: () => void;
+  onUpdate?: () => void;
 }
 
 export function PropertyImageManager({
