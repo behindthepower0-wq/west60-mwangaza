@@ -89,6 +89,7 @@ export function HomepageSectionEditForm({
         // Upload the file
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("category", "HOMEPAGE");
 
         const uploadRes = await fetch("/api/upload", {
           method: "POST",

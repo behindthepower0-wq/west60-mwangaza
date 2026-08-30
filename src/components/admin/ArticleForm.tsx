@@ -21,7 +21,7 @@ export function ArticleForm({ initialData }: ArticleFormProps) {
   const [uploadFileName, setUploadFileName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { upload, progress, isUploading, error: uploadError } = useFileUpload();
+  const { upload, progress, isUploading, error: uploadError } = useFileUpload({ category: "NEWS" });
   const [xhrProgress, setXhrProgress] = useState(0);
   useEffect(() => {
     const handler = (e: Event) => {

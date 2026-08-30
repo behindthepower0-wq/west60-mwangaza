@@ -10,8 +10,21 @@ export const metadata: Metadata = { title: 'Properties | CMS' };
 export default async function AdminPropertiesPage() {
   const properties = await prisma.property.findMany({
     orderBy: [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
-    include: { images: { take: 1, orderBy: { order: 'asc' } }, _count: { select: { enquiries: true } } },
+    include: { images: { take: 1, orderBy: { order: 'asc' } } },
   }).catch(() => []);
+
+  const propertyIds = properties.map((p) => p.id);
+  const enquiries = propertyIds.length > 0
+    ? await prisma.enquiry.findMany({
+        where: { propertyId: { in: propertyIds } },
+        select: { propertyId: true },
+      }).catch(() => [])
+    : [];
+  const enquiryCountMap = new Map<string, number>();
+  for (const e of enquiries) {
+    const pid = e.propertyId as string;
+    enquiryCountMap.set(pid, (enquiryCountMap.get(pid) || 0) + 1);
+  }
 
   return (
     <div className="space-y-6">
@@ -61,7 +74,7 @@ export default async function AdminPropertiesPage() {
                     <td className="px-5 py-4 text-sm font-medium text-gray-700">{p.priceLabel || formatPrice(p.price, p.currency)}</td>
                     <td className="px-5 py-4"><span className={getPropertyStatusClass(p.status)}>{getPropertyStatusLabel(p.status)}</span></td>
                     <td className="px-5 py-4"><span className={`text-xs font-medium ${p.isFeatured ? 'text-secondary-600' : 'text-gray-400'}`}>{p.isFeatured ? 'Yes' : 'No'}</span></td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{p._count.enquiries}</td>
+                    <td className="px-5 py-4 text-sm text-gray-600">{enquiryCountMap.get(p.id) || 0}</td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">
                         <Link href={`/properties/${p.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">

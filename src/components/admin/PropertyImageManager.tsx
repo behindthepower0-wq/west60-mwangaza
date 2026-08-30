@@ -43,7 +43,7 @@ export function PropertyImageManager({
   const [uploadFileName, setUploadFileName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { upload, progress, isUploading, error: uploadError } = useFileUpload();
+  const { upload, progress, isUploading, error: uploadError } = useFileUpload({ category: "PROPERTIES" });
   const [xhrProgress, setXhrProgress] = useState(0);
   useEffect(() => {
     const handler = (e: Event) => {
