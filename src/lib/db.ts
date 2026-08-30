@@ -357,7 +357,7 @@ function resolveRelatedInclude(
     if (relConfig === true) {
       // Simple include - find the related table name
       const relTable = findRelatedTable(primaryTable, relName);
-      if (relTable) embeds.push(relTable);
+      if (relTable) embeds.push(`${relTable}(*)`);
     } else if (typeof relConfig === "object" && relConfig !== null) {
       const relTable = findRelatedTable(primaryTable, relName);
       if (relTable) {
@@ -369,7 +369,7 @@ function resolveRelatedInclude(
           for (const [subRel, subConf] of Object.entries(subInclude as Record<string, unknown>)) {
             if (subConf === true) {
               const subRelTable = findRelatedTable(relTable, subRel);
-              if (subRelTable) subEmbeds.push(subRelTable);
+              if (subRelTable) subEmbeds.push(`${subRelTable}(*)`);
             }
           }
           embed += "*" + (subEmbeds.length ? "," + subEmbeds.join(",") : "");
