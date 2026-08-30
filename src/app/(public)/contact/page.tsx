@@ -45,15 +45,22 @@ export default function ContactPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-6 rounded-2xl overflow-hidden h-56 bg-primary-50 flex items-center justify-center border border-primary-100">
-                <div className="text-center">
-                  <MapPin size={32} className="text-secondary-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">Repen Complex, Suite 412, Katani Rd at the Junction of Katani Rd and Mombasa Rd, Syokimau</p>
-                   <a href="https://maps.app.goo.gl/TssHVf3wLmF9Tb5D8" target="_blank" rel="noopener noreferrer"
-                    className="text-xs text-primary-600 hover:text-secondary-600 transition-colors mt-1 block">
-                    View on Google Maps →
-                  </a>
-                </div>
+              <div className="mt-6 rounded-2xl overflow-hidden border border-primary-100">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7!2d36.87!3d-1.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwMjInNDguMCJTIDM2wrA1MicyNC4wIkU!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                  width="100%"
+                  height="300"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="West 60 Mwangaza Office Location"
+                  className="w-full h-56 sm:h-64"
+                />
+                <a href="https://maps.app.goo.gl/TssHVf3wLmF9Tb5D8" target="_blank" rel="noopener noreferrer"
+                  className="block text-center text-xs text-primary-600 hover:text-secondary-600 transition-colors py-2 bg-primary-50">
+                  Open in Google Maps →
+                </a>
               </div>
             </div>
             <div className="glass-card p-5 sm:p-8">

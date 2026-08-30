@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/public/Navbar";
 import { Footer } from "@/components/public/Footer";
+import { FloatingWhatsApp } from "@/components/public/FloatingWhatsApp";
 
 export default function PublicLayout({
   children,
@@ -11,6 +12,7 @@ export default function PublicLayout({
       <Navbar />
       <main>{children}</main>
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }
