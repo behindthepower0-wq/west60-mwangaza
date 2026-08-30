@@ -41,11 +41,15 @@ const FIELDS: Record<string, Record<string, string>> = {
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
-  site_settings: { updatedAt: "updated_at" },
+  site_settings: {
+    group: "grp",
+    updatedAt: "updated_at",
+  },
   navigation_items: {
     parentId: "parent_id",
     isVisible: "is_visible",
     isExternal: "is_external",
+    order: "sort_order",
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
@@ -80,13 +84,13 @@ const FIELDS: Record<string, Record<string, string>> = {
   },
   page_sections: {
     pageId: "page_id",
-    sortOrder: "sort_order",
+    order: "sort_order",
     isVisible: "is_visible",
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
   homepage_sections: {
-    sortOrder: "sort_order",
+    order: "sort_order",
     isVisible: "is_visible",
     updatedAt: "updated_at",
   },
@@ -95,7 +99,7 @@ const FIELDS: Record<string, Record<string, string>> = {
     fullDescription: "full_description",
     ctaText: "cta_text",
     ctaUrl: "cta_url",
-    sortOrder: "sort_order",
+    order: "sort_order",
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
@@ -122,16 +126,16 @@ const FIELDS: Record<string, Record<string, string>> = {
     propertyId: "property_id",
     thumbnailUrl: "thumbnail_url",
     altText: "alt_text",
-    sortOrder: "sort_order",
+    order: "sort_order",
     createdAt: "created_at",
   },
   property_features: {
     propertyId: "property_id",
-    sortOrder: "sort_order",
+    order: "sort_order",
   },
   property_amenities: {
     propertyId: "property_id",
-    sortOrder: "sort_order",
+    order: "sort_order",
   },
   projects: {
     shortDescription: "short_description",
@@ -148,26 +152,26 @@ const FIELDS: Record<string, Record<string, string>> = {
     projectId: "project_id",
     thumbnailUrl: "thumbnail_url",
     altText: "alt_text",
-    sortOrder: "sort_order",
+    order: "sort_order",
     createdAt: "created_at",
   },
   project_features: {
     projectId: "project_id",
-    sortOrder: "sort_order",
+    order: "sort_order",
   },
   team_members: {
     facebookUrl: "facebook_url",
     linkedinUrl: "linkedin_url",
     twitterUrl: "twitter_url",
     instagramUrl: "instagram_url",
-    sortOrder: "sort_order",
+    order: "sort_order",
     isVisible: "is_visible",
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
   testimonials: {
     clientName: "client_name",
-    sortOrder: "sort_order",
+    order: "sort_order",
     isVisible: "is_visible",
     createdAt: "created_at",
     updatedAt: "updated_at",
@@ -275,7 +279,7 @@ function applyWhere(
             query = query.lte(toSnake(key, table), val);
             break;
           case "contains":
-            query = query.contains(toSnake(key, table), val);
+            query = query.ilike(toSnake(key, table), `%${val}%`);
             break;
           case "startsWith":
             query = query.ilike(toSnake(key, table), `${val}%`);
