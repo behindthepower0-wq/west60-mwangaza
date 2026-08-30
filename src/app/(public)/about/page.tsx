@@ -91,7 +91,7 @@ export default async function AboutPage() {
       <TeamSection teamMembers={teamMembers} />
 
       <section className="py-16" style={{ background: 'var(--color-primary)' }}>
-        <div className="max-w-3xl mx-auto px-4 text-center">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-serif)' }}>Ready to Find Your Property?</h2>
           <p className="text-white/60 mb-8">Contact us today or explore our available properties.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

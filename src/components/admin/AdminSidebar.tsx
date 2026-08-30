@@ -5,11 +5,12 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Home, Building2, FolderKanban,
   Users, Star, Newspaper, Image, Navigation, MessageSquare,
-  Search, Settings, UserCog, Activity, ChevronDown, ChevronRight,
+  Search, Settings, UserCog, Activity, ChevronDown, ChevronRight, X,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useSidebar } from "./SidebarProvider";
 
 const navGroups = [
   {
@@ -55,24 +56,38 @@ const navGroups = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const { open, close } = useSidebar();
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
   return (
     <aside
-      className="fixed top-0 left-0 h-screen w-64 z-50 flex flex-col"
+      className={cn(
+        "fixed top-0 left-0 h-screen w-64 z-50 flex flex-col transition-transform duration-300 ease-in-out",
+        "lg:translate-x-0",
+        open ? "translate-x-0" : "-translate-x-full"
+      )}
       style={{
         background: "linear-gradient(180deg, #081a10 0%, #0f2815 100%)",
         borderRight: "1px solid rgba(255,255,255,0.06)",
       }}
     >
       {/* Logo area */}
-      <div className="p-5 border-b border-white/6">
-        <Logo variant="white" size="sm" />
-        <p className="text-[10px] text-white/30 mt-1.5 font-medium tracking-wider uppercase pl-0.5">
-          Content Management
-        </p>
+      <div className="p-5 border-b border-white/6 flex items-center justify-between">
+        <div>
+          <Logo variant="white" size="sm" />
+          <p className="text-[10px] text-white/30 mt-1.5 font-medium tracking-wider uppercase pl-0.5">
+            Content Management
+          </p>
+        </div>
+        <button
+          onClick={close}
+          className="p-1.5 text-white/40 hover:text-white hover:bg-white/10 rounded-lg lg:hidden"
+          aria-label="Close sidebar"
+        >
+          <X size={18} />
+        </button>
       </div>
 
       {/* Nav */}
@@ -89,6 +104,7 @@ export function AdminSidebar() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
+                      onClick={close}
                       className={cn(
                         "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200",
                         active

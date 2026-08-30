@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ScrollReveal } from "./ScrollReveal";
 import type { TeamMember } from "@prisma/client";
 
@@ -47,10 +48,12 @@ export function TeamSection({ teamMembers }: TeamSectionProps) {
                 {/* Photo area */}
                 <div className="aspect-[4/5] overflow-hidden relative">
                   {member.photograph ? (
-                    <img 
-                      src={member.photograph} 
-                      alt={member.name} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    <Image
+                      src={member.photograph}
+                      alt={member.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 flex flex-col items-center justify-center text-gray-400">

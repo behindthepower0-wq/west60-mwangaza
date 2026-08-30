@@ -278,7 +278,7 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
                 </div>
               )}
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
+              <div className="absolute inset-0 bg-black/60 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
                 <div className="flex justify-end">
                   <button
                     onClick={(e) => {
@@ -314,7 +314,7 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-100 overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, MapPin, Maximize2, Building2 } from "lucide-react";
 import type { Property, PropertyImage } from "@prisma/client";
 import { ScrollReveal } from "./ScrollReveal";
@@ -88,10 +89,12 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
               >
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
+                  <Image
                     src={property.mainImage}
                     alt={property.name}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
                   />
                   {/* Gradient overlay on hover */}
                   <div
@@ -178,10 +181,12 @@ export function PropertyCard({ property }: { property: any }) {
       className="property-card group block h-full"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img
+        <Image
           src={displayImage}
           alt={property.name}
-          className="w-full h-full object-cover"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover"
         />
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"

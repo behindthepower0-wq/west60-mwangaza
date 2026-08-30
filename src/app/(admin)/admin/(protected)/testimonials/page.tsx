@@ -13,7 +13,7 @@ export default async function AdminTestimonialsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'var(--font-serif)' }}>Testimonials</h1>
           <p className="text-sm text-gray-500">{testimonials.length} testimonials</p>

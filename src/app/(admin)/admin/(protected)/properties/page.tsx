@@ -28,7 +28,7 @@ export default async function AdminPropertiesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'var(--font-serif)' }}>Properties</h1>
           <p className="text-sm text-gray-500">{properties.length} total properties</p>
@@ -52,7 +52,7 @@ export default async function AdminPropertiesPage() {
               <thead>
                 <tr className="border-b border-gray-100">
                   {['Property', 'Location', 'Price', 'Status', 'Featured', 'Enquiries', 'Actions'].map(h => (
-                    <th key={h} className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-4">{h}</th>
+                    <th key={h} className={`text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-4 ${h === 'Location' || h === 'Featured' || h === 'Enquiries' ? 'hidden lg:table-cell' : ''}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -70,11 +70,11 @@ export default async function AdminPropertiesPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{p.location || '-'}</td>
+                    <td className="hidden lg:table-cell px-5 py-4 text-sm text-gray-600">{p.location || '-'}</td>
                     <td className="px-5 py-4 text-sm font-medium text-gray-700">{p.priceLabel || formatPrice(p.price, p.currency)}</td>
                     <td className="px-5 py-4"><span className={getPropertyStatusClass(p.status)}>{getPropertyStatusLabel(p.status)}</span></td>
-                    <td className="px-5 py-4"><span className={`text-xs font-medium ${p.isFeatured ? 'text-secondary-600' : 'text-gray-400'}`}>{p.isFeatured ? 'Yes' : 'No'}</span></td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{enquiryCountMap.get(p.id) || 0}</td>
+                    <td className="hidden lg:table-cell px-5 py-4"><span className={`text-xs font-medium ${p.isFeatured ? 'text-secondary-600' : 'text-gray-400'}`}>{p.isFeatured ? 'Yes' : 'No'}</span></td>
+                    <td className="hidden lg:table-cell px-5 py-4 text-sm text-gray-600">{enquiryCountMap.get(p.id) || 0}</td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">
                         <Link href={`/properties/${p.slug}`} target="_blank" className="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-colors">

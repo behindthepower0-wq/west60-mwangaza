@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 
@@ -26,10 +27,12 @@ export function AboutSection() {
             <div className="relative">
               {/* Main image */}
               <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl relative group">
-                <img
+                <Image
                   src="/images/about-building.jpg"
                   alt="Modern property development by West 60 Mwangaza"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 {/* Overlay gradient */}
                 <div

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, Tag, User } from "lucide-react";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
@@ -110,9 +111,11 @@ export default async function NewsArticlePage({ params }: Props) {
       {post.featuredImage && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-12">
           <div className="rounded-2xl overflow-hidden shadow-lg">
-            <img
+            <Image
               src={post.featuredImage}
               alt={post.title}
+              width={1200}
+              height={630}
               className="w-full h-auto object-cover max-h-[500px]"
             />
           </div>

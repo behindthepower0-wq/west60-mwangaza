@@ -277,7 +277,7 @@ export function HeroSection() {
 
       {/* Statistics bar */}
       <div
-        className="absolute bottom-0 left-0 right-0 hidden lg:block"
+        className="absolute bottom-0 left-0 right-0"
         style={{
           background: "rgba(10,20,16,0.6)",
           backdropFilter: "blur(20px) saturate(1.3)",
@@ -285,7 +285,7 @@ export function HeroSection() {
           borderTop: "1px solid rgba(198,145,43,0.12)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-8 py-6 grid grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 sm:py-6 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8">
           {stats.map((stat, i) => (
             <div key={stat.label} className="text-center">
               <div

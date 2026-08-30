@@ -56,7 +56,7 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-            <div className="glass-card p-8">
+            <div className="glass-card p-5 sm:p-8">
               <div className="flex items-center gap-3 mb-6">
                 <MessageSquare size={20} className="text-secondary-500" />
                 <h2 className="text-xl font-bold text-primary-800" style={{ fontFamily: 'var(--font-serif)' }}>Send Us a Message</h2>

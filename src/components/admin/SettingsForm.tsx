@@ -104,7 +104,7 @@ export function SettingsForm({ initialSettings }: SettingsFormProps) {
         </div>
       ))}
 
-      <div className="flex items-center justify-between py-4 px-6 bg-white rounded-xl border border-gray-100 shadow-sm sticky bottom-4">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 py-4 px-4 sm:px-6 bg-white rounded-xl border border-gray-100 shadow-sm sticky bottom-4">
         {status === "saved" && (
           <div className="flex items-center gap-2 text-green-600 text-sm">
             <CheckCircle size={16} /> Settings saved successfully

@@ -162,7 +162,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               placeholder="e.g. Syokimau, Nairobi"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Property Type
@@ -199,7 +199,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
         </div>
 
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Price (Number)
@@ -237,7 +237,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               placeholder="e.g. From KES 1.5M"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Size (Number)

@@ -14,7 +14,7 @@ export default async function AdminNewsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-800" style={{ fontFamily: 'var(--font-serif)' }}>News & Articles</h1>
           <p className="text-sm text-gray-500">{posts.length} published articles</p>
@@ -38,7 +38,7 @@ export default async function AdminNewsPage() {
               <thead>
                 <tr className="border-b border-gray-100">
                   {['Article', 'Category', 'Author', 'Status', 'Date', 'Actions'].map(h => (
-                    <th key={h} className="text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-4">{h}</th>
+                    <th key={h} className={`text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-4 ${h === 'Author' ? 'hidden md:table-cell' : ''}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -49,7 +49,7 @@ export default async function AdminNewsPage() {
                       <p className="font-semibold text-sm text-gray-800 max-w-[300px] truncate">{p.title}</p>
                     </td>
                     <td className="px-5 py-4 text-sm text-gray-600">{p.category?.name || '-'}</td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{p.author?.name || '-'}</td>
+                    <td className="hidden md:table-cell px-5 py-4 text-sm text-gray-600">{p.author?.name || '-'}</td>
                     <td className="px-5 py-4">
                       <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${p.status === 'PUBLISHED' ? 'bg-secondary-50 text-secondary-600' : 'bg-gray-100 text-gray-600'}`}>
                         {p.status}
