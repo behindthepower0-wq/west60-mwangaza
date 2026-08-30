@@ -10,6 +10,7 @@ import { TeamSection } from "@/components/public/TeamSection";
 import { NewsSection } from "@/components/public/NewsSection";
 import { TrustBadges } from "@/components/public/TrustBadges";
 import { AwardsSection } from "@/components/public/AwardsSection";
+import { TestimonialsSection } from "@/components/public/TestimonialsSection";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 
 async function getData() {
   try {
-    const [featuredProperties, projects, teamMembers, latestPosts, services] =
+    const [featuredProperties, projects, teamMembers, latestPosts, services, testimonials] =
       await Promise.all([
         prisma.property.findMany({
           where: { isFeatured: true, isPublished: true },
@@ -55,9 +56,14 @@ async function getData() {
           where: { status: "PUBLISHED" },
           orderBy: { order: "asc" },
         }),
+        prisma.testimonial.findMany({
+          where: { isVisible: true },
+          orderBy: { order: "asc" },
+          take: 6,
+        }),
       ]);
 
-    return { featuredProperties, projects, teamMembers, latestPosts, services };
+    return { featuredProperties, projects, teamMembers, latestPosts, services, testimonials };
   } catch {
     return {
       featuredProperties: [],
@@ -65,12 +71,13 @@ async function getData() {
       teamMembers: [],
       latestPosts: [],
       services: [],
+      testimonials: [],
     };
   }
 }
 
 export default async function HomePage() {
-  const { featuredProperties, projects, teamMembers, latestPosts, services } =
+  const { featuredProperties, projects, teamMembers, latestPosts, services, testimonials } =
     await getData();
 
   return (
@@ -84,6 +91,7 @@ export default async function HomePage() {
       <AwardsSection />
       <ProjectsSection projects={projects} />
       <TeamSection teamMembers={teamMembers} />
+      <TestimonialsSection testimonials={testimonials} />
       <NewsSection posts={latestPosts} />
     </>
   );
