@@ -227,18 +227,50 @@ function toSnakeRecord(obj: Record<string, unknown>, table: string): Record<stri
   return out;
 }
 
+const RELATION_NAMES: Record<string, Record<string, string>> = {
+  properties: {
+    property_images: "images",
+    property_features: "features",
+    property_amenities: "amenities",
+    enquiries: "enquiries",
+  },
+  projects: {
+    project_images: "images",
+    project_features: "features",
+    enquiries: "enquiries",
+  },
+  posts: {
+    categories: "category",
+    users: "author",
+  },
+  pages: {
+    page_sections: "sections",
+  },
+  users: {
+    posts: "posts",
+    activity_logs: "activityLogs",
+    content_revisions: "contentRevisions",
+  },
+  categories: {
+    posts: "posts",
+  },
+  navigation_items: {
+    navigation_items: "children",
+  },
+};
+
 function toCamel(row: Record<string, unknown>, table: string): Record<string, unknown> {
   if (!row) return row;
   const fieldMap = FIELDS[table];
-  if (!fieldMap) return row;
   // Build reverse map: snake → camel
   const reverse: Record<string, string> = {};
-  for (const [camel, snake] of Object.entries(fieldMap)) {
+  for (const [camel, snake] of Object.entries(fieldMap || {})) {
     reverse[snake] = camel;
   }
+  const relNames = RELATION_NAMES[table] || {};
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(row)) {
-    out[reverse[k] || k] = v;
+    out[reverse[k] || relNames[k] || k] = v;
   }
   return out;
 }
