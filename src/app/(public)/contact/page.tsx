@@ -49,7 +49,7 @@ export default function ContactPage() {
                 <div className="text-center">
                   <MapPin size={32} className="text-secondary-400 mx-auto mb-2" />
                   <p className="text-sm text-gray-500">Repen Complex, Suite 412, Katani Rd at the Junction of Katani Rd and Mombasa Rd, Syokimau</p>
-                  <a href="https://maps.google.com/?q=Junction+Katani+Road+Mombasa+Road+Syokimau+Nairobi" target="_blank" rel="noopener noreferrer"
+                   <a href="https://maps.app.goo.gl/TssHVf3wLmF9Tb5D8" target="_blank" rel="noopener noreferrer"
                     className="text-xs text-primary-600 hover:text-secondary-600 transition-colors mt-1 block">
                     View on Google Maps →
                   </a>
