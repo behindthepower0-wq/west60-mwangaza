@@ -29,9 +29,9 @@ const settingGroups = [
     title: "Social Media",
     fields: [
       { key: "facebook_url", label: "Facebook URL", type: "url", placeholder: "https://www.facebook.com/west60mwangaza/" },
-      { key: "instagram_url", label: "Instagram URL", type: "url", placeholder: "https://www.instagram.com/p/DSwdY07jGrK/" },
+      { key: "instagram_url", label: "Instagram URL", type: "url", placeholder: "https://www.instagram.com/west60mwangazaproperties" },
       { key: "youtube_url", label: "YouTube URL", type: "url", placeholder: "https://youtube.com/..." },
-      { key: "tiktok_url", label: "TikTok URL", type: "url", placeholder: "https://www.tiktok.com/@west60mwangaza" },
+      { key: "tiktok_url", label: "TikTok URL", type: "url", placeholder: "https://vm.tiktok.com/..." },
       { key: "whatsapp_url", label: "WhatsApp URL", type: "url", placeholder: "https://wa.me/254711400933" },
     ],
   },

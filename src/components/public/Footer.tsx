@@ -26,9 +26,9 @@ export async function Footer() {
 
   const whatsappUrl = settings.whatsapp_url || getWhatsAppUrl("0711400933");
   const facebookUrl = settings.facebook_url || "https://www.facebook.com/west60mwangaza/";
-  const instagramUrl = settings.instagram_url || "https://www.instagram.com/p/DSwdY07jGrK/";
+  const instagramUrl = settings.instagram_url || "https://www.instagram.com/west60mwangazaproperties?igsi=cDk5bmhjbDIxb2gy";
   const youtubeUrl = settings.youtube_url || "";
-  const tiktokUrl = settings.tiktok_url || "https://www.tiktok.com/@west60mwangaza";
+  const tiktokUrl = settings.tiktok_url || "https://vm.tiktok.com/ZS9BxDPojLPhc-YKyKL/";
 
   return (
     <footer style={{ background: "rgba(8,18,12,0.99)" }} className="text-white">
@@ -233,7 +233,8 @@ export async function Footer() {
       <div className="border-t border-white/6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white/35">
-            &copy; {currentYear} West 60 Mwangaza Properties Ltd. All rights reserved.
+            &copy; {currentYear} West 60 Mwangaza Properties Ltd. All rights reserved. | Designed &amp; Developed by{" "}
+            <a href="https://m26media.co.ke" target="_blank" rel="noopener noreferrer" className="hover:text-white/60 transition-colors">M26 Media</a>
           </p>
           <div className="flex items-center gap-4 text-xs text-white/35">
             <Link href="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
