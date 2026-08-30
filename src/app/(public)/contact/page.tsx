@@ -47,7 +47,7 @@ export default function ContactPage() {
               </div>
               <div className="mt-6 rounded-2xl overflow-hidden border border-primary-100">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7!2d36.87!3d-1.38!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwMjInNDguMCJTIDM2wrA1MicyNC4wIkU!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske"
+                  src="https://maps.google.com/maps?q=Repen+Complex+Katani+Road+Syokimau+Nairobi&t=&z=16&ie=UTF8&iwloc=&output=embed"
                   width="100%"
                   height="300"
                   style={{ border: 0 }}
