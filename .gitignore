@@ -57,6 +57,12 @@ public/uploads/
 
 # logs
 dev-server.log
+dev-test.log
+dev-test-err.log
+
+# test files
+_upload_test.mjs
+scripts/test-storage.mjs
 
 # seed scripts
 seed_sqlite.js
