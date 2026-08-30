@@ -69,7 +69,7 @@ export function AboutSection() {
                   animation: "float 5s ease-in-out infinite reverse",
                 }}
               >
-                <span className="text-2xl font-bold text-secondary-400" style={{ fontFamily: "var(--font-serif)" }}>8+</span>
+                <span className="text-2xl font-bold text-secondary-400" style={{ fontFamily: "var(--font-serif)" }}>4+</span>
                 <span className="text-[9px] text-white/60 font-medium tracking-wider uppercase">Years</span>
               </div>
 

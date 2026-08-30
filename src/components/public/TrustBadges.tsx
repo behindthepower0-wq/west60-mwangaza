@@ -24,7 +24,7 @@ const badges = [
   },
   {
     icon: Users,
-    title: "500+ Happy Clients",
+    title: "320+ Happy Clients",
     description: "Join hundreds of satisfied property owners",
     color: "#9e7420",
   },

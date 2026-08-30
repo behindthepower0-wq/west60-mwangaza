@@ -24,9 +24,9 @@ const glassFeatures = [
 ];
 
 const stats = [
-  { value: "8+", label: "Years Experience" },
-  { value: "500+", label: "Properties Sold" },
-  { value: "1,200+", label: "Happy Clients" },
+  { value: "4+", label: "Years Experience" },
+  { value: "160+", label: "Properties Sold" },
+  { value: "320+", label: "Happy Clients" },
   { value: "15+", label: "Active Projects" },
 ];
 
