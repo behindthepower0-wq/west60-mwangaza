@@ -663,6 +663,34 @@ function createModelDelegator(modelName: string) {
     async update(args: { where: WhereClause; data: Record<string, unknown> }) {
       const sb = getSupabase();
       const snakeData = toSnakeRecord(args.data, table);
+
+      // Handle nested deleteMany + create (e.g. features: { deleteMany: {}, create: [...] })
+      for (const [key, value] of Object.entries(snakeData)) {
+        if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+          const obj = value as Record<string, unknown>;
+          if (obj.deleteMany !== undefined || obj.create) {
+            const relTable = findRelatedTable(table, key.replace(/_id$/, ""));
+            if (relTable && args.where.id) {
+              // Delete existing related records
+              if (obj.deleteMany !== undefined) {
+                const { error: delErr } = await sb.from(relTable).delete().eq(key, args.where.id);
+                if (delErr) console.error(`[db] update nested delete(${relTable}):`, delErr.message);
+              }
+              // Insert new related records
+              if (obj.create && Array.isArray(obj.create)) {
+                for (const item of obj.create) {
+                  const snakeItem = toSnakeRecord(item, relTable);
+                  snakeItem[key] = args.where.id;
+                  const { error: insErr } = await sb.from(relTable).insert(snakeItem);
+                  if (insErr) console.error(`[db] update nested create(${relTable}):`, insErr.message);
+                }
+              }
+              delete snakeData[key];
+            }
+          }
+        }
+      }
+
       // Remove undefined values
       for (const [k, v] of Object.entries(snakeData)) {
         if (v === undefined) delete snakeData[k];
