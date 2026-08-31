@@ -65,15 +65,24 @@ export default async function AboutPage() {
               <span className="text-2xl">🔭</span>
             </div>
             <h3 className="section-heading text-2xl mb-4">Our Vision</h3>
-            <p className="section-subheading">To be Kenya&apos;s most trusted property company, known for integrity, quality and a relentless commitment to putting our clients first in every transaction.</p>
+            <p className="section-subheading">To be Kenya&apos;s most trusted property company, known for its integrity, quality and a relentless commitment to putting our clients first in every transaction.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="section-eyebrow justify-center mb-4"><span className="w-8 h-px bg-secondary-400" />Our Philosophy<span className="w-8 h-px bg-secondary-400" /></div>
+          <p className="section-subheading text-lg leading-relaxed">
+            Every individual deserves a life with dignity. Economic empowerment through property ownership is one of the ways to achieve it. Proper property investment makes this dream a reality.
+          </p>
         </div>
       </section>
 
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="section-eyebrow justify-center mb-4"><span className="w-8 h-px bg-secondary-400" />Core Values<span className="w-8 h-px bg-secondary-400" /></div>
+            <div className="section-eyebrow justify-center mb-4" style={{ fontSize: '1.25rem', letterSpacing: '0.15em' }}><span className="w-8 h-px bg-secondary-400" />Our Core Values<span className="w-8 h-px bg-secondary-400" /></div>
             <h2 className="section-heading">What We Stand For</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
