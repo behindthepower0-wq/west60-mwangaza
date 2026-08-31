@@ -10,7 +10,9 @@ import {
   Image,
   Eye,
   EyeOff,
+  Crop,
 } from "lucide-react";
+import { ImageCropModal } from "@/components/admin/ImageCropModal";
 
 interface HomepageSectionEditFormProps {
   sectionId: string;
@@ -55,6 +57,9 @@ const sectionImageFields: Record<string, { key: string; label: string }[]> = {
   news: [],
 };
 
+// Hero images should be cropped to 16:9 for optimal fullscreen display
+const HERO_CROP_ASPECT = 16 / 9;
+
 function getArrayKeyInfo(key: string): { arrayKey: string; index: number } | null {
   const match = key.match(/^(\w+)\[(\d+)\]$/);
   if (match) return { arrayKey: match[1], index: parseInt(match[2]) };
@@ -85,26 +90,26 @@ export function HomepageSectionEditForm({
   const [savingImageKey, setSavingImageKey] = useState<string | null>(null);
   const [error, setError] = useState("");
 
+  // Crop state
+  const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+  const [cropAspectRatio, setCropAspectRatio] = useState(16 / 9);
+  const [pendingImageKey, setPendingImageKey] = useState<string | null>(null);
+
   const imageFields = sectionImageFields[sectionKey] || [];
 
   const handleContentChange = (key: string, value: string) => {
     setContent((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleImageUpload = useCallback(
-    async (imageKey: string, file: File) => {
-      if (!file.type.startsWith("image/")) {
-        setError("Please select an image file");
-        return;
-      }
-
+  const uploadCroppedBlob = useCallback(
+    async (imageKey: string, blob: Blob) => {
       setSavingImageKey(imageKey);
       setError("");
 
       try {
-        // Upload the file
         const formData = new FormData();
-        formData.append("file", file);
+        const fileName = `hero-${Date.now()}.jpg`;
+        formData.append("file", new File([blob], fileName, { type: "image/jpeg" }));
         formData.append("category", "HOMEPAGE");
 
         const uploadRes = await fetch("/api/upload", {
@@ -115,7 +120,6 @@ export function HomepageSectionEditForm({
         if (!uploadRes.ok) throw new Error("Upload failed");
         const uploadData = await uploadRes.json();
 
-        // Update the section's content with the new image URL
         const updateRes = await fetch(
           `/api/admin/homepage/${sectionId}/image`,
           {
@@ -130,7 +134,6 @@ export function HomepageSectionEditForm({
 
         if (!updateRes.ok) throw new Error("Failed to update section");
 
-        // Update local state
         const arrayInfo = getArrayKeyInfo(imageKey);
         if (arrayInfo) {
           setContent((prev) => {
@@ -152,6 +155,95 @@ export function HomepageSectionEditForm({
     [sectionId]
   );
 
+  const handleImageUpload = useCallback(
+    async (imageKey: string, file: File) => {
+      if (!file.type.startsWith("image/")) {
+        setError("Please select an image file");
+        return;
+      }
+
+      // For hero images, show crop modal first
+      if (sectionKey === "hero") {
+        const previewUrl = URL.createObjectURL(file);
+        setCropImageSrc(previewUrl);
+        setCropAspectRatio(HERO_CROP_ASPECT);
+        setPendingImageKey(imageKey);
+        return;
+      }
+
+      // For non-hero sections, upload directly
+      setSavingImageKey(imageKey);
+      setError("");
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("category", "HOMEPAGE");
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadRes.ok) throw new Error("Upload failed");
+        const uploadData = await uploadRes.json();
+
+        const updateRes = await fetch(
+          `/api/admin/homepage/${sectionId}/image`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              imageKey,
+              imageUrl: uploadData.url,
+            }),
+          }
+        );
+
+        if (!updateRes.ok) throw new Error("Failed to update section");
+
+        const arrayInfo = getArrayKeyInfo(imageKey);
+        if (arrayInfo) {
+          setContent((prev) => {
+            const arr = Array.isArray(prev[arrayInfo.arrayKey])
+              ? [...(prev[arrayInfo.arrayKey] as string[])]
+              : [];
+            arr[arrayInfo.index] = uploadData.url;
+            return { ...prev, [arrayInfo.arrayKey]: arr };
+          });
+        } else {
+          setContent((prev) => ({ ...prev, [imageKey]: uploadData.url }));
+        }
+      } catch {
+        setError("Image upload failed. Please try again.");
+      } finally {
+        setSavingImageKey(null);
+      }
+    },
+    [sectionId, sectionKey]
+  );
+
+  const handleCropComplete = useCallback(
+    async (croppedBlob: Blob, _croppedUrl: string) => {
+      if (!pendingImageKey) return;
+      setCropImageSrc(null);
+      // Clean up the preview URL
+      if (cropImageSrc && cropImageSrc.startsWith("blob:")) {
+        URL.revokeObjectURL(cropImageSrc);
+      }
+      await uploadCroppedBlob(pendingImageKey, croppedBlob);
+    },
+    [pendingImageKey, cropImageSrc, uploadCroppedBlob]
+  );
+
+  const handleCropCancel = useCallback(() => {
+    if (cropImageSrc && cropImageSrc.startsWith("blob:")) {
+      URL.revokeObjectURL(cropImageSrc);
+    }
+    setCropImageSrc(null);
+    setPendingImageKey(null);
+  }, [cropImageSrc]);
+
   const handleRemoveImage = useCallback(
     async (imageKey: string) => {
       setSavingImageKey(imageKey);
@@ -170,7 +262,6 @@ export function HomepageSectionEditForm({
             newContent = { ...prev, [arrayInfo.arrayKey]: arr };
             return newContent;
           });
-          // Small delay to let state update
           await new Promise((r) => setTimeout(r, 50));
           newContent = { ...content };
           const arr = Array.isArray(newContent[arrayInfo.arrayKey])
@@ -207,7 +298,6 @@ export function HomepageSectionEditForm({
     setError("");
 
     try {
-      // Save content directly to the homepage section
       const contentRes = await fetch(
         `/api/admin/homepage/${sectionId}/content`,
         {
@@ -219,7 +309,6 @@ export function HomepageSectionEditForm({
 
       if (!contentRes.ok) throw new Error("Failed to save content");
 
-      // Also update visibility
       await fetch(`/api/admin/homepage/${sectionId}/visibility`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -234,7 +323,6 @@ export function HomepageSectionEditForm({
     }
   };
 
-  // Generic text fields based on section key
   const textFieldEntries = Object.entries(content).filter(
     ([key, val]) =>
       typeof val === "string" &&
@@ -250,6 +338,17 @@ export function HomepageSectionEditForm({
         <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm">
           {error}
         </div>
+      )}
+
+      {/* Crop Modal */}
+      {cropImageSrc && (
+        <ImageCropModal
+          imageSrc={cropImageSrc}
+          aspect={cropAspectRatio}
+          title="Crop Hero Image (16:9)"
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
       )}
 
       {/* Visibility toggle */}
@@ -289,9 +388,17 @@ export function HomepageSectionEditForm({
       {/* Image Fields */}
       {imageFields.length > 0 && (
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-800 text-sm">
-            Section Images
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-gray-800 text-sm">
+              Section Images
+            </h3>
+            {sectionKey === "hero" && (
+              <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Crop size={12} />
+                <span>Hero images are cropped to 16:9</span>
+              </div>
+            )}
+          </div>
           {sectionKey === "hero" ? (
             <div className="grid md:grid-cols-2 gap-4">
               {imageFields.map((field) => {
