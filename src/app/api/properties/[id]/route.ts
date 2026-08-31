@@ -27,6 +27,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       sizeUnit,
       features,
       isFeatured,
+      isPublished,
       mainImage,
     } = body;
 
@@ -40,7 +41,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const existing = await prisma.property.findFirst({
       where: { 
         slug: generatedSlug,
-        NOT: { id }
+        not: { id }
       },
     });
 
@@ -67,6 +68,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
           create: features?.map((f: string) => ({ feature: f })) || []
         },
         isFeatured: isFeatured || false,
+        isPublished: isPublished || false,
       },
     });
 

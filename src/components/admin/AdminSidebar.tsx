@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import {
   LayoutDashboard, Home, Building2, FolderKanban,
   Users, Star, Newspaper, Image, Navigation, MessageSquare,
@@ -12,15 +13,30 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useSidebar } from "./SidebarProvider";
 
+type UserRole = "SUPER_ADMIN" | "ADMINISTRATOR" | "EDITOR" | "CONTENT_STAFF";
+
+const ROLE_HIERARCHY: Record<UserRole, number> = {
+  SUPER_ADMIN: 4,
+  ADMINISTRATOR: 3,
+  EDITOR: 2,
+  CONTENT_STAFF: 1,
+};
+
+function hasAccess(userRole: UserRole, requiredRole: UserRole): boolean {
+  return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[requiredRole];
+}
+
 const navGroups = [
   {
     label: "Overview",
+    minRole: "CONTENT_STAFF" as UserRole,
     items: [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
     ],
   },
   {
     label: "Content",
+    minRole: "CONTENT_STAFF" as UserRole,
     items: [
       { label: "Homepage", href: "/admin/homepage", icon: Home },
       { label: "Properties", href: "/admin/properties", icon: Building2 },
@@ -32,21 +48,30 @@ const navGroups = [
   },
   {
     label: "Assets",
+    minRole: "CONTENT_STAFF" as UserRole,
     items: [
       { label: "Media Library", href: "/admin/media", icon: Image },
     ],
   },
   {
     label: "Site",
+    minRole: "EDITOR" as UserRole,
     items: [
       { label: "Navigation", href: "/admin/navigation", icon: Navigation },
       { label: "Enquiries", href: "/admin/enquiries", icon: MessageSquare },
       { label: "SEO", href: "/admin/seo", icon: Search },
+    ],
+  },
+  {
+    label: "System",
+    minRole: "SUPER_ADMIN" as UserRole,
+    items: [
       { label: "Settings", href: "/admin/settings", icon: Settings },
     ],
   },
   {
     label: "Access",
+    minRole: "SUPER_ADMIN" as UserRole,
     items: [
       { label: "Users", href: "/admin/users", icon: UserCog },
       { label: "Activity Log", href: "/admin/activity", icon: Activity },
@@ -57,9 +82,18 @@ const navGroups = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const { open, close } = useSidebar();
+  const { data: session } = useSession();
+  const userRole = ((session?.user as { role?: string })?.role || "CONTENT_STAFF") as UserRole;
 
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+
+  const visibleGroups = navGroups
+    .filter((group) => hasAccess(userRole, group.minRole))
+    .map((group) => ({
+      ...group,
+      items: group.items,
+    }));
 
   return (
     <aside
@@ -92,7 +126,7 @@ export function AdminSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5">
-        {navGroups.map((group) => (
+        {visibleGroups.map((group) => (
           <div key={group.label}>
             <p className="text-[9px] font-bold text-white/25 uppercase tracking-[0.15em] px-3 mb-1.5">
               {group.label}

@@ -60,7 +60,7 @@ export function hasPermission(userRole: UserRole, requiredRole: UserRole): boole
 }
 
 export function canManageUsers(role: UserRole): boolean {
-  return role === "SUPER_ADMIN" || role === "ADMINISTRATOR";
+  return role === "SUPER_ADMIN";
 }
 
 export function canPublish(role: UserRole): boolean {

@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { auth, canManageUsers, type UserRole } from '@/lib/auth';
 import { SettingsForm } from '@/components/admin/SettingsForm';
 import prisma from '@/lib/db';
 
@@ -12,6 +14,13 @@ async function getSettings() {
 }
 
 export default async function AdminSettingsPage() {
+  const session = await auth();
+  const userRole = ((session?.user as { role?: string })?.role || 'CONTENT_STAFF') as UserRole;
+
+  if (!canManageUsers(userRole)) {
+    redirect('/admin');
+  }
+
   const settings = await getSettings();
   return (
     <div className="space-y-6">

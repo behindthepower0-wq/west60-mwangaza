@@ -86,6 +86,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
         .map((f) => f.trim())
         .filter(Boolean),
       isFeatured: formData.get("isFeatured") === "on",
+      isPublished: formData.get("isPublished") === "on",
       mainImage,
     };
 
@@ -264,8 +265,19 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               />
             </div>
           </div>
-          <div>
-            <label className="flex items-center gap-2 mt-8 cursor-pointer">
+          <div className="space-y-3 mt-8">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                name="isPublished"
+                defaultChecked={initialData ? initialData?.isPublished : true}
+                className="w-5 h-5 text-secondary-500 rounded border-gray-300 focus:ring-secondary-500"
+              />
+              <span className="text-sm font-medium text-gray-700">
+                Publish on website
+              </span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 name="isFeatured"

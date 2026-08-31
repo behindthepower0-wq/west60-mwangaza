@@ -1,10 +1,19 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { auth, canManageUsers, type UserRole } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { Activity } from 'lucide-react';
 
 export const metadata: Metadata = { title: 'Activity Log | CMS' };
 
 export default async function AdminActivityPage() {
+  const session = await auth();
+  const userRole = ((session?.user as { role?: string })?.role || 'CONTENT_STAFF') as UserRole;
+
+  if (!canManageUsers(userRole)) {
+    redirect('/admin');
+  }
+
   const logs = await prisma.activityLog.findMany({
     orderBy: { createdAt: 'desc' },
     take: 200,

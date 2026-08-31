@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
       sizeUnit,
       features,
       isFeatured,
+      isPublished,
       mainImage,
     } = body;
 
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
           create: features?.map((f: string) => ({ feature: f })) || []
         },
         isFeatured: isFeatured || false,
+        isPublished: isPublished || false,
       },
     });
 

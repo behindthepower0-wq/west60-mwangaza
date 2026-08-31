@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth, canManageUsers, type UserRole } from "@/lib/auth";
 import prisma from "@/lib/db";
 import bcrypt from "bcryptjs";
 
@@ -9,6 +9,10 @@ export async function GET() {
     const session = await auth();
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    if (!canManageUsers((session.user as { role?: UserRole }).role || "CONTENT_STAFF")) {
+      return new NextResponse("Forbidden", { status: 403 });
     }
 
     const users = await prisma.user.findMany({
@@ -39,12 +43,25 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    const userRole = (session.user as { role?: UserRole }).role || "CONTENT_STAFF";
+    if (!canManageUsers(userRole)) {
+      return new NextResponse("Forbidden", { status: 403 });
+    }
+
     const body = await req.json();
     const { name, email, password, role, status } = body;
 
     if (!name || !email || !password) {
       return new NextResponse("Name, email, and password are required", {
         status: 400,
+      });
+    }
+
+    // Administrators cannot create Super Admins
+    const requestedRole = role || "EDITOR";
+    if (userRole === "ADMINISTRATOR" && requestedRole === "SUPER_ADMIN") {
+      return new NextResponse("Administrators cannot assign Super Admin role", {
+        status: 403,
       });
     }
 
@@ -63,7 +80,7 @@ export async function POST(req: NextRequest) {
         name,
         email,
         password: hashedPassword,
-        role: role || "EDITOR",
+        role: requestedRole,
         status: status || "ACTIVE",
       },
       select: {

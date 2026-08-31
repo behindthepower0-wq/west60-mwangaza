@@ -1,12 +1,21 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { auth, canManageUsers, type UserRole } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { UserForm } from '@/components/admin/UserForm';
 
 export const metadata: Metadata = { title: 'Edit User | CMS' };
 
 export default async function EditUserPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  const userRole = ((session?.user as { role?: string })?.role || 'CONTENT_STAFF') as UserRole;
+
+  if (!canManageUsers(userRole)) {
+    redirect('/admin');
+  }
+
   const { id } = await params;
 
   const user = await prisma.user.findUnique({
@@ -43,7 +52,7 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
       </div>
       
       <div className="admin-card p-6">
-        <UserForm initialData={user} />
+        <UserForm initialData={user} currentUserRole={userRole} />
       </div>
     </div>
   );

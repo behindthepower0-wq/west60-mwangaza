@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { Plus, Pencil, UserCog, Shield, CheckCircle, XCircle } from 'lucide-react';
 import { DeleteButton } from '@/components/admin/DeleteButton';
+import { auth, canManageUsers, type UserRole } from '@/lib/auth';
 import prisma from '@/lib/db';
 
 export const metadata: Metadata = { title: 'Users | CMS' };
@@ -14,6 +16,13 @@ const roleColors: Record<string, string> = {
 };
 
 export default async function AdminUsersPage() {
+  const session = await auth();
+  const userRole = ((session?.user as { role?: string })?.role || 'CONTENT_STAFF') as UserRole;
+
+  if (!canManageUsers(userRole)) {
+    redirect('/admin');
+  }
+
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'desc' },
     select: { id: true, name: true, email: true, role: true, status: true, lastLogin: true, createdAt: true },

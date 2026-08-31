@@ -1,10 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { auth, canManageUsers, type UserRole } from "@/lib/auth";
 import prisma from "@/lib/db";
 
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const userRole = ((session.user as { role?: string })?.role || "CONTENT_STAFF") as UserRole;
+  if (!canManageUsers(userRole)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   try {
     const body = await request.json() as Record<string, string>;
@@ -39,6 +44,11 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const userRole = ((session.user as { role?: string })?.role || "CONTENT_STAFF") as UserRole;
+  if (!canManageUsers(userRole)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const settings = await prisma.siteSetting.findMany();
   const map: Record<string, string> = {};

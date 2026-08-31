@@ -12,12 +12,16 @@ interface UserFormProps {
     role: string;
     status: string;
   };
+  currentUserRole?: string;
 }
 
-export function UserForm({ initialData }: UserFormProps) {
+export function UserForm({ initialData, currentUserRole }: UserFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  const isAdmin = currentUserRole === "SUPER_ADMIN";
+  const isAdministrator = currentUserRole === "ADMINISTRATOR";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -109,8 +113,9 @@ export function UserForm({ initialData }: UserFormProps) {
               defaultValue={initialData?.role || "EDITOR"}
               className="form-input bg-white"
             >
-              <option value="SUPER_ADMIN">Super Admin</option>
-              <option value="ADMINISTRATOR">Administrator</option>
+              {isAdmin && (
+                <option value="ADMINISTRATOR">Administrator</option>
+              )}
               <option value="EDITOR">Editor</option>
               <option value="CONTENT_STAFF">Content Staff</option>
             </select>

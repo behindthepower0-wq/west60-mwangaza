@@ -1,11 +1,20 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { auth, canManageUsers, type UserRole } from '@/lib/auth';
 import { UserForm } from '@/components/admin/UserForm';
 
 export const metadata: Metadata = { title: 'Add User | CMS' };
 
-export default function NewUserPage() {
+export default async function NewUserPage() {
+  const session = await auth();
+  const userRole = ((session?.user as { role?: string })?.role || 'CONTENT_STAFF') as UserRole;
+
+  if (!canManageUsers(userRole)) {
+    redirect('/admin');
+  }
+
   return (
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center gap-4">
@@ -19,7 +28,7 @@ export default function NewUserPage() {
       </div>
       
       <div className="admin-card p-6">
-        <UserForm />
+        <UserForm currentUserRole={userRole} />
       </div>
     </div>
   );
