@@ -31,8 +31,12 @@ const sectionImageFields: Record<string, { key: string; label: string }[]> = {
     { key: "heroImages[3]", label: "Hero Slide 4" },
   ],
   about: [
-    { key: "image", label: "About Section Image" },
-    { key: "secondaryImage", label: "Secondary Image" },
+    { key: "aboutImages[0]", label: "About Slide 1 (required)" },
+    { key: "aboutImages[1]", label: "About Slide 2" },
+    { key: "aboutImages[2]", label: "About Slide 3" },
+    { key: "aboutImages[3]", label: "About Slide 4" },
+    { key: "aboutImages[4]", label: "About Slide 5" },
+    { key: "aboutImages[5]", label: "About Slide 6" },
   ],
   properties: [
     { key: "backgroundImage", label: "Properties Background Image" },
@@ -59,6 +63,8 @@ const sectionImageFields: Record<string, { key: string; label: string }[]> = {
 
 // Hero images should be cropped to 16:9 for optimal fullscreen display
 const HERO_CROP_ASPECT = 16 / 9;
+// About images should be cropped to 4:3 for the card display
+const ABOUT_CROP_ASPECT = 4 / 3;
 
 function getArrayKeyInfo(key: string): { arrayKey: string; index: number } | null {
   const match = key.match(/^(\w+)\[(\d+)\]$/);
@@ -167,6 +173,15 @@ export function HomepageSectionEditForm({
         const previewUrl = URL.createObjectURL(file);
         setCropImageSrc(previewUrl);
         setCropAspectRatio(HERO_CROP_ASPECT);
+        setPendingImageKey(imageKey);
+        return;
+      }
+
+      // For about images, show crop modal with 4:3 ratio
+      if (sectionKey === "about") {
+        const previewUrl = URL.createObjectURL(file);
+        setCropImageSrc(previewUrl);
+        setCropAspectRatio(ABOUT_CROP_ASPECT);
         setPendingImageKey(imageKey);
         return;
       }
@@ -398,8 +413,14 @@ export function HomepageSectionEditForm({
                 <span>Hero images are cropped to 16:9</span>
               </div>
             )}
+            {sectionKey === "about" && (
+              <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Crop size={12} />
+                <span>About images are cropped to 4:3</span>
+              </div>
+            )}
           </div>
-          {sectionKey === "hero" ? (
+          {(sectionKey === "hero" || sectionKey === "about") ? (
             <div className="grid md:grid-cols-2 gap-4">
               {imageFields.map((field) => {
                 const currentUrl = getArrayValue(content, field.key);

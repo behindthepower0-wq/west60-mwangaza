@@ -1,5 +1,7 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
 
@@ -10,7 +12,46 @@ const values = [
   "After-Sales Support",
 ];
 
-export function AboutSection() {
+const FALLBACK_IMAGE = "/images/about-building.jpg";
+
+interface AboutSectionProps {
+  aboutImages?: string[];
+}
+
+export function AboutSection({ aboutImages = [] }: AboutSectionProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Filter to only valid URLs, fallback to static image
+  const slides =
+    aboutImages.filter((img) => typeof img === "string" && img.trim() !== "")
+      .length > 0
+      ? aboutImages.filter((img) => typeof img === "string" && img.trim() !== "")
+      : [FALLBACK_IMAGE];
+
+  const hasSlider = slides.length > 1;
+
+  // Auto-advance slider
+  useEffect(() => {
+    if (!hasSlider) return;
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 3800);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [hasSlider, slides.length]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (hasSlider) {
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 3800);
+    }
+  };
+
   return (
     <section id="about" className="py-20 lg:py-28 relative overflow-hidden" style={{ background: "#FFFFFF" }}>
       {/* Subtle decorative background */}
@@ -25,25 +66,49 @@ export function AboutSection() {
           {/* Image side */}
           <ScrollReveal direction="left" className="relative order-2 lg:order-1">
             <div className="relative">
-              {/* Main image */}
+              {/* Main image slider */}
               <div className="rounded-3xl overflow-hidden aspect-[4/3] shadow-2xl relative group">
-                <Image
-                  src="/images/about-building.jpg"
-                  alt="Modern property development by West 60 Mwangaza"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+                {slides.map((src, i) => (
+                  <div
+                    key={src + i}
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{
+                      backgroundImage: `url('${src}')`,
+                      opacity: i === currentSlide ? 1 : 0,
+                      transition: "opacity 1.2s ease-in-out",
+                      zIndex: i === currentSlide ? 0 : -1,
+                    }}
+                    aria-hidden="true"
+                  />
+                ))}
                 {/* Overlay gradient */}
                 <div
-                  className="absolute inset-0 opacity-20"
+                  className="absolute inset-0 opacity-20 z-10"
                   style={{ background: "linear-gradient(135deg, #1d4f38, transparent)" }}
                 />
               </div>
 
+              {/* Slider dots */}
+              {hasSlider && (
+                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => goToSlide(i)}
+                      className={`transition-all duration-300 rounded-full ${
+                        i === currentSlide
+                          ? "w-5 h-1.5 bg-secondary-400"
+                          : "w-1.5 h-1.5 bg-gray-300 hover:bg-gray-400"
+                      }`}
+                      aria-label={`Go to slide ${i + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+
               {/* Floating glass card */}
               <div
-                className="absolute -bottom-6 -right-6 rounded-2xl p-6 shadow-xl animate-float"
+                className="absolute -bottom-6 -right-6 rounded-2xl p-6 shadow-xl animate-float z-20"
                 style={{
                   background: "rgba(255,255,255,0.92)",
                   backdropFilter: "blur(16px)",
@@ -62,7 +127,7 @@ export function AboutSection() {
 
               {/* Experience badge */}
               <div
-                className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-lg"
+                className="absolute -top-4 -left-4 w-20 h-20 rounded-2xl flex flex-col items-center justify-center shadow-lg z-20"
                 style={{
                   background: "linear-gradient(135deg, #1d4f38, #2a6b50)",
                   border: "2px solid rgba(198,145,43,0.3)",

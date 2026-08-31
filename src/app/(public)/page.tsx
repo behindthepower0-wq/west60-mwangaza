@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 async function getData() {
   try {
-    const [featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroSection] =
+    const [featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroSection, aboutSection] =
       await Promise.all([
         prisma.property.findMany({
           where: { isFeatured: true, isPublished: true },
@@ -64,6 +64,9 @@ async function getData() {
         prisma.homepageSection.findUnique({
           where: { key: "hero" },
         }),
+        prisma.homepageSection.findUnique({
+          where: { key: "about" },
+        }),
       ]);
 
     // Parse hero images from CMS content
@@ -77,7 +80,18 @@ async function getData() {
       }
     }
 
-    return { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages };
+    // Parse about images from CMS content
+    let aboutImages: string[] = [];
+    if (aboutSection?.content) {
+      try {
+        const content = JSON.parse(aboutSection.content);
+        aboutImages = Array.isArray(content.aboutImages) ? content.aboutImages : [];
+      } catch {
+        aboutImages = [];
+      }
+    }
+
+    return { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages, aboutImages };
   } catch {
     return {
       featuredProperties: [],
@@ -87,19 +101,20 @@ async function getData() {
       services: [],
       testimonials: [],
       heroImages: [],
+      aboutImages: [],
     };
   }
 }
 
 export default async function HomePage() {
-  const { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages } =
+  const { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages, aboutImages } =
     await getData();
 
   return (
     <>
       <HeroSection heroImages={heroImages} />
       <TrustBadges />
-      <AboutSection />
+      <AboutSection aboutImages={aboutImages} />
       <ServicesSection services={services} />
       <FeaturedPropertiesSection properties={featuredProperties} />
       <WhyChooseUsSection />
