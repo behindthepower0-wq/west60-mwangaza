@@ -166,6 +166,7 @@ async function main() {
         secondaryCta: "Contact Us",
         secondaryCtaUrl: "/contact",
         backgroundImage: "/images/hero-bg.jpg",
+        heroImages: [],
       }),
       order: 1,
       isVisible: true,

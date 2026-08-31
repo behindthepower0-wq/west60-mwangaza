@@ -37,7 +37,19 @@ export async function PUT(
       content = {};
     }
 
-    content[imageKey] = imageUrl;
+    // Handle array keys like "heroImages[0]"
+    const arrayMatch = imageKey.match(/^(\w+)\[(\d+)\]$/);
+    if (arrayMatch) {
+      const arrayKey = arrayMatch[1];
+      const index = parseInt(arrayMatch[2]);
+      const arr = Array.isArray(content[arrayKey])
+        ? [...(content[arrayKey] as string[])]
+        : [];
+      arr[index] = imageUrl;
+      content[arrayKey] = arr;
+    } else {
+      content[imageKey] = imageUrl;
+    }
 
     await prisma.homepageSection.update({
       where: { id },

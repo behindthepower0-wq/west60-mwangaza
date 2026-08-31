@@ -23,8 +23,10 @@ interface HomepageSectionEditFormProps {
 // Define which image fields each section type has
 const sectionImageFields: Record<string, { key: string; label: string }[]> = {
   hero: [
-    { key: "backgroundImage", label: "Hero Background Image" },
-    { key: "mobileImage", label: "Hero Mobile Image" },
+    { key: "heroImages[0]", label: "Hero Slide 1 (required)" },
+    { key: "heroImages[1]", label: "Hero Slide 2" },
+    { key: "heroImages[2]", label: "Hero Slide 3" },
+    { key: "heroImages[3]", label: "Hero Slide 4" },
   ],
   about: [
     { key: "image", label: "About Section Image" },
@@ -52,6 +54,20 @@ const sectionImageFields: Record<string, { key: string; label: string }[]> = {
   statistics: [],
   news: [],
 };
+
+function getArrayKeyInfo(key: string): { arrayKey: string; index: number } | null {
+  const match = key.match(/^(\w+)\[(\d+)\]$/);
+  if (match) return { arrayKey: match[1], index: parseInt(match[2]) };
+  return null;
+}
+
+function getArrayValue(content: Record<string, unknown>, key: string): string | null {
+  const info = getArrayKeyInfo(key);
+  if (!info) return (content[key] as string) || null;
+  const arr = content[info.arrayKey];
+  if (Array.isArray(arr)) return (arr[info.index] as string) || null;
+  return null;
+}
 
 export function HomepageSectionEditForm({
   sectionId,
@@ -115,7 +131,18 @@ export function HomepageSectionEditForm({
         if (!updateRes.ok) throw new Error("Failed to update section");
 
         // Update local state
-        setContent((prev) => ({ ...prev, [imageKey]: uploadData.url }));
+        const arrayInfo = getArrayKeyInfo(imageKey);
+        if (arrayInfo) {
+          setContent((prev) => {
+            const arr = Array.isArray(prev[arrayInfo.arrayKey])
+              ? [...(prev[arrayInfo.arrayKey] as string[])]
+              : [];
+            arr[arrayInfo.index] = uploadData.url;
+            return { ...prev, [arrayInfo.arrayKey]: arr };
+          });
+        } else {
+          setContent((prev) => ({ ...prev, [imageKey]: uploadData.url }));
+        }
       } catch {
         setError("Image upload failed. Please try again.");
       } finally {
@@ -131,9 +158,30 @@ export function HomepageSectionEditForm({
       setError("");
 
       try {
-        // Update local state and save content directly
-        const newContent = { ...content, [imageKey]: "" };
-        setContent(newContent);
+        const arrayInfo = getArrayKeyInfo(imageKey);
+        let newContent: Record<string, unknown>;
+
+        if (arrayInfo) {
+          setContent((prev) => {
+            const arr = Array.isArray(prev[arrayInfo.arrayKey])
+              ? [...(prev[arrayInfo.arrayKey] as string[])]
+              : [];
+            arr[arrayInfo.index] = "";
+            newContent = { ...prev, [arrayInfo.arrayKey]: arr };
+            return newContent;
+          });
+          // Small delay to let state update
+          await new Promise((r) => setTimeout(r, 50));
+          newContent = { ...content };
+          const arr = Array.isArray(newContent[arrayInfo.arrayKey])
+            ? [...(newContent[arrayInfo.arrayKey] as string[])]
+            : [];
+          arr[arrayInfo.index] = "";
+          newContent[arrayInfo.arrayKey] = arr;
+        } else {
+          newContent = { ...content, [imageKey]: "" };
+          setContent(newContent);
+        }
 
         const updateRes = await fetch(
           `/api/admin/homepage/${sectionId}/content`,
@@ -192,7 +240,8 @@ export function HomepageSectionEditForm({
       typeof val === "string" &&
       !imageFields.some((f) => f.key === key) &&
       !key.includes("image") &&
-      !key.includes("Image")
+      !key.includes("Image") &&
+      key !== "heroImages"
   );
 
   return (
@@ -243,21 +292,39 @@ export function HomepageSectionEditForm({
           <h3 className="font-semibold text-gray-800 text-sm">
             Section Images
           </h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            {imageFields.map((field) => {
-              const currentUrl = content[field.key] as string | null;
-              return (
-                <ImageField
-                  key={field.key}
-                  label={field.label}
-                  currentUrl={currentUrl}
-                  isUploading={savingImageKey === field.key}
-                  onUpload={(file) => handleImageUpload(field.key, file)}
-                  onRemove={() => handleRemoveImage(field.key)}
-                />
-              );
-            })}
-          </div>
+          {sectionKey === "hero" ? (
+            <div className="grid md:grid-cols-2 gap-4">
+              {imageFields.map((field) => {
+                const currentUrl = getArrayValue(content, field.key);
+                return (
+                  <ImageField
+                    key={field.key}
+                    label={field.label}
+                    currentUrl={currentUrl}
+                    isUploading={savingImageKey === field.key}
+                    onUpload={(file) => handleImageUpload(field.key, file)}
+                    onRemove={() => handleRemoveImage(field.key)}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-4">
+              {imageFields.map((field) => {
+                const currentUrl = content[field.key] as string | null;
+                return (
+                  <ImageField
+                    key={field.key}
+                    label={field.label}
+                    currentUrl={currentUrl}
+                    isUploading={savingImageKey === field.key}
+                    onUpload={(file) => handleImageUpload(field.key, file)}
+                    onRemove={() => handleRemoveImage(field.key)}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 

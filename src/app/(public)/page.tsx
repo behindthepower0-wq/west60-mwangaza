@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 async function getData() {
   try {
-    const [featuredProperties, projects, teamMembers, latestPosts, services, testimonials] =
+    const [featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroSection] =
       await Promise.all([
         prisma.property.findMany({
           where: { isFeatured: true, isPublished: true },
@@ -61,9 +61,23 @@ async function getData() {
           orderBy: { order: "asc" },
           take: 6,
         }),
+        prisma.homepageSection.findUnique({
+          where: { key: "hero" },
+        }),
       ]);
 
-    return { featuredProperties, projects, teamMembers, latestPosts, services, testimonials };
+    // Parse hero images from CMS content
+    let heroImages: string[] = [];
+    if (heroSection?.content) {
+      try {
+        const content = JSON.parse(heroSection.content);
+        heroImages = Array.isArray(content.heroImages) ? content.heroImages : [];
+      } catch {
+        heroImages = [];
+      }
+    }
+
+    return { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages };
   } catch {
     return {
       featuredProperties: [],
@@ -72,17 +86,18 @@ async function getData() {
       latestPosts: [],
       services: [],
       testimonials: [],
+      heroImages: [],
     };
   }
 }
 
 export default async function HomePage() {
-  const { featuredProperties, projects, teamMembers, latestPosts, services, testimonials } =
+  const { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages } =
     await getData();
 
   return (
     <>
-      <HeroSection />
+      <HeroSection heroImages={heroImages} />
       <TrustBadges />
       <AboutSection />
       <ServicesSection services={services} />

@@ -234,7 +234,7 @@ export async function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white/35">
             &copy; {currentYear} West 60 Mwangaza Properties Ltd. All rights reserved. | Designed &amp; Developed by{" "}
-            <a href="https://m26media.co.ke" target="_blank" rel="noopener noreferrer" className="hover:text-white/60 transition-colors">M26 Media</a>
+            <a href="https://www.instagram.com/m26_kenya?igsi=MWd4Nm1kcmM2am1nNQ==" target="_blank" rel="noopener noreferrer" className="hover:text-white/60 transition-colors">M26 Media</a>
           </p>
           <div className="flex items-center gap-4 text-xs text-white/35">
             <Link href="/privacy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>

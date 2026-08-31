@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Shield, MapPin, Users, Play, ChevronDown } from "lucide-react";
+import { ArrowRight, Shield, MapPin, Users, ChevronDown } from "lucide-react";
 import { getWhatsAppUrl } from "@/lib/utils";
 
 const glassFeatures = [
@@ -30,6 +30,12 @@ const stats = [
   { value: "15+", label: "Active Projects" },
 ];
 
+const FALLBACK_IMAGE = "/images/hero-bg.jpg";
+
+interface HeroSectionProps {
+  heroImages?: string[];
+}
+
 function CountUpNumber({ value, delay }: { value: string; delay: number }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -49,9 +55,20 @@ function CountUpNumber({ value, delay }: { value: string; delay: number }) {
   );
 }
 
-export function HeroSection() {
+export function HeroSection({ heroImages = [] }: HeroSectionProps) {
   const [loaded, setLoaded] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Filter to only valid URLs, fallback to static image
+  const slides =
+    heroImages.filter((img) => typeof img === "string" && img.trim() !== "")
+      .length > 0
+      ? heroImages.filter((img) => typeof img === "string" && img.trim() !== "")
+      : [FALLBACK_IMAGE];
+
+  const hasSlider = slides.length > 1;
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 150);
@@ -64,22 +81,50 @@ export function HeroSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Auto-advance slider
+  useEffect(() => {
+    if (!hasSlider) return;
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 2600);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [hasSlider, slides.length]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    // Reset interval on manual navigation
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (hasSlider) {
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 2600);
+    }
+  };
+
   return (
     <section
       id="hero"
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{ background: "#080E0C" }}
     >
-      {/* Parallax background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-hero-parallax"
-        style={{
-          backgroundImage: `url('/images/hero-bg.jpg')`,
-          filter: "brightness(0.4) saturate(1.2)",
-          transform: `scale(1.1) translateY(${scrollY * 0.15}px)`,
-        }}
-        aria-hidden="true"
-      />
+      {/* Slider background images */}
+      {slides.map((src, i) => (
+        <div
+          key={src + i}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('${src}')`,
+            filter: "brightness(0.4) saturate(1.2)",
+            transform: `scale(1.1) translateY(${scrollY * 0.15}px)`,
+            opacity: i === currentSlide ? 1 : 0,
+            transition: "opacity 1.2s ease-in-out",
+            zIndex: i === currentSlide ? 0 : -1,
+          }}
+          aria-hidden="true"
+        />
+      ))}
 
       {/* Multi-layered gradient overlay */}
       <div
@@ -90,6 +135,7 @@ export function HeroSection() {
             radial-gradient(ellipse at 80% 80%, rgba(198,145,43,0.08) 0%, transparent 60%),
             radial-gradient(ellipse at 20% 20%, rgba(29,79,56,0.15) 0%, transparent 50%)
           `,
+          zIndex: 1,
         }}
         aria-hidden="true"
       />
@@ -99,6 +145,7 @@ export function HeroSection() {
         className="absolute top-20 right-20 w-96 h-96 rounded-full animate-float opacity-[0.03]"
         style={{
           background: "radial-gradient(circle, #c6912b, transparent 60%)",
+          zIndex: 1,
         }}
       />
       <div
@@ -106,6 +153,7 @@ export function HeroSection() {
         style={{
           background: "radial-gradient(circle, #c6912b, transparent 60%)",
           animation: "float 8s ease-in-out infinite reverse",
+          zIndex: 1,
         }}
       />
 
@@ -113,20 +161,23 @@ export function HeroSection() {
       <div
         className="absolute bottom-0 left-0 right-0 h-px"
         style={{
-          background: "linear-gradient(90deg, transparent 5%, rgba(198,145,43,0.3) 30%, rgba(198,145,43,0.5) 50%, rgba(198,145,43,0.3) 70%, transparent 95%)",
+          background:
+            "linear-gradient(90deg, transparent 5%, rgba(198,145,43,0.3) 30%, rgba(198,145,43,0.5) 50%, rgba(198,145,43,0.3) 70%, transparent 95%)",
+          zIndex: 2,
         }}
       />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-44 sm:pb-28 lg:pt-40 lg:pb-36">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-
           {/* Left: Copy */}
           <div>
             {/* Eyebrow */}
             <div
               className={`section-eyebrow mb-6 transition-all duration-1000 ${
-                loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                loaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
               }`}
             >
               <span className="w-10 h-px bg-secondary-400 flex-shrink-0" />
@@ -136,7 +187,9 @@ export function HeroSection() {
             {/* Headline */}
             <h1
               className={`text-4xl sm:text-5xl xl:text-[3.5rem] font-bold leading-[1.1] mb-7 transition-all duration-1000 delay-200 ${
-                loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                loaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
               }`}
               style={{ fontFamily: "var(--font-serif)", color: "white" }}
             >
@@ -148,7 +201,9 @@ export function HeroSection() {
             {/* Description */}
             <p
               className={`text-base md:text-lg text-white/60 leading-relaxed max-w-xl mb-9 transition-all duration-1000 delay-300 ${
-                loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                loaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
               }`}
             >
               Premium residential and commercial properties across Kenya&apos;s
@@ -159,7 +214,9 @@ export function HeroSection() {
             {/* CTA Buttons */}
             <div
               className={`flex flex-col sm:flex-row gap-3 transition-all duration-1000 delay-400 ${
-                loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                loaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
               }`}
             >
               <Link href="/properties" className="btn-secondary">
@@ -173,7 +230,9 @@ export function HeroSection() {
             {/* Trust badges */}
             <div
               className={`flex flex-wrap items-center gap-6 mt-12 pt-8 border-t border-white/8 transition-all duration-1000 delay-500 ${
-                loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                loaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
               }`}
             >
               {["Ready Title Deeds", "Free Site Visits", "Lipa Pole Pole Plans"].map(
@@ -192,7 +251,9 @@ export function HeroSection() {
           {/* Right: Glass feature cards */}
           <div
             className={`flex flex-col gap-4 transition-all duration-1000 delay-500 ${
-              loaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
+              loaded
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-12"
             }`}
           >
             {glassFeatures.map((feat, i) => (
@@ -210,7 +271,8 @@ export function HeroSection() {
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
                   style={{
-                    background: "linear-gradient(135deg, rgba(198,145,43,0.15), rgba(198,145,43,0.05))",
+                    background:
+                      "linear-gradient(135deg, rgba(198,145,43,0.15), rgba(198,145,43,0.05))",
                     border: "1px solid rgba(198,145,43,0.25)",
                   }}
                 >
@@ -275,9 +337,29 @@ export function HeroSection() {
         </div>
       </div>
 
+      {/* Slider dots */}
+      {hasSlider && (
+        <div
+          className="absolute bottom-28 lg:bottom-32 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20"
+        >
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goToSlide(i)}
+              className={`transition-all duration-300 rounded-full ${
+                i === currentSlide
+                  ? "w-6 h-2 bg-secondary-400"
+                  : "w-2 h-2 bg-white/30 hover:bg-white/50"
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
       {/* Statistics bar */}
       <div
-        className="absolute bottom-0 left-0 right-0"
+        className="absolute bottom-0 left-0 right-0 z-20"
         style={{
           background: "rgba(10,20,16,0.6)",
           backdropFilter: "blur(20px) saturate(1.3)",
@@ -303,7 +385,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-24 lg:bottom-28 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 animate-fade-in-up delay-800">
+      <div className="absolute bottom-24 lg:bottom-28 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 animate-fade-in-up delay-800 z-20">
         <span className="text-[10px] text-white/30 tracking-[0.2em] uppercase">
           Scroll
         </span>
