@@ -35,10 +35,19 @@ export const metadata: Metadata = {
     "title deed",
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+    other: [
+      { rel: "icon", type: "image/png", sizes: "512x512", url: "/icon-512.png" },
+      { rel: "icon", type: "image/png", sizes: "192x192", url: "/icon-192.png" },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_KE",
     siteName: "West 60 Mwangaza Properties",
+    images: ["/icon-512.png"],
   },
   robots: {
     index: true,
