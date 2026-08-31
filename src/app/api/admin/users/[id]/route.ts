@@ -45,7 +45,7 @@ export async function PUT(
 
     // Check if email exists on another user
     const existing = await prisma.user.findFirst({
-      where: { email, not: { id } },
+      where: { email, id: { not: id } },
     });
 
     if (existing) {

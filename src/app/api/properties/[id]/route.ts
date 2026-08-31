@@ -41,7 +41,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const existing = await prisma.property.findFirst({
       where: { 
         slug: generatedSlug,
-        not: { id }
+        id: { not: id }
       },
     });
 

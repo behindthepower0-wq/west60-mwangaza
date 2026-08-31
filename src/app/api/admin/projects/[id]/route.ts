@@ -36,7 +36,7 @@ export async function PUT(
     const generatedSlug = slug ? slugify(slug) : slugify(name);
 
     const existing = await prisma.project.findFirst({
-      where: { slug: generatedSlug, NOT: { id } },
+      where: { slug: generatedSlug, id: { not: id } },
     });
 
     if (existing) {
