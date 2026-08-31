@@ -84,9 +84,9 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
   // Auto-advance slider
   useEffect(() => {
     if (!hasSlider) return;
-    intervalRef.current = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 2600);
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 3800);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
@@ -99,7 +99,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
     if (hasSlider) {
       intervalRef.current = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
-      }, 2600);
+    }, 3800);
     }
   };
 
