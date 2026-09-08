@@ -116,7 +116,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url('${src}')`,
-            filter: "brightness(0.55) saturate(1.2)",
+            filter: "brightness(0.7) saturate(1.2)",
             transform: `scale(1.1) translateY(${scrollY * 0.15}px)`,
             opacity: i === currentSlide ? 1 : 0,
             transition: "opacity 1.2s ease-in-out",
@@ -131,7 +131,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
         className="absolute inset-0"
         style={{
           background: `
-            linear-gradient(135deg, rgba(8,14,12,0.75) 0%, rgba(8,14,12,0.70) 40%, rgba(8,14,12,0.35) 70%, rgba(8,14,12,0.50) 100%),
+            linear-gradient(135deg, rgba(8,14,12,0.6) 0%, rgba(8,14,12,0.55) 40%, rgba(8,14,12,0.2) 70%, rgba(8,14,12,0.35) 100%),
             radial-gradient(ellipse at 80% 80%, rgba(198,145,43,0.08) 0%, transparent 60%),
             radial-gradient(ellipse at 20% 20%, rgba(29,79,56,0.15) 0%, transparent 50%)
           `,
@@ -200,7 +200,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
 
             {/* Description */}
             <p
-              className={`text-base md:text-lg text-white/60 leading-relaxed max-w-xl mb-9 transition-all duration-1000 delay-300 ${
+              className={`text-base md:text-lg text-white/75 leading-relaxed max-w-xl mb-9 transition-all duration-1000 delay-300 ${
                 loaded
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-6"
@@ -239,7 +239,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
                 (badge) => (
                   <div key={badge} className="flex items-center gap-2.5">
                     <div className="w-2 h-2 rounded-full bg-secondary-400 animate-pulse-glow" />
-                    <span className="text-xs text-white/50 font-medium tracking-wide">
+                    <span className="text-xs text-white/65 font-medium tracking-wide">
                       {badge}
                     </span>
                   </div>
@@ -285,7 +285,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
                   >
                     {feat.title}
                   </h3>
-                  <p className="text-white/50 text-xs leading-relaxed">
+                  <p className="text-white/65 text-xs leading-relaxed">
                     {feat.desc}
                   </p>
                 </div>
