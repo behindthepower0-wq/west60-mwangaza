@@ -77,15 +77,15 @@ export async function POST(req: NextRequest) {
         name,
         slug: generatedSlug,
         fullDescription: description,
-        price,
+        price: typeof price === "string" ? parseFloat(price) : price,
         priceLabel,
         currency,
         location,
         area,
         propertyType,
         status,
-        totalPlots: totalPlots ? parseInt(totalPlots, 10) : null,
-        soldPlots: soldPlots ? parseInt(soldPlots, 10) : null,
+        totalPlots: totalPlots && totalPlots !== '' ? parseInt(totalPlots, 10) : null,
+        soldPlots: soldPlots && soldPlots !== '' ? parseInt(soldPlots, 10) : null,
         mainImage: mainImage || null,
         features: {
           create: features?.map((f: string) => ({ feature: f })) || []
