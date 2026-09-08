@@ -51,10 +51,9 @@ export default async function EditPropertyPage({
   const initialData = {
     ...property,
     description: property.fullDescription || "",
-    size: property.area ? parseFloat(property.area) : null,
-    sizeUnit: property.area
-      ? property.area.replace(/[\d.]+\s*/, "").trim()
-      : "x 100 ft",
+    size: property.landSize,
+    sizeUnit: "sqm",
+    area: property.area || "",
     features: property.features.map((f) => f.feature),
   };
 
