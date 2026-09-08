@@ -29,8 +29,24 @@ EXCEPTION WHEN duplicate_object THEN null;
 END $$;
 
 DO $$ BEGIN
-  CREATE TYPE property_status AS ENUM ('AVAILABLE', 'RESERVED', 'SOLD', 'COMING_SOON', 'UNDER_CONSTRUCTION', 'COMPLETED');
+  CREATE TYPE property_status AS ENUM ('AVAILABLE', 'RESERVED', 'SOLD_OUT', 'COMING_SOON', 'UNDER_CONSTRUCTION', 'COMPLETED');
 EXCEPTION WHEN duplicate_object THEN null;
+END $$;
+
+-- Property status rename: SOLD → SOLD_OUT (idempotent; only runs when the old value still exists)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_enum e JOIN pg_type t ON t.oid = e.enumtypid
+    WHERE t.typname = 'property_status' AND e.enumlabel = 'SOLD'
+  ) THEN
+    ALTER TYPE property_status RENAME TO property_status_old;
+    CREATE TYPE property_status AS ENUM ('AVAILABLE', 'RESERVED', 'SOLD_OUT', 'COMING_SOON', 'UNDER_CONSTRUCTION', 'COMPLETED');
+    ALTER TABLE properties ALTER COLUMN status TYPE property_status USING (
+      CASE status::text WHEN 'SOLD' THEN 'SOLD_OUT'::property_status ELSE status::text::property_status END
+    );
+    DROP TYPE property_status_old;
+  END IF;
 END $$;
 
 DO $$ BEGIN
@@ -179,6 +195,8 @@ CREATE TABLE IF NOT EXISTS properties (
   bathrooms INT,
   floor_area NUMERIC,
   land_size NUMERIC,
+  total_plots INT,
+  sold_plots INT,
   main_image TEXT,
   is_featured BOOLEAN DEFAULT false,
   is_published BOOLEAN DEFAULT false,

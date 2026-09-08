@@ -5,21 +5,30 @@ import Cropper from "react-easy-crop";
 import { X, Loader2, Check } from "lucide-react";
 import { getCroppedImg, PixelCrop } from "@/lib/crop-utils";
 
+export interface CropAspectOption {
+  label: string;
+  value: number;
+}
+
 interface ImageCropModalProps {
   imageSrc: string;
   aspect: number;
   title?: string;
+  /** Optional preset aspect ratios shown as quick-pick buttons */
+  aspects?: CropAspectOption[];
   onCropComplete: (croppedBlob: Blob, croppedUrl: string) => void;
   onCancel: () => void;
 }
 
 export function ImageCropModal({
   imageSrc,
-  aspect,
+  aspect: initialAspect,
   title = "Crop Image",
+  aspects,
   onCropComplete,
   onCancel,
 }: ImageCropModalProps) {
+  const [aspect, setAspect] = useState(initialAspect);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<PixelCrop | null>(null);
@@ -82,6 +91,27 @@ export function ImageCropModal({
             onCropComplete={onCropCompleteCallback}
           />
         </div>
+
+        {/* Aspect ratio options */}
+        {aspects && aspects.length > 0 && (
+          <div className="px-6 pt-4 flex items-center gap-2">
+            <span className="text-xs text-gray-500 mr-1">Aspect:</span>
+            {aspects.map((opt) => (
+              <button
+                key={opt.label}
+                type="button"
+                onClick={() => setAspect(opt.value)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  aspect === opt.value
+                    ? "bg-primary-500 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Zoom slider */}
         <div className="px-6 py-4 border-t border-gray-100">

@@ -20,10 +20,9 @@ type FormData = z.infer<typeof schema>;
 interface ContactFormProps {
   propertyName?: string;
   propertyId?: string;
-  projectId?: string;
 }
 
-export function ContactForm({ propertyName, propertyId, projectId }: ContactFormProps) {
+export function ContactForm({ propertyName, propertyId }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
@@ -39,7 +38,7 @@ export function ContactForm({ propertyName, propertyId, projectId }: ContactForm
       const res = await fetch("/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, propertyId, projectId }),
+        body: JSON.stringify({ ...data, propertyId }),
       });
       if (!res.ok) throw new Error();
       setStatus("success");

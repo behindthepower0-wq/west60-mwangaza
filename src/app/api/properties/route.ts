@@ -3,6 +3,31 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { slugify } from "@/lib/utils";
 
+// GET /api/properties - public list of published properties (for enquiry modals etc.)
+export async function GET() {
+  try {
+    const properties = await prisma.property.findMany({
+      where: { isPublished: true },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        location: true,
+        price: true,
+        priceLabel: true,
+        area: true,
+        status: true,
+      },
+    }).catch(() => []);
+
+    return NextResponse.json(properties);
+  } catch (error) {
+    console.error("[PROPERTIES_GET]", error);
+    return NextResponse.json([], { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
@@ -23,6 +48,8 @@ export async function POST(req: NextRequest) {
       status,
       size,
       sizeUnit,
+      totalPlots,
+      soldPlots,
       features,
       isFeatured,
       isPublished,
@@ -56,6 +83,8 @@ export async function POST(req: NextRequest) {
         propertyType,
         status,
         area: size ? `${size} ${sizeUnit || ''}`.trim() : null,
+        totalPlots: totalPlots ? parseInt(totalPlots, 10) : null,
+        soldPlots: soldPlots ? parseInt(soldPlots, 10) : null,
         mainImage: mainImage || null,
         features: {
           create: features?.map((f: string) => ({ feature: f })) || []

@@ -81,6 +81,8 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
       status: formData.get("status"),
       size: parseFloat(formData.get("size") as string) || null,
       sizeUnit: formData.get("sizeUnit"),
+      totalPlots: parseInt(formData.get("totalPlots") as string) || null,
+      soldPlots: parseInt(formData.get("soldPlots") as string) || null,
       features: (formData.get("features") as string)
         .split(",")
         .map((f) => f.trim())
@@ -190,7 +192,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               >
                 <option value="AVAILABLE">Available</option>
                 <option value="RESERVED">Reserved</option>
-                <option value="SOLD">Sold</option>
+                <option value="SOLD_OUT">Sold Out</option>
                 <option value="COMING_SOON">Coming Soon</option>
                 <option value="UNDER_CONSTRUCTION">Under Construction</option>
                 <option value="COMPLETED">Completed</option>
@@ -262,6 +264,34 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
                 defaultValue={initialData?.sizeUnit || "x 100 ft"}
                 className="form-input"
                 placeholder="e.g. x 100 ft, acres"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Total Plots
+              </label>
+              <input
+                type="number"
+                min="0"
+                name="totalPlots"
+                defaultValue={initialData?.totalPlots ?? ""}
+                className="form-input"
+                placeholder="e.g. 120 (leave empty if not a plot scheme)"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Sold Plots
+              </label>
+              <input
+                type="number"
+                min="0"
+                name="soldPlots"
+                defaultValue={initialData?.soldPlots ?? ""}
+                className="form-input"
+                placeholder="e.g. 108"
               />
             </div>
           </div>

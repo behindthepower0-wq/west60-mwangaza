@@ -4,10 +4,10 @@ import { useState } from "react";
 import { Filter, ChevronDown, ChevronUp } from "lucide-react";
 
 const areas = ["All", "Katani", "Kitengela", "Joska", "Malaa", "Kitui"];
-const statuses = ["All", "AVAILABLE", "COMING_SOON", "UNDER_CONSTRUCTION", "COMPLETED", "SOLD"];
+const statuses = ["All", "AVAILABLE", "COMING_SOON", "UNDER_CONSTRUCTION", "COMPLETED", "SOLD_OUT"];
 const statusLabels: Record<string, string> = {
   All: "All", AVAILABLE: "Available", COMING_SOON: "Coming Soon",
-  UNDER_CONSTRUCTION: "Under Construction", COMPLETED: "Completed", SOLD: "Sold",
+  UNDER_CONSTRUCTION: "Under Construction", COMPLETED: "Completed", SOLD_OUT: "Sold Out",
 };
 
 interface PropertyFiltersProps {

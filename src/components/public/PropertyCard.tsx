@@ -3,36 +3,13 @@ import Image from "next/image";
 import { ArrowRight, MapPin, Maximize2, Building2 } from "lucide-react";
 import type { Property, PropertyImage } from "@prisma/client";
 import { ScrollReveal } from "./ScrollReveal";
-import { formatPrice } from "@/lib/utils";
+import { PlotProgress } from "./PlotProgress";
+import { formatPrice, getPropertyStatusLabel, getPropertyStatusClass } from "@/lib/utils";
 
 type PropertyWithImages = Property & { images: PropertyImage[] };
 
 interface FeaturedPropertiesSectionProps {
   properties: PropertyWithImages[];
-}
-
-function getStatusLabel(status: string) {
-  const map: Record<string, string> = {
-    AVAILABLE: "Available",
-    SOLD: "Sold",
-    RESERVED: "Reserved",
-    COMING_SOON: "Coming Soon",
-    UNDER_CONSTRUCTION: "Under Construction",
-    COMPLETED: "Completed",
-  };
-  return map[status] || status;
-}
-
-function getStatusClass(status: string) {
-  const map: Record<string, string> = {
-    AVAILABLE: "status-available",
-    SOLD: "status-sold",
-    RESERVED: "status-reserved",
-    COMING_SOON: "status-coming-soon",
-    UNDER_CONSTRUCTION: "status-construction",
-    COMPLETED: "status-completed",
-  };
-  return `status-badge ${map[status] || ""}`;
 }
 
 export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSectionProps) {
@@ -47,6 +24,8 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
     propertyType: p.propertyType,
     status: p.status,
     area: p.area,
+    totalPlots: p.totalPlots,
+    soldPlots: p.soldPlots,
     mainImage: p.images[0]?.url || p.mainImage || "/images/property-1.jpg",
     shortDescription: p.shortDescription,
   }));
@@ -103,8 +82,8 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
                   />
                   {/* Status badge */}
                   <div className="absolute top-4 left-4">
-                    <span className={getStatusClass(property.status)}>
-                      {getStatusLabel(property.status)}
+                    <span className={getPropertyStatusClass(property.status)}>
+                      {getPropertyStatusLabel(property.status)}
                     </span>
                   </div>
                   {/* Price tag */}
@@ -146,6 +125,16 @@ export function FeaturedPropertiesSection({ properties }: FeaturedPropertiesSect
                   <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">
                     {property.shortDescription}
                   </p>
+
+                  {property.totalPlots && property.totalPlots > 0 && (
+                    <div className="mb-4">
+                      <PlotProgress
+                        totalPlots={property.totalPlots}
+                        soldPlots={property.soldPlots}
+                        compact
+                      />
+                    </div>
+                  )}
 
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-primary-600 group-hover:text-secondary-600 transition-all duration-300">
                     View Details{" "}
@@ -193,8 +182,8 @@ export function PropertyCard({ property }: { property: any }) {
           style={{ background: "linear-gradient(to top, rgba(29,79,56,0.6) 0%, transparent 50%)" }}
         />
         <div className="absolute top-4 left-4">
-          <span className={getStatusClass(property.status)}>
-            {getStatusLabel(property.status)}
+          <span className={getPropertyStatusClass(property.status)}>
+            {getPropertyStatusLabel(property.status)}
           </span>
         </div>
         <div
@@ -234,6 +223,16 @@ export function PropertyCard({ property }: { property: any }) {
         <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">
           {property.shortDescription}
         </p>
+
+        {property.totalPlots && property.totalPlots > 0 && (
+          <div className="mb-4">
+            <PlotProgress
+              totalPlots={property.totalPlots}
+              soldPlots={property.soldPlots}
+              compact
+            />
+          </div>
+        )}
 
         <div className="flex items-center gap-1.5 text-xs font-semibold text-primary-600 group-hover:text-secondary-600 transition-all duration-300">
           View Details{" "}

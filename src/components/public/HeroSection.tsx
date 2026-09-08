@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Shield, MapPin, Users, ChevronDown } from "lucide-react";
-import { getWhatsAppUrl } from "@/lib/utils";
+import { useWhatsAppModal } from "./WhatsAppModalProvider";
 
 const glassFeatures = [
   {
@@ -27,7 +27,6 @@ const stats = [
   { value: "4+", label: "Years Experience" },
   { value: "160+", label: "Properties Sold" },
   { value: "320+", label: "Happy Clients" },
-  { value: "15+", label: "Active Projects" },
 ];
 
 const FALLBACK_IMAGE = "/images/hero-bg.jpg";
@@ -56,6 +55,7 @@ function CountUpNumber({ value, delay }: { value: string; delay: number }) {
 }
 
 export function HeroSection({ heroImages = [] }: HeroSectionProps) {
+  const { openWhatsAppModal } = useWhatsAppModal();
   const [loaded, setLoaded] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -116,7 +116,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url('${src}')`,
-            filter: "brightness(0.4) saturate(1.2)",
+            filter: "brightness(0.55) saturate(1.2)",
             transform: `scale(1.1) translateY(${scrollY * 0.15}px)`,
             opacity: i === currentSlide ? 1 : 0,
             transition: "opacity 1.2s ease-in-out",
@@ -131,7 +131,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
         className="absolute inset-0"
         style={{
           background: `
-            linear-gradient(135deg, rgba(8,14,12,0.92) 0%, rgba(8,14,12,0.70) 40%, rgba(8,14,12,0.35) 70%, rgba(8,14,12,0.50) 100%),
+            linear-gradient(135deg, rgba(8,14,12,0.75) 0%, rgba(8,14,12,0.70) 40%, rgba(8,14,12,0.35) 70%, rgba(8,14,12,0.50) 100%),
             radial-gradient(ellipse at 80% 80%, rgba(198,145,43,0.08) 0%, transparent 60%),
             radial-gradient(ellipse at 20% 20%, rgba(29,79,56,0.15) 0%, transparent 50%)
           `,
@@ -293,14 +293,10 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
             ))}
 
             {/* WhatsApp quick contact */}
-            <a
-              href={getWhatsAppUrl(
-                "0711400933",
-                "Hello! I would like to enquire about your properties."
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glass-gold rounded-2xl p-5 flex items-center gap-4 transition-all duration-300 hover:scale-[1.02] cursor-pointer group"
+            <button
+              type="button"
+              onClick={() => openWhatsAppModal()}
+              className="glass-gold rounded-2xl p-5 flex items-center gap-4 text-left transition-all duration-300 hover:scale-[1.02] cursor-pointer group"
               style={{
                 animation: loaded
                   ? `fadeInRight 0.7s cubic-bezier(0.16,1,0.3,1) 960ms forwards`
@@ -332,7 +328,7 @@ export function HeroSection({ heroImages = [] }: HeroSectionProps) {
                 size={16}
                 className="text-white/25 group-hover:text-white/60 group-hover:translate-x-1 transition-all"
               />
-            </a>
+            </button>
           </div>
         </div>
       </div>

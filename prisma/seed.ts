@@ -72,7 +72,6 @@ async function main() {
     { label: "Home", url: "/", order: 1 },
     { label: "About Us", url: "/about", order: 2 },
     { label: "Properties", url: "/properties", order: 3 },
-    { label: "Projects", url: "/projects", order: 5 },
     { label: "News", url: "/news", order: 6 },
     { label: "Contact Us", url: "/contact", order: 7 },
   ];
@@ -179,7 +178,6 @@ async function main() {
           { value: "", label: "Years Experience", icon: "Calendar" },
           { value: "", label: "Properties", icon: "Building2" },
           { value: "", label: "Happy Clients", icon: "Users" },
-          { value: "", label: "Active Projects", icon: "FolderKanban" },
         ],
       }),
       order: 2,
@@ -219,13 +217,6 @@ async function main() {
       title: "Why Choose Us",
       content: JSON.stringify({ eyebrow: "Why Choose Us", heading: "We Deliver More Than Properties" }),
       order: 6,
-      isVisible: true,
-    },
-    {
-      key: "projects",
-      title: "Projects Section",
-      content: JSON.stringify({ eyebrow: "Our Projects", heading: "Current & Completed Projects" }),
-      order: 7,
       isVisible: true,
     },
     {

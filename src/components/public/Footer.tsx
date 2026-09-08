@@ -7,7 +7,6 @@ import prisma from "@/lib/db";
 const quickLinks = [
   { label: "About Us", href: "/about" },
   { label: "Properties", href: "/properties" },
-  { label: "Projects", href: "/projects" },
   { label: "Our Team", href: "/team" },
   { label: "News & Insights", href: "/news" },
   { label: "Contact Us", href: "/contact" },

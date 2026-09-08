@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Building2, FolderKanban, MessageSquare, Users, Newspaper, TrendingUp, ArrowRight } from "lucide-react";
+import { Building2, MessageSquare, Users, Newspaper, TrendingUp, ArrowRight } from "lucide-react";
 import prisma from "@/lib/db";
 
 export const metadata: Metadata = { title: "Dashboard | CMS" };
 
 export default async function AdminDashboardPage() {
-  const [propertyCount, projectCount, newEnquiries, totalEnquiries, teamCount, postCount] =
+  const [propertyCount, newEnquiries, totalEnquiries, teamCount, postCount] =
     await Promise.all([
       prisma.property.count().catch(() => 0),
-      prisma.project.count().catch(() => 0),
       prisma.enquiry.count({ where: { status: "NEW" } }).catch(() => 0),
       prisma.enquiry.count().catch(() => 0),
       prisma.teamMember.count().catch(() => 0),
@@ -24,7 +23,6 @@ export default async function AdminDashboardPage() {
 
   const stats = [
     { label: "Properties", value: propertyCount, icon: Building2, href: "/admin/properties", color: "#1d4f38" },
-    { label: "Projects", value: projectCount, icon: FolderKanban, href: "/admin/projects", color: "#2a6b50" },
     { label: "New Enquiries", value: newEnquiries, icon: MessageSquare, href: "/admin/enquiries", color: newEnquiries > 0 ? "#c6912b" : "#6B7280", badge: newEnquiries > 0 },
     { label: "Team Members", value: teamCount, icon: Users, href: "/admin/team", color: "#4B5563" },
     { label: "Articles", value: postCount, icon: Newspaper, href: "/admin/news", color: "#374151" },
@@ -102,7 +100,6 @@ export default async function AdminDashboardPage() {
           <div className="space-y-2">
             {[
               { label: "Add New Property", href: "/admin/properties/new", icon: Building2 },
-              { label: "Add New Project", href: "/admin/projects/new", icon: FolderKanban },
               { label: "Write an Article", href: "/admin/news/new", icon: Newspaper },
               { label: "Add Team Member", href: "/admin/team/new", icon: Users },
               { label: "View Website", href: "/", icon: TrendingUp },

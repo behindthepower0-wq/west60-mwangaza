@@ -10,9 +10,30 @@ import {
   Search,
   Grid3X3,
   List,
+  Crop,
 } from "lucide-react";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { UploadProgress } from "@/components/admin/UploadProgress";
+import {
+  ImageCropModal,
+  type CropAspectOption,
+} from "@/components/admin/ImageCropModal";
+
+function readImageSize(blob: Blob): Promise<{ width: number; height: number } | null> {
+  return new Promise((resolve) => {
+    const url = URL.createObjectURL(blob);
+    const img = new window.Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(null);
+    };
+    img.src = url;
+  });
+}
 
 interface MediaItem {
   id: string;
@@ -53,14 +74,23 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [cropTarget, setCropTarget] = useState<MediaItem | null>(null);
+  const [isCropping, setIsCropping] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const cropAspects: CropAspectOption[] = [
+    { label: "Free", value: 0 },
+    { label: "1:1", value: 1 },
+    { label: "4:3", value: 4 / 3 },
+    { label: "16:9", value: 16 / 9 },
+    { label: "3:2", value: 3 / 2 },
+  ];
 
   const categories = [
     "ALL",
     "GENERAL",
     "HOMEPAGE",
     "PROPERTIES",
-    "PROJECTS",
     "SERVICES",
     "TEAM",
     "NEWS",
@@ -121,6 +151,78 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
       setDeletingId(null);
     }
   };
+
+  const handleCropComplete = useCallback(
+    async (croppedBlob: Blob) => {
+      if (!cropTarget) return;
+      setError("");
+      setIsCropping(true);
+      try {
+        // Re-upload the cropped version under the same category
+        const formData = new FormData();
+        formData.append(
+          "file",
+          croppedBlob,
+          `cropped-${cropTarget.originalName || "image.jpg"}`
+        );
+        formData.append("category", cropTarget.category);
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!uploadRes.ok) throw new Error("Upload failed");
+        const data = await uploadRes.json();
+        const urls = data.urls || {
+          large: data.url,
+          medium: data.url,
+          thumbnail: data.url,
+        };
+
+        // Read cropped image dimensions for the Media record
+        let width: number | undefined;
+        let height: number | undefined;
+        const dims = await readImageSize(croppedBlob);
+        if (dims) {
+          width = dims.width;
+          height = dims.height;
+        }
+
+        // Update the existing Media record (keep ID)
+        const patchRes = await fetch(`/api/admin/media/${cropTarget.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: urls.large,
+            thumbnailUrl: urls.thumbnail,
+            webpUrl: urls.medium,
+            width,
+            height,
+          }),
+        });
+        if (!patchRes.ok) throw new Error("Failed to update media record");
+
+        setMedia((prev) =>
+          prev.map((m) =>
+            m.id === cropTarget.id
+              ? {
+                  ...m,
+                  url: urls.large,
+                  thumbnailUrl: urls.thumbnail,
+                  webpUrl: urls.medium,
+                }
+              : m
+          )
+        );
+        setCropTarget(null);
+      } catch {
+        setError("Failed to apply crop. Please try again.");
+      } finally {
+        setIsCropping(false);
+      }
+    },
+    [cropTarget]
+  );
 
   const formatSize = (bytes: number) => {
     if (bytes === 0) return "0 B";
@@ -279,7 +381,17 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
               )}
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/60 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
-                <div className="flex justify-end">
+                <div className="flex justify-end gap-1.5">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCropTarget(m);
+                    }}
+                    className="p-1.5 bg-white/15 rounded-lg text-white hover:bg-secondary-500 transition-colors"
+                    title="Crop image"
+                  >
+                    <Crop size={14} />
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -377,17 +489,26 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
                     {new Date(m.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-5 py-3 text-right">
-                    <button
-                      onClick={() => handleDelete(m.id)}
-                      disabled={deletingId === m.id}
-                      className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
-                    >
-                      {deletingId === m.id ? (
-                        <Loader2 size={14} className="animate-spin" />
-                      ) : (
-                        <Trash2 size={14} />
-                      )}
-                    </button>
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => setCropTarget(m)}
+                        className="p-2 text-gray-400 hover:text-secondary-600 rounded-lg hover:bg-secondary-50 transition-colors"
+                        title="Crop image"
+                      >
+                        <Crop size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(m.id)}
+                        disabled={deletingId === m.id}
+                        className="p-2 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                      >
+                        {deletingId === m.id ? (
+                          <Loader2 size={14} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={14} />
+                        )}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -400,6 +521,28 @@ export function MediaLibraryManager({ initialMedia }: MediaLibraryManagerProps) 
       <p className="text-xs text-gray-400 text-right">
         Showing {filteredMedia.length} of {media.length} files
       </p>
+
+      {/* Crop modal */}
+      {cropTarget && (
+        <ImageCropModal
+          imageSrc={cropTarget.url}
+          aspect={1}
+          title="Crop Image"
+          aspects={cropAspects}
+          onCropComplete={handleCropComplete}
+          onCancel={() => setCropTarget(null)}
+        />
+      )}
+      {isCropping && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl px-8 py-6 flex flex-col items-center gap-3">
+            <Loader2 size={28} className="animate-spin text-primary-500" />
+            <p className="text-sm text-gray-600 font-medium">
+              Saving cropped image...
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -63,7 +63,7 @@ export function getPropertyStatusLabel(status: string): string {
   const map: Record<string, string> = {
     AVAILABLE: "Available",
     RESERVED: "Reserved",
-    SOLD: "Sold",
+    SOLD_OUT: "Sold Out",
     COMING_SOON: "Coming Soon",
     UNDER_CONSTRUCTION: "Under Construction",
     COMPLETED: "Completed",
@@ -75,7 +75,7 @@ export function getPropertyStatusClass(status: string): string {
   const map: Record<string, string> = {
     AVAILABLE: "status-available",
     RESERVED: "status-reserved",
-    SOLD: "status-sold",
+    SOLD_OUT: "status-sold",
     COMING_SOON: "status-coming-soon",
     UNDER_CONSTRUCTION: "status-construction",
     COMPLETED: "status-completed",
@@ -83,14 +83,26 @@ export function getPropertyStatusClass(status: string): string {
   return `status-badge ${map[status] || ""}`;
 }
 
-export function getProjectStatusLabel(status: string): string {
-  const map: Record<string, string> = {
-    PLANNING: "Planning",
-    ONGOING: "Ongoing",
-    COMPLETED: "Completed",
-    ON_HOLD: "On Hold",
+export interface PlotStats {
+  total: number;
+  sold: number;
+  remaining: number;
+  percent: number;
+}
+
+export function getPlotStats(
+  totalPlots: number | null | undefined,
+  soldPlots: number | null | undefined
+): PlotStats | null {
+  if (!totalPlots || totalPlots <= 0) return null;
+  const total = Math.round(totalPlots);
+  const sold = Math.max(0, Math.min(Math.round(soldPlots || 0), total));
+  return {
+    total,
+    sold,
+    remaining: total - sold,
+    percent: Math.round((sold / total) * 100),
   };
-  return map[status] || status;
 }
 
 export function parseJsonSafe<T>(json: string | null | undefined, fallback: T): T {

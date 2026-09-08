@@ -22,9 +22,6 @@ const TABLES: Record<string, string> = {
   propertyImage: "property_images",
   propertyFeature: "property_features",
   propertyAmenity: "property_amenities",
-  project: "projects",
-  projectImage: "project_images",
-  projectFeature: "project_features",
   teamMember: "team_members",
   testimonial: "testimonials",
   category: "categories",
@@ -112,6 +109,8 @@ const FIELDS: Record<string, Record<string, string>> = {
     bathrooms: "bathrooms",
     floorArea: "floor_area",
     landSize: "land_size",
+    totalPlots: "total_plots",
+    soldPlots: "sold_plots",
     mainImage: "main_image",
     isFeatured: "is_featured",
     isPublished: "is_published",
@@ -135,28 +134,6 @@ const FIELDS: Record<string, Record<string, string>> = {
   },
   property_amenities: {
     propertyId: "property_id",
-    order: "sort_order",
-  },
-  projects: {
-    shortDescription: "short_description",
-    fullDescription: "full_description",
-    startDate: "start_date",
-    completionDate: "completion_date",
-    mainImage: "main_image",
-    isPublished: "is_published",
-    publishedAt: "published_at",
-    createdAt: "created_at",
-    updatedAt: "updated_at",
-  },
-  project_images: {
-    projectId: "project_id",
-    thumbnailUrl: "thumbnail_url",
-    altText: "alt_text",
-    order: "sort_order",
-    createdAt: "created_at",
-  },
-  project_features: {
-    projectId: "project_id",
     order: "sort_order",
   },
   team_members: {
@@ -191,7 +168,6 @@ const FIELDS: Record<string, Record<string, string>> = {
   },
   enquiries: {
     propertyId: "property_id",
-    projectId: "project_id",
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
@@ -232,11 +208,6 @@ const RELATION_NAMES: Record<string, Record<string, string>> = {
     property_images: "images",
     property_features: "features",
     property_amenities: "amenities",
-    enquiries: "enquiries",
-  },
-  projects: {
-    project_images: "images",
-    project_features: "features",
     enquiries: "enquiries",
   },
   posts: {
@@ -286,6 +257,47 @@ function applyWhere(
 ): ReturnType<SupabaseClient["from"]> {
   let query = q;
   for (const [key, value] of Object.entries(where)) {
+    if (key === "OR") {
+      // Prisma-style OR: array of where-clauses, joined with PostgREST or(...)
+      const groups = Array.isArray(value) ? value : [value];
+      const parts: string[] = [];
+      for (const group of groups) {
+        const conds: string[] = [];
+        for (const [gk, gv] of Object.entries(group as Record<string, unknown>)) {
+          if (gv === null || gv === undefined) {
+            conds.push(`${toSnake(gk, table)}.is.null`);
+          } else if (typeof gv === "object" && gv !== null && !Array.isArray(gv)) {
+            for (const [op, val] of Object.entries(gv as Record<string, unknown>)) {
+              if (val === null || val === undefined) continue;
+              switch (op) {
+                case "equals":
+                  conds.push(`${toSnake(gk, table)}.eq.${encodeURIComponent(String(val))}`);
+                  break;
+                case "contains":
+                  conds.push(`${toSnake(gk, table)}.ilike.%${encodeURIComponent(String(val))}%`);
+                  break;
+                case "startsWith":
+                  conds.push(`${toSnake(gk, table)}.ilike.${encodeURIComponent(String(val))}%`);
+                  break;
+                case "in":
+                  for (const v of val as unknown[]) {
+                    conds.push(`${toSnake(gk, table)}.eq.${encodeURIComponent(String(v))}`);
+                  }
+                  break;
+              }
+            }
+          } else {
+            conds.push(`${toSnake(gk, table)}.eq.${encodeURIComponent(String(gv))}`);
+          }
+        }
+        if (conds.length === 1) parts.push(conds[0]);
+        else if (conds.length > 1) parts.push(`and(${conds.join(",")})`);
+      }
+      if (parts.length > 0) {
+        query = query.or(parts.join(","));
+      }
+      continue;
+    }
     if (value === null || value === undefined) {
       query = query.is(toSnake(key, table), null);
     } else if (typeof value === "object" && value !== null && !Array.isArray(value)) {
@@ -432,11 +444,6 @@ function findRelatedTable(parentTable: string, relName: string): string | null {
       images: "property_images",
       features: "property_features",
       amenities: "property_amenities",
-      enquiries: "enquiries",
-    },
-    projects: {
-      images: "project_images",
-      features: "project_features",
       enquiries: "enquiries",
     },
     posts: {

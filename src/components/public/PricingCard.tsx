@@ -1,7 +1,8 @@
 "use client";
 
-import { CheckCircle, CreditCard, Phone, Calculator } from "lucide-react";
+import { CheckCircle, Phone } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { useWhatsAppModal } from "./WhatsAppModalProvider";
 
 interface PricingCardProps {
   price: number | null;
@@ -10,6 +11,7 @@ interface PricingCardProps {
   location?: string | null;
   propertyType?: string | null;
   area?: string | null;
+  propertyId?: string;
 }
 
 export function PricingCard({
@@ -19,9 +21,11 @@ export function PricingCard({
   location,
   propertyType,
   area,
+  propertyId,
 }: PricingCardProps) {
+  const { openWhatsAppModal } = useWhatsAppModal();
   const displayPrice = priceLabel || formatPrice(price, currency ?? undefined);
-  const installmentMonthly = price ? Math.round(price / 6) : null;
+  const installmentMonthly = price ? Math.round(price / 18) : null;
   const cashDiscount = price ? Math.round(price * 0.9) : null;
 
   return (
@@ -81,7 +85,7 @@ export function PricingCard({
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-secondary-dark">
-                6-Month Plan
+                18-Month Plan
               </span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-secondary/10 text-secondary-dark">
                 0% Interest
@@ -92,7 +96,7 @@ export function PricingCard({
               <span className="text-sm font-normal text-text-muted">/month</span>
             </p>
             <p className="text-xs text-text-muted mt-1">
-              Spread over 6 months, title deed after final payment
+              Spread over 18 months, title deed after final payment
             </p>
           </div>
         )}
@@ -131,10 +135,9 @@ export function PricingCard({
             <Phone size={16} className="inline mr-2" />
             Enquire Now
           </a>
-          <a
-            href={`https://wa.me/254711400933?text=Hi, I'm interested in this property`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => openWhatsAppModal({ propertyId })}
             className="block w-full py-3 px-6 rounded-xl font-semibold text-sm text-center transition-all hover:shadow-lg"
             style={{
               background: "#25D366",
@@ -142,7 +145,7 @@ export function PricingCard({
             }}
           >
             WhatsApp Us
-          </a>
+          </button>
         </div>
       </div>
     </div>

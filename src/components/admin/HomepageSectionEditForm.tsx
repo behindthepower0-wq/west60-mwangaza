@@ -41,9 +41,6 @@ const sectionImageFields: Record<string, { key: string; label: string }[]> = {
   properties: [
     { key: "backgroundImage", label: "Properties Background Image" },
   ],
-  projects: [
-    { key: "backgroundImage", label: "Projects Background Image" },
-  ],
   whychooseus: [
     { key: "image", label: "Why Choose Us Image" },
     { key: "backgroundImage", label: "Background Image" },

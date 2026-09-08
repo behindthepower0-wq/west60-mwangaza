@@ -106,7 +106,6 @@ enum MediaCategory {
   BRANDING
   HOMEPAGE
   PROPERTIES
-  PROJECTS
   SERVICES
   TEAM
   NEWS
@@ -119,7 +118,7 @@ enum MediaCategory {
 
 model SeoMetadata {
   id              String  @id @default(cuid())
-  entityType      String  // page | property | project | service | post
+  entityType      String  // page | property | service | post
   entityId        String
   seoTitle        String?
   metaDescription String?
@@ -176,7 +175,7 @@ model PageSection {
 
 model HomepageSection {
   id          String   @id @default(cuid())
-  key         String   @unique // hero | statistics | about | services | properties | projects | whychooseus | team | testimonials | news | cta
+  key         String   @unique // hero | statistics | about | services | properties | whychooseus | team | testimonials | news | cta
   title       String
   content     String   // JSON blob for all fields in this section
   order       Int      @default(0)
@@ -229,6 +228,8 @@ model Property {
   bathrooms       Int?
   floorArea       Float?          // sqm
   landSize        Float?          // sqm or acres
+  totalPlots      Int?            // total plots in a plot-tracked development
+  soldPlots       Int?            // plots sold so far
   mainImage       String?
   isFeatured      Boolean         @default(false)
   isPublished     Boolean         @default(false)
@@ -295,70 +296,10 @@ enum PropertyType {
 enum PropertyStatus {
   AVAILABLE
   RESERVED
-  SOLD
+  SOLD_OUT
   COMING_SOON
   UNDER_CONSTRUCTION
   COMPLETED
-}
-
-// ─────────────────────────────────────────────
-// PROJECTS
-// ─────────────────────────────────────────────
-
-model Project {
-  id              String        @id @default(cuid())
-  name            String
-  slug            String        @unique
-  location        String?
-  shortDescription String?
-  fullDescription String?
-  status          ProjectStatus @default(ONGOING)
-  startDate       DateTime?
-  completionDate  DateTime?
-  mainImage       String?
-  isPublished     Boolean       @default(false)
-  publishedAt     DateTime?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  images          ProjectImage[]
-  features        ProjectFeature[]
-  enquiries       Enquiry[]
-
-  @@map("projects")
-}
-
-model ProjectImage {
-  id          String   @id @default(cuid())
-  projectId   String
-  url         String
-  thumbnailUrl String?
-  altText     String?
-  caption     String?
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@map("project_images")
-}
-
-model ProjectFeature {
-  id          String   @id @default(cuid())
-  projectId   String
-  feature     String
-  order       Int      @default(0)
-
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@map("project_features")
-}
-
-enum ProjectStatus {
-  PLANNING
-  ONGOING
-  COMPLETED
-  ON_HOLD
 }
 
 // ─────────────────────────────────────────────
@@ -458,14 +399,12 @@ model Enquiry {
   subject     String?
   message     String
   propertyId  String?
-  projectId   String?
   status      EnquiryStatus   @default(NEW)
   notes       String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
   property    Property?       @relation(fields: [propertyId], references: [id])
-  project     Project?        @relation(fields: [projectId], references: [id])
 
   @@map("enquiries")
 }

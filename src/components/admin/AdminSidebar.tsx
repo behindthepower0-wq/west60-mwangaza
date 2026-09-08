@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
-  LayoutDashboard, Home, Building2, FolderKanban,
+  LayoutDashboard, Home, Building2,
   Users, Star, Newspaper, Image, Navigation, MessageSquare,
   Search, Settings, UserCog, Activity, ChevronDown, ChevronRight, X,
 } from "lucide-react";
@@ -40,7 +40,6 @@ const navGroups = [
     items: [
       { label: "Homepage", href: "/admin/homepage", icon: Home },
       { label: "Properties", href: "/admin/properties", icon: Building2 },
-      { label: "Projects", href: "/admin/projects", icon: FolderKanban },
       { label: "Team", href: "/admin/team", icon: Users },
       { label: "Testimonials", href: "/admin/testimonials", icon: Star },
       { label: "News / Blog", href: "/admin/news", icon: Newspaper },

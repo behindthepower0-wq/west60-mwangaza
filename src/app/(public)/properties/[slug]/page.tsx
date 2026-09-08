@@ -8,6 +8,7 @@ import { formatPrice, getPropertyStatusLabel, getPropertyStatusClass, getWhatsAp
 import { ContactForm } from "@/components/public/ContactForm";
 import { PropertyCard } from "@/components/public/PropertyCard";
 import { PricingCard } from "@/components/public/PricingCard";
+import { PlotProgress } from "@/components/public/PlotProgress";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -129,6 +130,16 @@ export default async function PropertyDetailPage({ params }: Props) {
               )}
             </div>
 
+            {/* Plot tracker */}
+            {property.totalPlots && property.totalPlots > 0 && (
+              <div className="glass-card p-6">
+                <h2 className="font-bold text-primary-800 text-lg mb-4" style={{ fontFamily: "var(--font-serif)" }}>
+                  Plot Sales Progress
+                </h2>
+                <PlotProgress totalPlots={property.totalPlots} soldPlots={property.soldPlots} />
+              </div>
+            )}
+
             {/* Description */}
             {(property.fullDescription || property.shortDescription) && (
               <div className="glass-card p-6">
@@ -178,6 +189,7 @@ export default async function PropertyDetailPage({ params }: Props) {
               location={property.location ?? undefined}
               propertyType={property.propertyType}
               area={property.area ?? undefined}
+              propertyId={property.id}
             />
           </div>
         </div>

@@ -25,6 +25,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       status,
       size,
       sizeUnit,
+      totalPlots,
+      soldPlots,
       features,
       isFeatured,
       isPublished,
@@ -62,6 +64,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         propertyType,
         status,
         area: size ? `${size} ${sizeUnit || ''}`.trim() : null,
+        totalPlots: totalPlots !== undefined && totalPlots !== null && totalPlots !== '' ? parseInt(totalPlots, 10) : null,
+        soldPlots: soldPlots !== undefined && soldPlots !== null && soldPlots !== '' ? parseInt(soldPlots, 10) : null,
         mainImage: mainImage !== undefined ? mainImage : undefined,
         features: {
           deleteMany: {},

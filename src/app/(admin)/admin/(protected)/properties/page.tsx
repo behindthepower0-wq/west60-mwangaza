@@ -51,7 +51,7 @@ export default async function AdminPropertiesPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-100">
-                  {['Property', 'Location', 'Price', 'Status', 'Featured', 'Enquiries', 'Actions'].map(h => (
+                  {['Property', 'Location', 'Price', 'Status', 'Plots', 'Featured', 'Enquiries', 'Actions'].map(h => (
                     <th key={h} className={`text-left text-xs font-semibold text-gray-400 uppercase tracking-wider px-5 py-4 ${h === 'Location' || h === 'Featured' || h === 'Enquiries' ? 'hidden lg:table-cell' : ''}`}>{h}</th>
                   ))}
                 </tr>
@@ -73,6 +73,9 @@ export default async function AdminPropertiesPage() {
                     <td className="hidden lg:table-cell px-5 py-4 text-sm text-gray-600">{p.location || '-'}</td>
                     <td className="px-5 py-4 text-sm font-medium text-gray-700">{p.priceLabel || formatPrice(p.price, p.currency)}</td>
                     <td className="px-5 py-4"><span className={getPropertyStatusClass(p.status)}>{getPropertyStatusLabel(p.status)}</span></td>
+                    <td className="px-5 py-4 text-sm text-gray-600">
+                      {p.totalPlots && p.totalPlots > 0 ? `${p.soldPlots || 0}/${p.totalPlots}` : '-'}
+                    </td>
                     <td className="hidden lg:table-cell px-5 py-4"><span className={`text-xs font-medium ${p.isFeatured ? 'text-secondary-600' : 'text-gray-400'}`}>{p.isFeatured ? 'Yes' : 'No'}</span></td>
                     <td className="hidden lg:table-cell px-5 py-4 text-sm text-gray-600">{enquiryCountMap.get(p.id) || 0}</td>
                     <td className="px-5 py-4">
