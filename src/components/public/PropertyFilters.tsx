@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Filter, ChevronDown, ChevronUp } from "lucide-react";
 
 const areas = ["All", "Katani", "Kitengela", "Joska", "Malaa", "Kitui"];
@@ -10,17 +11,34 @@ const statusLabels: Record<string, string> = {
   UNDER_CONSTRUCTION: "Under Construction", COMPLETED: "Completed", SOLD_OUT: "Sold Out",
 };
 
-interface PropertyFiltersProps {
-  activeArea?: string;
-  activeStatus?: string;
-}
-
-export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersProps) {
+export function PropertyFilters() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
-  const currentArea = activeArea || "All";
-  const currentStatus = activeStatus || "All";
 
+  const currentArea = searchParams.get("area") || "All";
+  const currentStatus = searchParams.get("status") || "All";
   const hasActiveFilters = currentArea !== "All" || currentStatus !== "All";
+
+  function navigate(area: string, status: string) {
+    const params = new URLSearchParams();
+    if (area !== "All") params.set("area", area);
+    if (status !== "All") params.set("status", status);
+    const qs = params.toString();
+    router.push(`/properties${qs ? `?${qs}` : ""}`, { scroll: false });
+  }
+
+  function handleArea(area: string) {
+    navigate(area, currentStatus);
+  }
+
+  function handleStatus(status: string) {
+    navigate(currentArea, status);
+  }
+
+  function clearFilters() {
+    navigate("All", "All");
+  }
 
   return (
     <section className="sticky top-[72px] z-30 bg-white border-b border-gray-100 shadow-sm">
@@ -50,12 +68,12 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
                     {statusLabels[currentStatus]}
                   </span>
                 )}
-                <a
-                  href="/properties"
+                <button
+                  onClick={clearFilters}
                   className="px-2.5 py-1 rounded-full text-xs font-medium text-gray-400 hover:text-red-500 transition-colors"
                 >
                   Clear
-                </a>
+                </button>
               </div>
             )}
           </div>
@@ -64,9 +82,9 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
           {!open && (
             <div className="hidden sm:flex flex-wrap gap-1.5">
               {areas.map((area) => (
-                <a
+                <button
                   key={area}
-                  href={`/properties?${area !== "All" ? `area=${area}` : ""}${currentStatus !== "All" ? `&status=${currentStatus}` : ""}`}
+                  onClick={() => handleArea(area)}
                   className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
                     currentArea === area
                       ? "bg-primary-700 text-white"
@@ -74,7 +92,7 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
                   }`}
                 >
                   {area}
-                </a>
+                </button>
               ))}
             </div>
           )}
@@ -87,9 +105,9 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
             <div className="flex flex-wrap gap-2">
               <span className="text-xs font-medium text-gray-400 self-center mr-1">Area:</span>
               {areas.map((area) => (
-                <a
+                <button
                   key={area}
-                  href={`/properties?${area !== "All" ? `area=${area}` : ""}${currentStatus !== "All" ? `&status=${currentStatus}` : ""}`}
+                  onClick={() => handleArea(area)}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                     currentArea === area
                       ? "bg-primary-700 text-white"
@@ -97,7 +115,7 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
                   }`}
                 >
                   {area}
-                </a>
+                </button>
               ))}
             </div>
 
@@ -105,9 +123,9 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
             <div className="flex flex-wrap gap-2">
               <span className="text-xs font-medium text-gray-400 self-center mr-1">Status:</span>
               {statuses.map((s) => (
-                <a
+                <button
                   key={s}
-                  href={`/properties?${currentArea !== "All" ? `area=${currentArea}&` : ""}status=${s}`}
+                  onClick={() => handleStatus(s)}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                     currentStatus === s
                       ? "bg-secondary-400 text-primary-900"
@@ -115,18 +133,18 @@ export function PropertyFilters({ activeArea, activeStatus }: PropertyFiltersPro
                   }`}
                 >
                   {statusLabels[s]}
-                </a>
+                </button>
               ))}
             </div>
 
             {/* Clear all */}
             {hasActiveFilters && (
-              <a
-                href="/properties"
+              <button
+                onClick={clearFilters}
                 className="inline-flex items-center gap-1 text-xs font-medium text-gray-400 hover:text-red-500 transition-colors"
               >
                 ✕ Clear all filters
-              </a>
+              </button>
             )}
           </div>
         )}

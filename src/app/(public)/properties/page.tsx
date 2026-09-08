@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import prisma from "@/lib/db";
 import { PropertyCard } from "@/components/public/PropertyCard";
 import { PropertyFilters } from "@/components/public/PropertyFilters";
@@ -56,7 +57,9 @@ export default async function PropertiesPage({
       </section>
 
       {/* Filters */}
-      <PropertyFilters activeArea={params.area} activeStatus={params.status} />
+      <Suspense>
+        <PropertyFilters />
+      </Suspense>
 
       {/* Grid */}
       <section className="py-16" style={{ background: "var(--color-warm-white)" }}>
