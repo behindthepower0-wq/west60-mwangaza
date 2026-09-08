@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Filter, ChevronDown, ChevronUp } from "lucide-react";
 
-const areas = ["All", "Katani", "Kitengela", "Joska", "Malaa", "Kitui"];
+const DEFAULT_LOCATIONS = ["Katani", "Kitengela", "Joska", "Malaa", "Kitui"];
 const statuses = ["All", "AVAILABLE", "COMING_SOON", "UNDER_CONSTRUCTION", "COMPLETED", "SOLD_OUT"];
 const statusLabels: Record<string, string> = {
   All: "All", AVAILABLE: "Available", COMING_SOON: "Coming Soon",
@@ -15,10 +15,20 @@ export function PropertyFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
+  const [locations, setLocations] = useState<string[]>(DEFAULT_LOCATIONS);
 
   const currentArea = searchParams.get("area") || "All";
   const currentStatus = searchParams.get("status") || "All";
   const hasActiveFilters = currentArea !== "All" || currentStatus !== "All";
+
+  useEffect(() => {
+    fetch("/api/admin/locations")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) setLocations(data);
+      })
+      .catch(() => {});
+  }, []);
 
   function navigate(area: string, status: string) {
     const params = new URLSearchParams();
@@ -81,7 +91,7 @@ export function PropertyFilters() {
           {/* Quick area pills always visible */}
           {!open && (
             <div className="hidden sm:flex flex-wrap gap-1.5">
-              {areas.map((area) => (
+              {locations.map((area) => (
                 <button
                   key={area}
                   onClick={() => handleArea(area)}
@@ -104,7 +114,7 @@ export function PropertyFilters() {
             {/* Areas */}
             <div className="flex flex-wrap gap-2">
               <span className="text-xs font-medium text-gray-400 self-center mr-1">Area:</span>
-              {areas.map((area) => (
+              {locations.map((area) => (
                 <button
                   key={area}
                   onClick={() => handleArea(area)}

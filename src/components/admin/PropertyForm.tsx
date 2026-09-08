@@ -20,6 +20,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
   );
   const [isDragging, setIsDragging] = useState(false);
   const [uploadFileName, setUploadFileName] = useState("");
+  const [locations, setLocations] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { upload, progress, isUploading, error: uploadError } = useFileUpload({ category: "PROPERTIES" });
@@ -31,6 +32,13 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
     };
     window.addEventListener("upload-progress", handler);
     return () => window.removeEventListener("upload-progress", handler);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/admin/locations")
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setLocations(data); })
+      .catch(() => {});
   }, []);
 
   const handleImageUpload = useCallback(
@@ -77,6 +85,7 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
       priceLabel: formData.get("priceLabel"),
       currency: formData.get("currency") || "KES",
       location: formData.get("location"),
+      area: formData.get("area") || null,
       propertyType: formData.get("propertyType"),
       status: formData.get("status"),
       size: parseFloat(formData.get("size") as string) || null,
@@ -164,6 +173,25 @@ export function PropertyForm({ initialData, children }: PropertyFormProps) {
               className="form-input"
               placeholder="e.g. Syokimau, Nairobi"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Area / Region
+            </label>
+            <select
+              name="area"
+              defaultValue={initialData?.area || ""}
+              className="form-input bg-white"
+            >
+              <option value="">Select area...</option>
+              {locations.map((loc) => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-400 mt-1">
+              Manage locations in{" "}
+              <a href="/admin/locations" className="text-primary-600 underline">CMS &gt; Locations</a>
+            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>

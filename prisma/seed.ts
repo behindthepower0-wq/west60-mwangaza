@@ -53,6 +53,7 @@ async function main() {
     { key: "stat_properties", value: "", label: "Properties Developed" },
     { key: "stat_clients", value: "", label: "Happy Clients" },
     { key: "stat_satisfaction", value: "", label: "Client Satisfaction %" },
+    { key: "property_locations", value: JSON.stringify(["Katani", "Kitengela", "Joska", "Malaa", "Kitui"]), label: "Property Locations", group: "properties" },
   ];
 
   for (const setting of settings) {

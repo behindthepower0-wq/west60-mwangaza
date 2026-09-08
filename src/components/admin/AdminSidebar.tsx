@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import {
   LayoutDashboard, Home, Building2,
   Users, Star, Newspaper, Image, Navigation, MessageSquare,
-  Search, Settings, UserCog, Activity, ChevronDown, ChevronRight, X,
+  Search, Settings, UserCog, Activity, ChevronDown, ChevronRight, X, MapPin,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
@@ -57,6 +57,7 @@ const navGroups = [
     minRole: "EDITOR" as UserRole,
     items: [
       { label: "Navigation", href: "/admin/navigation", icon: Navigation },
+      { label: "Locations", href: "/admin/locations", icon: MapPin },
       { label: "Enquiries", href: "/admin/enquiries", icon: MessageSquare },
       { label: "SEO", href: "/admin/seo", icon: Search },
     ],
