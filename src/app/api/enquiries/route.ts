@@ -9,6 +9,7 @@ const schema = z.object({
   subject: z.string().min(3).max(200).optional(),
   message: z.string().min(10).max(5000),
   propertyId: z.string().optional(),
+  projectId: z.string().optional(),
 });
 
 // Simple rate limiting map (in-memory, resets on restart — sufficient for local)
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
         subject: validated.subject,
         message: validated.message,
         propertyId: validated.propertyId || null,
+        projectId: validated.projectId || null,
         status: "NEW",
       },
     });

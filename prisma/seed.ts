@@ -73,6 +73,7 @@ async function main() {
     { label: "Home", url: "/", order: 1 },
     { label: "About Us", url: "/about", order: 2 },
     { label: "Properties", url: "/properties", order: 3 },
+    { label: "Projects", url: "/projects", order: 5 },
     { label: "News", url: "/news", order: 6 },
     { label: "Contact Us", url: "/contact", order: 7 },
   ];
@@ -221,6 +222,13 @@ async function main() {
       isVisible: true,
     },
     {
+      key: "projects",
+      title: "Projects Section",
+      content: JSON.stringify({ eyebrow: "Our Projects", heading: "Current & Completed Projects" }),
+      order: 7,
+      isVisible: true,
+    },
+    {
       key: "team",
       title: "Team Section",
       content: JSON.stringify({ eyebrow: "Our Team", heading: "Meet The People Behind The Brand" }),
@@ -352,6 +360,50 @@ async function main() {
     });
   }
   console.log("✅ Properties seeded");
+
+  // ─── PROJECTS ───
+  const projects = [
+    {
+      id: "proj-mwangaza-gardens",
+      name: "Mwangaza Gardens",
+      slug: "mwangaza-gardens",
+      location: "Kitengela, Kenya",
+      status: "ONGOING" as const,
+      shortDescription:
+        "A gated residential development of 50x100 plots in the fast-growing Kitengela corridor, with ready title deeds and flexible payment plans.",
+      fullDescription:
+        "Mwangaza Gardens is a gated residential development located in the fast-growing Kitengela corridor. The project offers 50 x 100 ft plots with ready title deeds, secure perimeter fencing, and flexible payment plans of up to 18 months. Watch the video tour to see progress on the ground.",
+      mainImage: "/images/property-1.jpg",
+      isPublished: true,
+      publishedAt: new Date(),
+      features: {
+        create: [
+          { feature: "Ready title deed", order: 1 },
+          { feature: "Gated and secured community", order: 2 },
+          { feature: "Flexible payment plan up to 18 months", order: 3 },
+          { feature: "50 x 100 ft plots", order: 4 },
+        ],
+      },
+      videos: {
+        create: [
+          {
+            youtubeUrl: "https://www.youtube.com/watch?v=ScMzIvxBSi4",
+            title: "Mwangaza Gardens — Site Tour",
+            order: 0,
+          },
+        ],
+      },
+    },
+  ];
+
+  for (const project of projects) {
+    await prisma.project.upsert({
+      where: { slug: project.slug },
+      update: {},
+      create: project,
+    });
+  }
+  console.log("✅ Projects seeded");
 
   // ─── TEAM MEMBERS ───
   const teamMembers = [

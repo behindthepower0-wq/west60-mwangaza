@@ -269,6 +269,15 @@ CREATE TABLE IF NOT EXISTS project_features (
   sort_order INT DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS project_videos (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  youtube_url TEXT NOT NULL,
+  title TEXT,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS team_members (
   id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   name TEXT NOT NULL,
@@ -377,6 +386,7 @@ CREATE INDEX IF NOT EXISTS idx_projects_slug ON projects(slug);
 CREATE INDEX IF NOT EXISTS idx_projects_is_published ON projects(is_published);
 CREATE INDEX IF NOT EXISTS idx_project_images_project_id ON project_images(project_id);
 CREATE INDEX IF NOT EXISTS idx_project_features_project_id ON project_features(project_id);
+CREATE INDEX IF NOT EXISTS idx_project_videos_project_id ON project_videos(project_id);
 CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
 CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
 CREATE INDEX IF NOT EXISTS idx_posts_author_id ON posts(author_id);
@@ -407,6 +417,7 @@ DO $$ BEGIN
   ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
   ALTER TABLE project_images ENABLE ROW LEVEL SECURITY;
   ALTER TABLE project_features ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE project_videos ENABLE ROW LEVEL SECURITY;
   ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
   ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
   ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
@@ -435,6 +446,7 @@ DO $$ BEGIN
   DROP POLICY IF EXISTS "Allow all" ON projects;
   DROP POLICY IF EXISTS "Allow all" ON project_images;
   DROP POLICY IF EXISTS "Allow all" ON project_features;
+  DROP POLICY IF EXISTS "Allow all" ON project_videos;
   DROP POLICY IF EXISTS "Allow all" ON team_members;
   DROP POLICY IF EXISTS "Allow all" ON testimonials;
   DROP POLICY IF EXISTS "Allow all" ON categories;
@@ -461,6 +473,7 @@ CREATE POLICY "Allow all" ON property_amenities FOR ALL USING (true) WITH CHECK 
 CREATE POLICY "Allow all" ON projects FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON project_images FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON project_features FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow all" ON project_videos FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON team_members FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON testimonials FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Allow all" ON categories FOR ALL USING (true) WITH CHECK (true);

@@ -22,6 +22,10 @@ const TABLES: Record<string, string> = {
   propertyImage: "property_images",
   propertyFeature: "property_features",
   propertyAmenity: "property_amenities",
+  project: "projects",
+  projectImage: "project_images",
+  projectFeature: "project_features",
+  projectVideo: "project_videos",
   teamMember: "team_members",
   testimonial: "testimonials",
   category: "categories",
@@ -136,6 +140,34 @@ const FIELDS: Record<string, Record<string, string>> = {
     propertyId: "property_id",
     order: "sort_order",
   },
+  projects: {
+    shortDescription: "short_description",
+    fullDescription: "full_description",
+    startDate: "start_date",
+    completionDate: "completion_date",
+    mainImage: "main_image",
+    isPublished: "is_published",
+    publishedAt: "published_at",
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+  },
+  project_images: {
+    projectId: "project_id",
+    thumbnailUrl: "thumbnail_url",
+    altText: "alt_text",
+    order: "sort_order",
+    createdAt: "created_at",
+  },
+  project_features: {
+    projectId: "project_id",
+    order: "sort_order",
+  },
+  project_videos: {
+    projectId: "project_id",
+    youtubeUrl: "youtube_url",
+    order: "sort_order",
+    createdAt: "created_at",
+  },
   team_members: {
     facebookUrl: "facebook_url",
     linkedinUrl: "linkedin_url",
@@ -168,6 +200,7 @@ const FIELDS: Record<string, Record<string, string>> = {
   },
   enquiries: {
     propertyId: "property_id",
+    projectId: "project_id",
     createdAt: "created_at",
     updatedAt: "updated_at",
   },
@@ -210,6 +243,12 @@ const RELATION_NAMES: Record<string, Record<string, string>> = {
     property_amenities: "amenities",
     enquiries: "enquiries",
   },
+  projects: {
+    project_images: "images",
+    project_features: "features",
+    project_videos: "videos",
+    enquiries: "enquiries",
+  },
   posts: {
     categories: "category",
     users: "author",
@@ -241,7 +280,15 @@ function toCamel(row: Record<string, unknown>, table: string): Record<string, un
   const relNames = RELATION_NAMES[table] || {};
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(row)) {
-    out[reverse[k] || relNames[k] || k] = v;
+    let value = v;
+    // PostgREST embeds related rows under the related TABLE name (e.g. "project_videos").
+    // Those nested rows are raw snake_case, so camel-case them using the child table's field map.
+    if (Array.isArray(value) && FIELDS[k]) {
+      value = value.map((el) =>
+        el && typeof el === "object" ? toCamel(el as Record<string, unknown>, k) : el,
+      );
+    }
+    out[reverse[k] || relNames[k] || k] = value;
   }
   return out;
 }
@@ -446,6 +493,12 @@ function findRelatedTable(parentTable: string, relName: string): string | null {
       amenities: "property_amenities",
       enquiries: "enquiries",
     },
+    projects: {
+      images: "project_images",
+      features: "project_features",
+      videos: "project_videos",
+      enquiries: "enquiries",
+    },
     posts: {
       category: "categories",
       author: "users",
@@ -468,6 +521,22 @@ function findRelatedTable(parentTable: string, relName: string): string | null {
   };
 
   return RELATIONS[parentTable]?.[relName] || null;
+}
+
+/**
+ * Resolve the foreign-key column on a child table that points back to its
+ * parent (e.g. "properties" + "property_features" => "property_id").
+ */
+function fkColumnFor(parentTable: string, relTable: string): string | null {
+  const parentSingular = parentTable.replace(/s$/, "");
+  const fieldMap = FIELDS[relTable] || {};
+  for (const camel of Object.keys(fieldMap)) {
+    const snake = fieldMap[camel];
+    if (snake && snake.endsWith("_id") && snake.slice(0, -3) === parentSingular) {
+      return snake;
+    }
+  }
+  return null;
 }
 
 async function applyPostInsertRelations(
@@ -636,7 +705,7 @@ function createModelDelegator(modelName: string) {
             // This is a nested create - remove from main data and create separately
             const relTable = findRelatedTable(table, key.replace(/_id$/, ""));
             if (relTable) {
-              const fkCol = key; // e.g. property_id
+              const fkCol = fkColumnFor(table, relTable) || key; // e.g. property_id
               nestedCreates.push({ table: relTable, fkCol, items: obj.create as Record<string, unknown>[] });
               delete snakeData[key];
             }
@@ -678,16 +747,17 @@ function createModelDelegator(modelName: string) {
           if (obj.deleteMany !== undefined || obj.create) {
             const relTable = findRelatedTable(table, key.replace(/_id$/, ""));
             if (relTable && args.where.id) {
+              const fkCol = fkColumnFor(table, relTable) || key;
               // Delete existing related records
               if (obj.deleteMany !== undefined) {
-                const { error: delErr } = await sb.from(relTable).delete().eq(key, args.where.id);
+                const { error: delErr } = await sb.from(relTable).delete().eq(fkCol, args.where.id);
                 if (delErr) console.error(`[db] update nested delete(${relTable}):`, delErr.message);
               }
               // Insert new related records
               if (obj.create && Array.isArray(obj.create)) {
                 for (const item of obj.create) {
                   const snakeItem = toSnakeRecord(item, relTable);
-                  snakeItem[key] = args.where.id;
+                  snakeItem[fkCol] = args.where.id;
                   const { error: insErr } = await sb.from(relTable).insert(snakeItem);
                   if (insErr) console.error(`[db] update nested create(${relTable}):`, insErr.message);
                 }

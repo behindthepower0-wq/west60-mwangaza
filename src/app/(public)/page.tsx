@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/public/HeroSection";
 import { AboutSection } from "@/components/public/AboutSection";
 import { ServicesSection } from "@/components/public/ServicesSection";
 import { FeaturedPropertiesSection } from "@/components/public/PropertyCard";
+import { ProjectsSection } from "@/components/public/ProjectCard";
 import { WhyChooseUsSection } from "@/components/public/WhyChooseUsSection";
 import { TeamSection } from "@/components/public/TeamSection";
 import { NewsSection } from "@/components/public/NewsSection";
@@ -26,12 +27,18 @@ export const metadata: Metadata = {
 
 async function getData() {
   try {
-    const [featuredProperties, teamMembers, latestPosts, services, testimonials, heroSection, aboutSection] =
+    const [featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroSection, aboutSection] =
       await Promise.all([
         prisma.property.findMany({
           where: { isFeatured: true, isPublished: true },
           orderBy: { createdAt: "desc" },
           take: 6,
+          include: { images: { orderBy: { order: "asc" }, take: 1 } },
+        }),
+        prisma.project.findMany({
+          where: { isPublished: true },
+          orderBy: { createdAt: "desc" },
+          take: 3,
           include: { images: { orderBy: { order: "asc" }, take: 1 } },
         }),
         prisma.teamMember.findMany({
@@ -84,10 +91,11 @@ async function getData() {
       }
     }
 
-    return { featuredProperties, teamMembers, latestPosts, services, testimonials, heroImages, aboutImages };
+    return { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages, aboutImages };
   } catch {
     return {
       featuredProperties: [],
+      projects: [],
       teamMembers: [],
       latestPosts: [],
       services: [],
@@ -99,7 +107,7 @@ async function getData() {
 }
 
 export default async function HomePage() {
-  const { featuredProperties, teamMembers, latestPosts, services, testimonials, heroImages, aboutImages } =
+  const { featuredProperties, projects, teamMembers, latestPosts, services, testimonials, heroImages, aboutImages } =
     await getData();
 
   return (
@@ -109,6 +117,7 @@ export default async function HomePage() {
       <AboutSection aboutImages={aboutImages} />
       <ServicesSection services={services} />
       <FeaturedPropertiesSection properties={featuredProperties} />
+      <ProjectsSection projects={projects} />
       <WhyChooseUsSection />
       <AwardsSection />
       <TeamSection teamMembers={teamMembers} />
