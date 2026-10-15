@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/db";
-import { ProjectCard } from "@/components/public/ProjectCard";
+import { ProjectHero } from "@/components/public/ProjectHero";
+import { MediaRow } from "@/components/public/MediaRow";
+import { ProjectMediaCard } from "@/components/public/ProjectMediaCard";
 import { VideoGallery } from "@/components/public/VideoGallery";
 import { ContactForm } from "@/components/public/ContactForm";
-import { MapPin, ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import Image from "next/image";
-import { getProjectStatusLabel } from "@/lib/utils";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -41,57 +41,30 @@ export default async function ProjectDetailPage({ params }: Props) {
   const related = await prisma.project
     .findMany({
       where: { isPublished: true, id: { not: project.id } },
-      take: 3,
+      take: 6,
       include: { images: { orderBy: { order: "asc" }, take: 1 } },
     })
     .catch(() => []);
 
-  const heroImage = project.images?.[0]?.url || project.mainImage || "/images/project-placeholder.jpg";
-  const featureList: string[] = (project.features || []).map((f: { feature: string }) => f.feature);
+  const featureList: string[] = (project.features || []).map(
+    (f: { feature: string }) => f.feature
+  );
 
   return (
     <>
-      <div className="pt-24 pb-4" style={{ background: "var(--color-primary)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 text-sm text-white/50">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
-            <span>/</span>
-            <Link href="/projects" className="hover:text-white transition-colors">Projects</Link>
-            <span>/</span>
-            <span className="text-white/80">{project.name}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative h-72 md:h-96 bg-primary-100">
-        <Image src={heroImage} alt={project.name} fill className="object-cover" priority />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary-900/50 to-transparent" />
-        <div className="absolute bottom-6 left-6">
-          <span className="status-badge bg-secondary-400/20 text-secondary-100 border border-secondary-400/30">
-            {getProjectStatusLabel(project.status)}
-          </span>
-        </div>
-      </div>
+      <ProjectHero project={project} features={featureList} />
 
       <section className="py-16" style={{ background: "var(--color-warm-white)" }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2 space-y-8">
-            <div>
-              <Link href="/projects" className="flex items-center gap-1 text-sm text-gray-400 hover:text-primary-600 transition-colors mb-4">
-                <ArrowLeft size={14} /> Back to Projects
-              </Link>
-              <h1 className="section-heading mb-2">{project.name}</h1>
-              {project.location && (
-                <div className="flex items-center gap-2 text-gray-500">
-                  <MapPin size={15} className="text-secondary-500" />
-                  <span>{project.location}</span>
-                </div>
-              )}
-            </div>
-
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
+          <div className="space-y-8 lg:col-span-2">
             {(project.fullDescription || project.shortDescription) && (
               <div className="glass-card p-6">
-                <h2 className="font-bold text-primary-800 text-xl mb-4" style={{ fontFamily: "var(--font-serif)" }}>About This Project</h2>
+                <h2
+                  className="mb-4 text-xl font-bold text-primary-800"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  About This Project
+                </h2>
                 <div className="prose-brand">
                   <p>{project.fullDescription || project.shortDescription}</p>
                 </div>
@@ -100,10 +73,18 @@ export default async function ProjectDetailPage({ params }: Props) {
 
             {featureList.length > 0 && (
               <div className="glass-card p-6">
-                <h2 className="font-bold text-primary-800 text-xl mb-4" style={{ fontFamily: "var(--font-serif)" }}>Key Features</h2>
-                <ul className="grid sm:grid-cols-2 gap-3">
+                <h2
+                  className="mb-4 text-xl font-bold text-primary-800"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  Key Features
+                </h2>
+                <ul className="grid gap-3 sm:grid-cols-2">
                   {featureList.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-sm text-gray-600">
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2 text-sm text-gray-600"
+                    >
                       <Check size={16} className="mt-0.5 flex-shrink-0 text-secondary-500" />
                       <span>{feature}</span>
                     </li>
@@ -114,23 +95,40 @@ export default async function ProjectDetailPage({ params }: Props) {
 
             {(project.images?.length || 0) > 1 && (
               <div className="glass-card p-6">
-                <h2 className="font-bold text-primary-800 text-xl mb-4" style={{ fontFamily: "var(--font-serif)" }}>Gallery</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {(project.images || []).map((img: { id: string; url: string; altText?: string | null }) => (
-                    <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden">
-                      <Image src={img.url} alt={img.altText || project.name} fill className="object-cover hover:scale-105 transition-transform duration-300" />
-                    </div>
-                  ))}
+                <h2
+                  className="mb-4 text-xl font-bold text-primary-800"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  Gallery
+                </h2>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {(project.images || []).map(
+                    (img: { id: string; url: string; altText?: string | null }) => (
+                      <div
+                        key={img.id}
+                        className="relative aspect-square overflow-hidden rounded-xl"
+                      >
+                        <Image
+                          src={img.url}
+                          alt={img.altText || project.name}
+                          fill
+                          className="object-cover transition-transform duration-300 hover:scale-105"
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             )}
 
             <VideoGallery
-              videos={(project.videos || []).map((v: { id: string; youtubeUrl: string; title?: string | null }) => ({
-                id: v.id,
-                youtubeUrl: v.youtubeUrl,
-                title: v.title,
-              }))}
+              videos={(project.videos || []).map(
+                (v: { id: string; youtubeUrl: string; title?: string | null }) => ({
+                  id: v.id,
+                  youtubeUrl: v.youtubeUrl,
+                  title: v.title,
+                })
+              )}
               details={{
                 slug: project.slug,
                 name: project.name,
@@ -144,7 +142,12 @@ export default async function ProjectDetailPage({ params }: Props) {
 
           <div>
             <div className="glass-card p-6" id="enquire">
-              <h3 className="font-bold text-primary-800 text-lg mb-4" style={{ fontFamily: "var(--font-serif)" }}>Enquire About This Project</h3>
+              <h3
+                className="mb-4 text-lg font-bold text-primary-800"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
+                Enquire About This Project
+              </h3>
               <ContactForm projectId={project.id} projectName={project.name} />
             </div>
           </div>
@@ -152,19 +155,18 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {related.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="section-heading text-2xl">Other Projects</h2>
-              <Link href="/projects" className="flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-secondary-600 transition-colors">
-                All Projects <ArrowRight size={14} />
-              </Link>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section className="bg-white py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <MediaRow
+              title="Other Projects"
+              viewAllHref="/projects"
+              viewAllLabel="All Projects"
+              edgeFadeClass="from-white"
+            >
               {related.map((p) => (
-                <ProjectCard key={p.id} project={p} />
+                <ProjectMediaCard key={p.id} project={p} />
               ))}
-            </div>
+            </MediaRow>
           </div>
         </section>
       )}

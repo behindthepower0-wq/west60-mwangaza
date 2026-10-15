@@ -4,7 +4,7 @@ import { HeroSection } from "@/components/public/HeroSection";
 import { AboutSection } from "@/components/public/AboutSection";
 import { ServicesSection } from "@/components/public/ServicesSection";
 import { FeaturedPropertiesSection } from "@/components/public/PropertyCard";
-import { ProjectsSection } from "@/components/public/ProjectCard";
+import { ProjectsShowcase } from "@/components/public/ProjectsShowcase";
 import { WhyChooseUsSection } from "@/components/public/WhyChooseUsSection";
 import { TeamSection } from "@/components/public/TeamSection";
 import { NewsSection } from "@/components/public/NewsSection";
@@ -38,8 +38,11 @@ async function getData() {
         prisma.project.findMany({
           where: { isPublished: true },
           orderBy: { createdAt: "desc" },
-          take: 3,
-          include: { images: { orderBy: { order: "asc" }, take: 1 } },
+          take: 8,
+          include: {
+            images: { orderBy: { order: "asc" }, take: 1 },
+            videos: { orderBy: { order: "asc" } },
+          },
         }),
         prisma.teamMember.findMany({
           where: { isVisible: true },
@@ -117,7 +120,20 @@ export default async function HomePage() {
       <AboutSection aboutImages={aboutImages} />
       <ServicesSection services={services} />
       <FeaturedPropertiesSection properties={featuredProperties} />
-      <ProjectsSection projects={projects} />
+      <section
+        id="projects"
+        style={{ background: "var(--color-warm-white)" }}
+        className="py-20 lg:py-28"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="section-eyebrow mb-3">
+            <span className="h-px w-8 bg-secondary-400" />
+            Our Projects
+          </div>
+          <h2 className="section-heading mb-10">Current &amp; Completed Projects</h2>
+          <ProjectsShowcase projects={projects} />
+        </div>
+      </section>
       <WhyChooseUsSection />
       <AwardsSection />
       <TeamSection teamMembers={teamMembers} />

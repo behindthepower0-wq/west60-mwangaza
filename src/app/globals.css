@@ -189,6 +189,22 @@ h1, h2, h3, h4, h5, h6 {
 .delay-800 { animation-delay: 800ms; }
 
 /* ─────────────────────────────────────────────
+   HORIZONTAL MEDIA ROWS
+───────────────────────────────────────────── */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .no-scrollbar { scroll-behavior: auto; }
+}
+
+/* ─────────────────────────────────────────────
    GLASS COMPONENTS
 ───────────────────────────────────────────── */
 @layer components {
