@@ -25,8 +25,9 @@ export function PricingCard({
 }: PricingCardProps) {
   const { openWhatsAppModal } = useWhatsAppModal();
   const displayPrice = priceLabel || formatPrice(price, currency ?? undefined);
-  const installmentMonthly = price ? Math.round(price / 18) : null;
-  const cashDiscount = price ? Math.round(price * 0.9) : null;
+  const depositAmount = price ? Math.round(price * 0.1) : null;
+  const balance = price && depositAmount != null ? price - depositAmount : null;
+  const installmentMonthly = balance ? Math.round(balance / 18) : null;
 
   return (
     <div
@@ -54,25 +55,25 @@ export function PricingCard({
 
       {/* Pricing Options */}
       <div className="p-6 space-y-4">
-        {/* Cash Price */}
-        {cashDiscount && (
+        {/* Deposit 10% */}
+        {depositAmount && (
           <div
             className="p-4 rounded-xl"
             style={{ background: "rgba(29,79,56,0.05)" }}
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-primary">
-                Cash Price
+                Deposit 10%
               </span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                Save 10%
+                To Reserve
               </span>
             </div>
             <p className="text-2xl font-bold text-primary">
-              {formatPrice(cashDiscount, currency ?? undefined)}
+              {formatPrice(depositAmount, currency ?? undefined)}
             </p>
             <p className="text-xs text-text-muted mt-1">
-              One-time payment, immediate title deed
+              Pay 10% deposit to reserve your plot
             </p>
           </div>
         )}
@@ -96,7 +97,7 @@ export function PricingCard({
               <span className="text-sm font-normal text-text-muted">/month</span>
             </p>
             <p className="text-xs text-text-muted mt-1">
-              Spread over 18 months, title deed after final payment
+              Pay the balance of {formatPrice(balance, currency ?? undefined)} over 18 months, title deed after final payment
             </p>
           </div>
         )}
