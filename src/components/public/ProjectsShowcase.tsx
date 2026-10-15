@@ -94,7 +94,7 @@ export function ProjectsShowcase({
         <>
           <ProjectBillboard project={projects[0]} onPlay={openProject} />
 
-          {withVideos.length > 0 && (
+          {withVideos.length > 0 ? (
             <MediaRow
               title="Watch Our Projects"
               subtitle="Step onto site with our latest project videos."
@@ -103,16 +103,15 @@ export function ProjectsShowcase({
             >
               {withVideos.map(renderCard)}
             </MediaRow>
+          ) : (
+            <MediaRow
+              title="Our Projects"
+              viewAllHref="/projects"
+              viewAllLabel="All Projects"
+            >
+              {projects.map(renderCard)}
+            </MediaRow>
           )}
-
-          <MediaRow
-            title="Explore Our Projects"
-            subtitle="From ongoing developments to completed landmarks."
-            viewAllHref="/projects"
-            viewAllLabel="All Projects"
-          >
-            {projects.map(renderCard)}
-          </MediaRow>
         </>
       ) : (
         groups.map((group) => (
