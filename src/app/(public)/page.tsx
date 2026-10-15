@@ -130,7 +130,27 @@ export default async function HomePage() {
             <span className="h-px w-8 bg-secondary-400" />
             Our Projects
           </div>
-          <h2 className="section-heading mb-10">Current &amp; Completed Projects</h2>
+          <div className="flex items-end justify-between gap-4 mb-10">
+            <h2 className="section-heading">Current &amp; Completed Projects</h2>
+            <a href="/projects" className="btn-outline-primary flex-shrink-0">
+              All Projects
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="ml-2 h-4 w-4"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </a>
+          </div>
           <ProjectsShowcase projects={projects} />
         </div>
       </section>
